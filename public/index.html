@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASSING - Storytelling Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,400&family=Roboto:wght@300;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #171717;
+            color: white;
+            cursor: default;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .font-sans { font-family: 'Roboto', sans-serif; }
+        .grayscale { filter: grayscale(100%); }
+        .sepia-anxiety { filter: sepia(0.4) brightness(0.7) contrast(1.2); }
+        .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-pulse-slow { animation: pulse 3s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @keyframes pan-bg {
+            0% { transform: scale(1.1) translateX(0); }
+            50% { transform: scale(1.1) translateX(-2%); }
+            100% { transform: scale(1.1) translateX(0); }
+        }
+        .animate-pan { animation: pan-bg 10s infinite alternate linear; }
+        .ending-b-bg { background-color: #1e0a2d !important; transition: background-color 3s ease; }
+        .ending-a-bg { background-color: #000 !important; transition: background-color 2s ease; }
+        .ending-c-bg { background-color: #262626 !important; transition: background-color 2s ease; }
+        
+        .anxiety-shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        /* Mobile Scroll Optimization */
+        .custom-scroll {
+            overflow-y: auto;
+            max-height: 100vh;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative transition-all duration-1000 bg-neutral-900 custom-scroll">
+    
+    <!-- Video Screen -->
+    <div id="video-screen" style="display: none; position: fixed; inset: 0; z-index: 99999; background-color: #000; align-items: center; justify-content: center;">
+        <video id="game-video" src="question1b.mp4" muted controls playsinline webkit-playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; z-index: 99999; transform: translateZ(0); filter: none;">
+            Your browser does not support the video tag.
+        </video>
+        <button onclick="skipVideo()" style="position: absolute; bottom: 40px; right: 40px; z-index: 100000; color: white; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; background: rgba(0,0,0,0.7); cursor: pointer; font-family: sans-serif; font-weight: bold;">Skip Video</button>
+    </div>
+    
+    <audio id="bgm" src="timersound.mp3" loop preload="auto"></audio>
+    <audio id="ending-sfx" preload="auto"></audio>
+
+    <!-- Intro Screen -->
+    <div id="intro-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black transition-opacity duration-1000">
+        <div class="text-center space-y-6 md:space-y-8 max-w-2xl px-6">
+            <h1 class="text-5xl md:text-9xl font-black tracking-[0.2em] uppercase animate-pulse-slow leading-none">PASSING</h1>
+            <div class="pt-8 md:pt-12">
+                <button onclick="startSelect()" class="group relative px-10 md:px-12 py-3 md:py-4 border-2 border-white text-lg md:text-xl uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-500 overflow-hidden">
+                    <span class="relative z-10 font-black">Start</span>
+                </button>
+            </div>
+        </div>
+        <div class="absolute bottom-8 text-[10px] opacity-30 uppercase tracking-widest font-sans px-4 text-center">
+            Based on the novel by Nella Larsen & the movie by Rebecca Hall
+        </div>
+    </div>
+
+    <!-- Quote Screen -->
+    <div id="quote-screen" class="hidden fixed inset-0 z-[110] flex flex-col items-center justify-center bg-black transition-opacity duration-1000 opacity-0">
+        <p class="text-xl md:text-3xl italic opacity-80 border-y border-white/30 py-8 px-6 max-w-4xl text-center leading-relaxed">
+            "We're all of us passing for something or other, aren't we?"
+        </p>
+    </div>
+
+    <!-- Character Selection Screen -->
+    <div id="select-screen" class="hidden flex-1 flex flex-col items-center justify-center p-6 md:p-12 space-y-8 md:space-y-12 animate-fade-in relative pt-24 md:pt-12">
+        <div class="absolute top-6 left-6 z-50">
+            <button onclick="goBackToIntro()" class="text-[10px] md:text-sm uppercase tracking-widest border border-white/20 px-4 py-2 md:px-6 md:py-3 hover:bg-white hover:text-black transition-all font-sans font-bold">← Back</button>
+        </div>
+        
+        <div class="flex flex-col md:flex-row gap-12 md:gap-32 max-w-5xl w-full justify-center items-end mt-8 -translate-y-[160px] md:-translate-y-[320px]">
+            <div onclick="selectCharacter('IRENE')" class="group cursor-pointer flex flex-col items-center gap-6 md:gap-8 transition-transform duration-500 hover:scale-105">
+                <div class="h-[85vh] md:h-[125vh] w-auto translate-y-12">
+                    <img src="character02.png" alt="IRENE" class="h-full w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-700">
+                </div>
+                <div class="border-[2px] border-neutral-300 rounded-[2rem] px-10 py-1.5 md:px-14 md:py-2 bg-gradient-to-b from-neutral-600 via-neutral-800 to-black shadow-[inset_0_2px_5px_rgba(255,255,255,0.4),0_5px_15px_rgba(0,0,0,0.5)] -translate-y-[450px]">
+                    <h3 class="text-lg md:text-xl font-bold tracking-[0.3em] text-center uppercase text-white font-sans">IRENE</h3>
+                </div>
+            </div>
+            
+            <div onclick="selectCharacter('CLARE')" class="group cursor-pointer flex flex-col items-center gap-6 md:gap-8 transition-transform duration-500 hover:scale-105">
+                <div class="h-[65vh] md:h-[95vh] w-auto -translate-y-36">
+                    <img src="character01.png" alt="CLARE" class="h-full w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-700">
+                </div>
+                <div class="border-[2px] border-neutral-300 rounded-[2rem] px-10 py-1.5 md:px-14 md:py-2 bg-gradient-to-b from-neutral-600 via-neutral-800 to-black shadow-[inset_0_2px_5px_rgba(255,255,255,0.4),0_5px_15px_rgba(0,0,0,0.5)] -translate-y-[450px]">
+                    <h3 class="text-lg md:text-xl font-bold tracking-[0.3em] text-center uppercase text-white font-sans">CLARE</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Play Screen -->
+    <div id="play-screen" class="hidden flex-1 flex flex-col p-4 md:p-16 animate-fade-in relative pt-20 md:pt-16">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12 font-sans relative z-50 gap-4">
+            <div class="flex items-center gap-4 md:gap-8 w-full md:w-auto justify-between md:justify-start">
+                <button onclick="goBackFromPlay()" class="text-[10px] md:text-sm uppercase tracking-widest border border-white/40 px-3 py-1.5 md:px-4 md:py-2 hover:bg-white hover:text-black transition-all font-bold">← Back</button>
+                <div class="text-[10px] md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] opacity-50">
+                    <span id="current-char-name" class="text-white opacity-100 font-black"></span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 w-full md:w-auto">
+                <div class="text-[10px] uppercase tracking-widest font-bold opacity-70">Anxiety</div>
+                <div id="anxiety-gauge-container" class="flex-1 md:w-48 h-2 bg-white/10 border border-white/20 relative overflow-hidden">
+                    <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
+                </div>
+                <div id="anxiety-text" class="text-[10px] font-mono w-8 font-bold">0%</div>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start overflow-y-auto">
+            <div class="w-full md:w-1/3 aspect-[3/4] max-h-[35vh] md:max-h-none border border-white/10 relative overflow-hidden bg-neutral-800/50 shadow-2xl flex-shrink-0">
+                <img id="char-image" src="" alt="character" class="w-full h-full object-cover transition-all duration-1000 grayscale">
+                <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent"></div>
+            </div>
+
+            <div class="w-full md:w-2/3 space-y-6 md:space-y-12">
+                <div class="space-y-3 md:space-y-4">
+                    <div id="scene-num" class="text-[10px] md:text-xs text-red-500 uppercase tracking-widest font-black font-sans"></div>
+                    <div id="scene-desc" class="text-[10px] md:text-sm italic opacity-50 border-l-2 border-white/20 pl-3 md:pl-4"></div>
+                    <h3 id="question-text" class="text-xl md:text-5xl font-black leading-tight"></h3>
+                </div>
+
+                <div id="choices-container" class="grid gap-3 md:gap-6 pb-8"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ending Screen -->
+    <div id="ending-screen" class="hidden flex-1 flex flex-col items-center p-6 md:p-8 text-center relative animate-fade-in overflow-y-auto">
+        <div id="final-score-badge" class="mt-12 md:mt-0 mb-6 px-6 py-2 md:px-8 md:py-3 border-2 border-white/50 rounded-full font-sans text-[10px] md:text-sm uppercase tracking-widest bg-black/60 backdrop-blur-md z-50">
+            Final Anxiety Score: <span id="final-anxiety-val" class="font-black text-red-500 text-base md:text-xl ml-2"></span>
+        </div>
+        <div id="ending-visual" class="w-full max-w-4xl aspect-video border border-white/20 mb-8 md:mb-12 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex-shrink-0">
+            <img id="ending-img" src="" alt="Ending Scene" class="w-full h-full object-contain">
+        </div>
+        <div id="ending-content" class="max-w-3xl space-y-6 md:space-y-8 mb-8 md:mb-12"></div>
+        
+        <div class="flex flex-col md:flex-row gap-4 md:gap-6 font-sans relative z-[100] pb-12 w-full md:w-auto">
+            <button onclick="goBackFromEnding()" class="w-full md:w-auto px-8 py-4 md:px-10 md:py-5 border-2 border-white/40 bg-black/40 text-white text-xs md:text-base uppercase tracking-widest hover:bg-white hover:text-black transition-all font-bold">
+                ← Back
+            </button>
+            <button onclick="location.reload()" class="w-full md:w-auto px-10 py-4 md:px-14 md:py-5 bg-white text-black text-xs md:text-base font-black uppercase tracking-widest hover:bg-neutral-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.4)]">
+                Start Over
+            </button>
+        </div>
+    </div>
+
+    <!-- Audio Control Toggle -->
+    <button id="audio-toggle" onclick="toggleBgm()" class="hidden fixed top-4 right-4 md:top-6 md:right-6 z-[200] p-2 md:p-3 border-2 border-white/30 rounded-full hover:bg-white/10 bg-black/40 backdrop-blur-md">
+        <svg id="audio-icon-on" class="w-5 h-5 md:w-6 md:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        <svg id="audio-icon-off" class="hidden w-5 h-5 md:w-6 md:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+    </button>
+
+    <script>
+        let anxiety = 0;
+        let anxietyHistory = [0]; 
+        let currentQuestionIndex = 0;
+        let selectedCharacter = '';
+        let isPlayingBgm = false;
+        const bgm = document.getElementById('bgm');
+        const endingSfx = document.getElementById('ending-sfx');
+
+        const questions = [
+            {
+                id: 1,
+                scene: "백인 전용 호텔 공간에서 CLARE와의 첫 만남",
+                text: "저 여자가 나를 빤히 쳐다본다. 어떻게 할까?",
+                choices: [
+                    { text: "잡지를 들어 얼굴을 가리고 시선을 피한다.", score: 15 },
+                    { text: "나도 쳐다본다.", score: 0 }
+                ]
+            },
+            {
+                id: 2,
+                scene: "IRENE의 집",
+                text: "CLARE가 자신의 'PASSING' 생활을 자랑하며 당신의 근황을 묻는다.",
+                choices: [
+                    { text: "나는 할렘에서 평범하고 안전하게 잘 지내.", score: 5 },
+                    { text: "남편 몰래 이런 짓을 하는 게 무섭지는 않아? 행복하니?", score: 20 }
+                ]
+            },
+            {
+                id: 3,
+                scene: "할렘 사교 파티 장면",
+                text: "파티장 한편에서 누군가 'PASSING'에 대해 수근거리는 소리가 들린다.",
+                choices: [
+                    { text: "못 들은 척하며 자리를 피한다.", score: 15 },
+                    { text: "대화에 끼어들어 당당하게 의견을 말한다.", score: 5 }
+                ]
+            },
+            {
+                id: 4,
+                scene: "폭풍전야의 밤",
+                text: "모든 비밀이 밝혀질 것 같은 예감이 든다. 당신의 선택은?",
+                choices: [
+                    { text: "끝까지 비밀을 지키며 침묵한다.", score: 10 },
+                    { text: "모든 것을 고백하고 상황을 정면 돌파한다.", score: 25 }
+                ]
+            }
+        ];
+
+        function startSelect() {
+            bgm.volume = 0.5;
+            bgm.play().then(() => {
+                isPlayingBgm = true;
+                updateAudioIcons();
+            }).catch(e => console.error("Audio play failed:", e));
+
+            document.body.classList.add('game-started');
+            document.getElementById('intro-screen').classList.add('opacity-0');
+            
+            setTimeout(() => {
+                document.getElementById('intro-screen').classList.add('hidden');
+                
+                const quoteScreen = document.getElementById('quote-screen');
+                quoteScreen.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    quoteScreen.classList.remove('opacity-0');
+                    
+                    setTimeout(() => {
+                        quoteScreen.classList.add('opacity-0');
+                        
+                        setTimeout(() => {
+                            quoteScreen.classList.add('hidden');
+                            document.getElementById('select-screen').classList.remove('hidden');
+                            document.getElementById('audio-toggle').classList.remove('hidden');
+                        }, 1000);
+                    }, 3000);
+                }, 100);
+            }, 1000);
+        }
+
+        function goBackToIntro() {
+            document.body.classList.remove('game-started');
+            document.getElementById('select-screen').classList.add('hidden');
+            document.getElementById('intro-screen').classList.remove('hidden');
+            document.getElementById('intro-screen').classList.remove('opacity-0');
+            document.getElementById('audio-toggle').classList.add('hidden');
+            bgm.pause();
+            isPlayingBgm = false;
+            updateAudioIcons();
+        }
+
+        function selectCharacter(char) {
+            selectedCharacter = char;
+            document.getElementById('select-screen').classList.add('hidden');
+            playVideo();
+        }
+
+        function playVideo() {
+            const videoScreen = document.getElementById('video-screen');
+            const video = document.getElementById('game-video');
+            
+            videoScreen.style.display = 'flex';
+            
+            video.currentTime = 0;
+            video.load();
+            
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log("Playback started successfully");
+                }).catch(e => {
+                    console.error("Video play failed:", e);
+                });
+            }
+            
+            video.onended = finishVideo;
+        }
+
+        function skipVideo() {
+            const video = document.getElementById('game-video');
+            video.pause();
+            finishVideo();
+        }
+
+        function finishVideo() {
+            const videoScreen = document.getElementById('video-screen');
+            videoScreen.style.display = 'none';
+            
+            continueToPlay();
+        }
+
+        function continueToPlay() {
+            document.getElementById('play-screen').classList.remove('hidden');
+            document.getElementById('current-char-name').innerText = selectedCharacter;
+            document.getElementById('char-image').src = selectedCharacter === 'IRENE' ? 'character02.png' : 'character01.png';
+            renderQuestion();
+        }
+
+        function goBackFromPlay() {
+            if (currentQuestionIndex === 0) {
+                document.getElementById('play-screen').classList.add('hidden');
+                document.getElementById('select-screen').classList.remove('hidden');
+                anxiety = 0;
+                anxietyHistory = [0];
+            } else {
+                currentQuestionIndex--;
+                anxietyHistory.pop();
+                anxiety = anxietyHistory[anxietyHistory.length - 1];
+                renderQuestion();
+            }
+        }
+
+        function goBackFromEnding() {
+            document.getElementById('ending-screen').classList.add('hidden');
+            document.getElementById('play-screen').classList.remove('hidden');
+            document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 bg-neutral-900 custom-scroll"; 
+            
+            endingSfx.pause();
+            bgm.play().catch(() => {});
+            isPlayingBgm = true;
+            updateAudioIcons();
+
+            currentQuestionIndex = questions.length - 1;
+            anxietyHistory.pop();
+            anxiety = anxietyHistory[anxietyHistory.length - 1];
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('scene-num').innerText = `Scene ${q.id}`;
+            document.getElementById('scene-desc').innerText = q.scene;
+            document.getElementById('question-text').innerText = q.text;
+            
+            const container = document.getElementById('choices-container');
+            container.innerHTML = '';
+            q.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 md:p-6 border border-white/20 hover:border-white hover:bg-white/10 transition-all group flex justify-between items-center bg-white/5 font-sans";
+                btn.innerHTML = `<span class="text-sm md:text-xl font-bold">${choice.text}</span><span class="opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all text-xl">→</span>`;
+                btn.onclick = () => handleChoice(choice.score);
+                container.appendChild(btn);
+            });
+
+            updateVisuals();
+        }
+
+        function updateVisuals() {
+            const charImg = document.getElementById('char-image');
+            const gaugeContainer = document.getElementById('anxiety-gauge-container');
+            
+            if (anxiety > 50) {
+                charImg.className = "w-full h-full object-cover transition-all duration-1000 sepia-anxiety";
+                gaugeContainer.classList.add('anxiety-shake');
+                setTimeout(() => gaugeContainer.classList.remove('anxiety-shake'), 500);
+            } else {
+                charImg.className = "w-full h-full object-cover transition-all duration-1000 grayscale";
+            }
+            
+            document.getElementById('anxiety-bar').style.width = `${Math.min(anxiety, 100)}%`;
+            document.getElementById('anxiety-text').innerText = `${anxiety}%`;
+        }
+
+        function handleChoice(score) {
+            anxiety += score;
+            anxietyHistory.push(anxiety);
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
+            } else {
+                showEnding();
+            }
+        }
+
+        function showEnding() {
+            bgm.pause();
+            document.getElementById('play-screen').classList.add('hidden');
+            document.getElementById('ending-screen').classList.remove('hidden');
+            
+            const content = document.getElementById('ending-content');
+            const endingImg = document.getElementById('ending-img');
+            document.getElementById('final-anxiety-val').innerText = `${anxiety}%`;
+            let html = '';
+            
+            if (anxiety >= 70) {
+                document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
+                endingImg.src = 'ending_b.png';
+                endingSfx.src = 'woman.mp3';
+                html = `
+                    <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Ending B</h2>
+                    <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight">THE PASSING</h3>
+                    <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0">
+                        당신은 CLARE의 삶에 완전히 잠식되었다.<br>
+                        거울을 보니 당신의 얼굴이 아닌, 기괴한 미소를 짓고 있는 CLARE의 얼굴이 보인다.
+                    </p>
+                    <p class="text-base md:text-2xl font-bold pt-6 md:pt-12 text-purple-300 opacity-50 font-sans italic">"We're all of us passing for something or other..."</p>
+                `;
+            } else if (anxiety > 40) {
+                document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
+                endingImg.src = 'ending_a.png';
+                endingSfx.src = 'siren.mp3';
+                html = `
+                    <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">Ending A</h2>
+                    <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight">THE FALL</h3>
+                    <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0">
+                        혼란스러운 상황 속에서 CLARE는 창밖으로 추락한다.<br>
+                        사고였을까, 아니면...? 사이렌 소리만이 멀리서 울려 퍼진다.
+                    </p>
+                    <p class="text-xl md:text-4xl font-black pt-6 md:pt-12 text-red-600 font-sans animate-pulse">"IS SHE... IS SHE...?"</p>
+                `;
+            } else {
+                document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
+                endingImg.src = 'ending_c.png';
+                endingSfx.src = 'calm.mp3';
+                html = `
+                    <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Ending C</h2>
+                    <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight">ROOTED</h3>
+                    <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0">
+                        폭풍이 지나가고, 아무 일도 없었던 것처럼 일상은 이어진다.<br>
+                        당신은 다시 완벽하게 다려진 옷을 입고 정자세로 앉아 찻잔을 든다.
+                    </p>
+                    <p class="text-xs md:text-lg opacity-40 pt-6 md:pt-12 uppercase tracking-[0.2em] font-sans">Still in the same world.</p>
+                `;
+            }
+            content.innerHTML = html;
+            endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
+        }
+
+        function toggleBgm() {
+            if (isPlayingBgm) {
+                bgm.pause();
+            } else {
+                bgm.play().catch(() => {});
+            }
+            isPlayingBgm = !isPlayingBgm;
+            updateAudioIcons();
+        }
+
+        function updateAudioIcons() {
+            document.getElementById('audio-icon-on').classList.toggle('hidden', !isPlayingBgm);
+            document.getElementById('audio-icon-off').classList.toggle('hidden', isPlayingBgm);
+        }
+    </script>
+</body>
+</html>
