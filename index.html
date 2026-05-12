@@ -274,14 +274,15 @@
         function selectCharacter(char) {
             selectedCharacter = char;
             document.getElementById('select-screen').classList.add('hidden');
-            playVideo();
+            playVideo('question1b.mp4', finishVideo);
         }
 
-        function playVideo() {
+        function playVideo(src, callback) {
             const videoScreen = document.getElementById('video-screen');
             const video = document.getElementById('game-video');
             
             videoScreen.style.display = 'flex';
+            video.src = src;
             
             video.currentTime = 0;
             video.load();
@@ -295,19 +296,20 @@
                 });
             }
             
-            video.onended = finishVideo;
-        }
+            video.onended = () => {
+                videoScreen.style.display = 'none';
+                if (callback) callback();
+            };
 
-        function skipVideo() {
-            const video = document.getElementById('game-video');
-            video.pause();
-            finishVideo();
+            // Update skip button to use the same callback
+            window.skipVideo = () => {
+                video.pause();
+                videoScreen.style.display = 'none';
+                if (callback) callback();
+            };
         }
 
         function finishVideo() {
-            const videoScreen = document.getElementById('video-screen');
-            videoScreen.style.display = 'none';
-            
             continueToPlay();
         }
 
@@ -360,7 +362,7 @@
                 const btn = document.createElement('button');
                 btn.className = "w-full text-left p-4 md:p-6 border border-white/20 hover:border-white hover:bg-white/10 transition-all group flex justify-between items-center bg-white/5 font-sans";
                 btn.innerHTML = `<span class="text-sm md:text-xl font-bold">${choice.text}</span><span class="opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all text-xl">→</span>`;
-                btn.onclick = () => handleChoice(choice.score);
+                btn.onclick = () => handleChoice(choice.score, choice.text);
                 container.appendChild(btn);
             });
 
@@ -383,14 +385,24 @@
             document.getElementById('anxiety-text').innerText = `${anxiety}%`;
         }
 
-        function handleChoice(score) {
+        function handleChoice(score, choiceText) {
             anxiety += score;
             anxietyHistory.push(anxiety);
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                renderQuestion();
+            
+            if (currentQuestionIndex === 0) {
+                // Play branching video for the first question
+                const videoSrc = choiceText.startsWith('A') ? 'answer1a.mp4' : 'answer1b.mp4';
+                playVideo(videoSrc, () => {
+                    currentQuestionIndex++;
+                    renderQuestion();
+                });
             } else {
-                showEnding();
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showEnding();
+                }
             }
         }
 
