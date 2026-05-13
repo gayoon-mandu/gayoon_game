@@ -72,9 +72,9 @@
     <!-- Intro Screen -->
     <div id="intro-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black transition-opacity duration-1000">
         <div class="text-center space-y-6 md:space-y-8 max-w-2xl px-6">
-            <h1 class="text-5xl md:text-9xl font-black tracking-[0.2em] uppercase animate-pulse-slow leading-none">PASSING</h1>
-            <div class="pt-8 md:pt-12">
-                <button onclick="startSelect()" class="group relative px-10 md:px-12 py-3 md:py-4 border-2 border-white text-lg md:text-xl uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-500 overflow-hidden">
+            <h1 class="text-5xl md:text-9xl font-black tracking-[0.2em] uppercase animate-pulse-slow leading-none text-center w-full">PASSING</h1>
+            <div class="pt-8 md:pt-12 flex justify-center w-full">
+                <button onclick="startSelect()" class="group relative px-10 md:px-12 py-3 md:py-4 border-2 border-white text-lg md:text-xl uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-500 overflow-hidden mx-auto">
                     <span class="relative z-10 font-black">Start</span>
                 </button>
             </div>
@@ -102,7 +102,7 @@
             <div onclick="selectCharacter('IRENE')" class="group cursor-pointer flex flex-col items-center transition-transform duration-500 hover:scale-105 w-full md:w-1/2 max-w-sm md:max-w-md translate-x-12 md:translate-x-24">
                 <div class="relative w-full h-[50vh] md:h-[70vh] flex flex-col items-center justify-end">
                     <img src="character02.png" alt="IRENE" class="h-full w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute bottom-4 w-full flex justify-center -translate-x-8 md:-translate-x-16">
+                    <div class="absolute bottom-4 w-full flex justify-center -translate-x-12 md:-translate-x-24">
                         <div class="border-[2px] border-neutral-300 rounded-[2rem] px-8 py-1.5 md:px-12 md:py-2 bg-gradient-to-b from-neutral-600 via-neutral-800 to-black shadow-[inset_0_2px_5px_rgba(255,255,255,0.4),0_5px_15px_rgba(0,0,0,0.5)]">
                             <h3 class="text-base md:text-xl font-bold tracking-[0.3em] text-center uppercase text-white font-sans">IRENE</h3>
                         </div>
@@ -114,7 +114,7 @@
             <div onclick="selectCharacter('CLARE')" class="group cursor-pointer flex flex-col items-center transition-transform duration-500 hover:scale-105 w-full md:w-1/2 max-w-sm md:max-w-md translate-x-12 md:translate-x-24">
                 <div class="relative w-full h-[50vh] md:h-[70vh] flex flex-col items-center justify-end">
                     <img src="character01.png" alt="CLARE" class="h-full w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-700">
-                    <div class="absolute bottom-4 w-full flex justify-center -translate-x-8 md:-translate-x-16">
+                    <div class="absolute bottom-4 w-full flex justify-center -translate-x-12 md:-translate-x-24">
                         <div class="border-[2px] border-neutral-300 rounded-[2rem] px-8 py-1.5 md:px-12 md:py-2 bg-gradient-to-b from-neutral-600 via-neutral-800 to-black shadow-[inset_0_2px_5px_rgba(255,255,255,0.4),0_5px_15px_rgba(0,0,0,0.5)]">
                             <h3 class="text-base md:text-xl font-bold tracking-[0.3em] text-center uppercase text-white font-sans">CLARE</h3>
                         </div>
