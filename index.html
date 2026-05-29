@@ -87,7 +87,7 @@
     <!-- Quote Screen -->
     <div id="quote-screen" class="hidden fixed inset-0 z-[110] flex flex-col items-center justify-center bg-black transition-opacity duration-1000 opacity-0">
         <p class="text-xl md:text-3xl italic opacity-80 border-y border-white/30 py-8 px-6 max-w-4xl text-center leading-relaxed">
-            "We're all of us passing for something or other, aren't we?"
+            “It’s funny about ‘passing.’<br><br>We disapprove of it and at the same time condone it.”
         </p>
     </div>
 
@@ -204,7 +204,7 @@
 
         const ireneQuestions = [
             {
-                id: 1,
+                id: "1-1",
                 scene: "백인 전용 호텔 공간에서 CLARE와의 첫 만남",
                 text: "낯선 여자가 나를 빤히 쳐다본다. 어떻게 할까?",
                 choices: [
@@ -665,20 +665,11 @@
                 clareStatsHistory.push(Object.assign({}, clareStats));
             }
             
-            if (currentQuestionIndex === 0) {
-                // Play branching video for the first question
-                const videoSrc = choiceText.startsWith('A') ? 'answer1a.mp4' : 'answer1b.mp4';
-                playVideo(videoSrc, () => {
-                    currentQuestionIndex++;
-                    renderQuestion();
-                });
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
             } else {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questions.length) {
-                    renderQuestion();
-                } else {
-                    showEnding();
-                }
+                showEnding();
             }
         }
 
