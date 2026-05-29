@@ -761,7 +761,23 @@
             let html = '';
             
             if (selectedCharacter === 'IRENE') {
-                if (anxiety >= 85) {
+                const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
+                let highestStats = [];
+                if (ireneStats.C === maxVal) highestStats.push('C');
+                if (ireneStats.S === maxVal) highestStats.push('S');
+                if (ireneStats.R === maxVal) highestStats.push('R');
+                
+                let ending = '';
+                if (highestStats.length >= 2) {
+                    ending = 'The Fall';
+                } else {
+                    const dominant = highestStats[0];
+                    if (dominant === 'C') ending = 'Return';
+                    else if (dominant === 'R') ending = 'Quiet Collapse';
+                    else if (dominant === 'S') ending = 'Passing';
+                }
+
+                if (ending === 'Passing') {
                     // Ending 4: Passing
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     endingImg.src = 'ending_b.png';
@@ -783,7 +799,7 @@
                             </a>
                         </div>
                     `;
-                } else if (anxiety >= 60) {
+                } else if (ending === 'The Fall') {
                     // Ending 1: The Fall
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
                     endingImg.src = 'ending_a.png';
@@ -805,7 +821,7 @@
                             </a>
                         </div>
                     `;
-                } else if (anxiety >= 35) {
+                } else if (ending === 'Quiet Collapse') {
                     // Ending 3: Quiet Collapse
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     endingImg.src = 'ending_b.png';
