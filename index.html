@@ -198,6 +198,10 @@
         const endingSfx = document.getElementById('ending-sfx');
         let questions = [];
 
+        // Irene-specific Stats
+        let ireneStats = { C: 0, S: 0, R: 0 };
+        let ireneStatsHistory = [{ C: 0, S: 0, R: 0 }];
+
         // Clare-specific Stats
         let clareStats = { P: 50, C: 50, S: 50 };
         let clareStatsHistory = [{ P: 50, C: 50, S: 50 }];
@@ -208,26 +212,26 @@
                 scene: "백인 전용 호텔 공간에서 CLARE와의 첫 만남",
                 text: "낯선 여자가 나를 빤히 쳐다본다. 어떻게 할까?",
                 choices: [
-                    { text: "A. 커피를 마시는 척 하며 시선을 피한다", score: 15 },
-                    { text: "B. 나도 쳐다본다.", score: 0 }
+                    { text: "A. 커피를 마시는 척하며 시선을 피한다.", cChange: 1, sChange: 0, rChange: 0 },
+                    { text: "B. 나도 쳐다본다.", cChange: 0, sChange: 1, rChange: 0 }
                 ]
             },
             {
                 id: "1-2",
                 scene: "백인 전용 호텔 공간에서 CLARE와의 첫 만남",
-                text: "Clare가 자신의 'Passing' 생활을 이야기하며 당신의 근황을 묻는다.",
+                text: "Clare가 자신의 ‘Passing’ 생활을 이야기하며 당신의 근황을 묻는다.",
                 choices: [
-                    { text: "A. 나는 할렘에서 평범하고 만족스럽게 잘 지내.", score: 5 },
-                    { text: "B. 백인으로 살아간다는 건 어때? 행복해?", score: 20 }
+                    { text: "A. 나는 할렘에서 평범하고 만족스럽게 잘 지내.", cChange: 0, sChange: 0, rChange: 1 },
+                    { text: "B. 백인으로 살아간다는 건 어때? 행복해?", cChange: 0, sChange: 1, rChange: 0 }
                 ]
             },
             {
                 id: "2-1",
                 scene: "IRENE의 집",
-                text: '갑자기 찾아 온 Clare가 "가끔은 예전 삶이 그리워. 남편에게 들킬까봐 겁이 나."라고 말한다.',
+                text: "갑자기 찾아 온 Clare가 “가끔은 예전 삶이 그리워, 패싱 한 걸 남편에게 들킬까봐 겁이 나”라고 말한다.",
                 choices: [
-                    { text: "A. 그리우면 돌아오면 되잖아. 왜 그렇게 위험한 삶을 살아?", score: 15 },
-                    { text: "B. 네가 왜 그런 선택을 했는지.. 조금은 이해할 것 같아.", score: 5 }
+                    { text: "A. 그리우면 돌아오면 되잖아. 왜 그렇게 위험한 삶을 살아?", cChange: 1, sChange: 0, rChange: 0 },
+                    { text: "B. 네가 왜 그런 선택을 했는지.. 조금은 이해할 것 같아.", cChange: 0, sChange: 1, rChange: 0 }
                 ]
             },
             {
@@ -235,8 +239,8 @@
                 scene: "IRENE의 집",
                 text: "Clare는 앞으로 자주 만나고 싶다고 이야기한다.",
                 choices: [
-                    { text: "A. 망설여지지만 차마 거절하지 못해 '그래...'라고 답한다.", score: 10 },
-                    { text: "B. '이번주에 흑인 파티가 있는데... 같이 갈래?'라고 답한다.", score: 20 }
+                    { text: "A. 망설여지지만 차마 거절하지 못한다. “그래…”라고 답한다.", cChange: 0, sChange: 0, rChange: 1 },
+                    { text: "B. 이번주에 흑인 파티가 있는데… 같이 갈래?라고 답한다.", cChange: 0, sChange: 0, rChange: 1 }
                 ]
             },
             {
@@ -244,8 +248,8 @@
                 scene: "IRENE의 집",
                 text: "BRIAN은 “이 도시를 떠나고 싶다”고 말한다.",
                 choices: [
-                    { text: "A. 지금 삶도 충분히 안정적이야. 왜 굳이 변화를 원해?", score: 5 },
-                    { text: "B. 여기서 계속 살아가는 게 답답한 건 이해해.", score: 15 }
+                    { text: "A. 지금 삶도 충분히 안정적이야. 왜 굳이 변화를 원해?", cChange: 0, sChange: 0, rChange: 1 },
+                    { text: "B. 여기서 계속 살아가는 게 답답한 건 이해해.", cChange: 1, sChange: 0, rChange: 0 }
                 ]
             },
             {
@@ -253,8 +257,8 @@
                 scene: "IRENE의 집",
                 text: "BRIAN이 아이들에게 인종차별의 현실을 알려줘야 한다고 말한다.",
                 choices: [
-                    { text: "A. 아이들은 아직 어려. 위험한 현실은 최대한 늦게 알게 하고 싶어.", score: 5 },
-                    { text: "B. 언젠간 마주해야 할 현실이라면 숨길 수만은 없어.", score: 20 }
+                    { text: "A. 아이들은 아직 어려. 위험한 현실은 최대한 늦게 알게 하고 싶어.", cChange: 0, sChange: 0, rChange: 1 },
+                    { text: "B. 언젠간 마주해야 할 현실이라면 숨길 수만은 없어.", cChange: 1, sChange: 0, rChange: 0 }
                 ]
             },
             {
@@ -262,8 +266,8 @@
                 scene: "IRENE의 집",
                 text: "BRIAN과 CLARE가 웃으며 대화하는 모습을 본다.",
                 choices: [
-                    { text: "A. 애써 아무렇지 않은 척 자리를 피한다.", score: 10 },
-                    { text: "B. 둘 사이의 분위기를 의식하며 대화에 끼어든다.", score: 20 }
+                    { text: "A. 애써 아무렇지 않은 척 자리를 피한다.", cChange: 0, sChange: 1, rChange: 0 },
+                    { text: "B. 둘 사이의 분위기를 의식하며 대화에 끼어든다.", cChange: 0, sChange: 0, rChange: 1 }
                 ]
             },
             {
@@ -271,8 +275,8 @@
                 scene: "IRENE의 집",
                 text: "BRIAN이 CLARE와 대화 후, Clare를 두둔하는 듯한 말을 한다.",
                 choices: [
-                    { text: "A. 현실적인 위험성과 도덕적 책임감을 들어 브라이언의 감성을 차단한다", score: 15 },
-                    { text: "B. 브라이언이 품고 있는 현실 도피(이민) 욕구를 클레어의 삶에 빗대어 우회적으로 꼬집는다.", score: 25 }
+                    { text: "A. 현실적인 위험성과 도덕적 책임감을 들어 브라이언의 감성을 차단한다.", cChange: 1, sChange: 0, rChange: 0 },
+                    { text: "B. 브라이언이 품고 있는 현실 도피(이민) 욕구를 클레어의 삶에 빗대어 우회적으로 꼬집는다.", cChange: 0, sChange: 0, rChange: 1 }
                 ]
             },
             {
@@ -280,8 +284,8 @@
                 scene: "할렘 사교 파티 장면",
                 text: "파티장에서 CLARE는 자연스럽게 사람들의 시선을 사로잡는다. 그녀를 바라보는 당신의 감정은?",
                 choices: [
-                    { text: "A. 내 일상을 흔들 수 있는 불안한 존재로 느껴진다.", score: 20 },
-                    { text: "B. 그녀의 자유롭고 거리낌 없는 태도에 묘하게 끌린다.", score: 5 }
+                    { text: "A. 내 일상을 흔들 수 있는 불안한 존재로 느껴진다.", cChange: 1, sChange: 0, rChange: 0 },
+                    { text: "B. 그녀의 자유롭고 거리낌 없는 태도에 묘하게 끌린다.", cChange: 0, sChange: 1, rChange: 0 }
                 ]
             },
             {
@@ -289,8 +293,8 @@
                 scene: "할렘 사교 파티 장면",
                 text: "CLARE가 “여기서는 숨을 쉴 수 있는 것 같아”라고 말한다.",
                 choices: [
-                    { text: "A. 그 말이 진심이라기보다, 이곳을 잠시 이용하는 것처럼 느껴진다.", score: 10 },
-                    { text: "B. 이곳도, 나도 완전히 자유로운 곳은 아닐지도 모른다고 느낀다.", score: 20 }
+                    { text: "A. 그 말이 진심이라기보다, 이곳을 잠시 이용하는 것처럼 느껴진다.", cChange: 1, sChange: 0, rChange: 0 },
+                    { text: "B. 이곳도, 나도 완전히 자유로운 곳은 아닐지도 모른다고 느낀다.", cChange: 0, sChange: 1, rChange: 0 }
                 ]
             },
             {
@@ -298,17 +302,17 @@
                 scene: "폭풍전야의 밤",
                 text: "Clare의 남편이 갑자기 파티장에 나타난다.",
                 choices: [
-                    { text: "A. 상황이 커지기 전에 Clare를 피하게 만든다.", score: 10 },
-                    { text: "B. 지켜본다.", score: 25 }
+                    { text: "A. 상황이 커지기 전에 Clare를 피하게 만든다.", cChange: 0, sChange: 0, rChange: 1 },
+                    { text: "B. 지켜본다.", cChange: 1, sChange: 0, rChange: 0 }
                 ]
             },
             {
                 id: "6-2",
                 scene: "폭풍전야의 밤",
-                text: "방 안의 소음이 멀어지는 것 처럼 느껴지고, 당신은 창가에 서 있는 Clare를 발견한다.",
+                text: "방 안의 소음이 멀어지는 것처럼 느껴지고, 당신은 창가에 서 있는 Clare를 발견한다.",
                 choices: [
-                    { text: "A. 조용히 그녀를 바라본다.", score: 10 },
-                    { text: "B. 아무 말도 하지 않은 채, Clare에게 다가간다.", score: 25 }
+                    { text: "A. 조용히 그녀를 바라본다.", cChange: 0, sChange: 1, rChange: 0 },
+                    { text: "B. 아무 말도 하지 않은 채, Clare에게 다가간다.", cChange: 0, sChange: 1, rChange: 0 }
                 ]
             }
         ];
@@ -514,12 +518,38 @@
             const gaugeSec = document.getElementById('gauge-section');
             if (selectedCharacter === 'IRENE') {
                 gaugeSec.innerHTML = `
-                    <div class="flex items-center gap-4 w-full md:w-auto font-sans">
-                        <div class="text-[10px] uppercase tracking-widest font-bold opacity-70">Anxiety</div>
-                        <div id="anxiety-gauge-container" class="flex-1 md:w-48 h-2 bg-white/10 border border-white/20 relative overflow-hidden">
+                    <div class="flex flex-col gap-1 w-full md:w-64 bg-black/40 p-2 border border-white/10 rounded font-sans">
+                        <div class="flex items-center justify-between text-[10px] uppercase font-black tracking-widest text-red-400 mb-1">
+                            <span>Composite Anxiety</span>
+                            <span id="anxiety-text" class="font-mono text-red-500 font-bold">0%</span>
+                        </div>
+                        <div id="anxiety-gauge-container" class="h-2 bg-white/10 border border-white/20 relative overflow-hidden mb-2">
                             <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
                         </div>
-                        <div id="anxiety-text" class="text-[10px] font-mono w-8 font-bold">0%</div>
+                        
+                        <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
+                            <span>Social / Community (C)</span>
+                            <span id="c-val" class="font-mono text-purple-400">0%</span>
+                        </div>
+                        <div class="h-1 bg-white/10 relative overflow-hidden mb-1">
+                            <div id="c-bar" class="absolute top-0 left-0 h-full bg-purple-500 transition-all duration-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
+                            <span>Self / Identity (S)</span>
+                            <span id="s-val" class="font-mono text-blue-400">0%</span>
+                        </div>
+                        <div class="h-1 bg-white/10 relative overflow-hidden mb-1">
+                            <div id="s-bar" class="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
+                            <span>Relationship / Family (R)</span>
+                            <span id="r-val" class="font-mono text-green-400">0%</span>
+                        </div>
+                        <div class="h-1 bg-white/10 relative overflow-hidden">
+                            <div id="r-bar" class="absolute top-0 left-0 h-full bg-green-500 transition-all duration-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" style="width: 0%"></div>
+                        </div>
                     </div>
                 `;
             } else {
@@ -553,20 +583,26 @@
             }
             renderQuestion();
         }
-
         function goBackFromPlay() {
             if (currentQuestionIndex === 0) {
                 document.getElementById('play-screen').classList.add('hidden');
                 document.getElementById('select-screen').classList.remove('hidden');
                 anxiety = 0;
                 anxietyHistory = [0];
+                ireneStats = { C: 0, S: 0, R: 0 };
+                ireneStatsHistory = [{ C: 0, S: 0, R: 0 }];
                 clareStats = { P: 50, C: 50, S: 50 };
                 clareStatsHistory = [{ P: 50, C: 50, S: 50 }];
             } else {
                 currentQuestionIndex--;
-                anxietyHistory.pop();
-                anxiety = anxietyHistory[anxietyHistory.length - 1];
-                if (selectedCharacter === 'CLARE') {
+                if (selectedCharacter === 'IRENE') {
+                    ireneStatsHistory.pop();
+                    ireneStats = Object.assign({}, ireneStatsHistory[ireneStatsHistory.length - 1]);
+                    const cPct = Math.round((ireneStats.C / 7) * 100);
+                    const sPct = Math.round((ireneStats.S / 6) * 100);
+                    const rPct = Math.round((ireneStats.R / 8) * 100);
+                    anxiety = Math.round((cPct + sPct + rPct) / 3);
+                } else {
                     clareStatsHistory.pop();
                     clareStats = Object.assign({}, clareStatsHistory[clareStatsHistory.length - 1]);
                 }
@@ -585,9 +621,14 @@
             updateAudioIcons();
 
             currentQuestionIndex = questions.length - 1;
-            anxietyHistory.pop();
-            anxiety = anxietyHistory[anxietyHistory.length - 1];
-            if (selectedCharacter === 'CLARE') {
+            if (selectedCharacter === 'IRENE') {
+                ireneStatsHistory.pop();
+                ireneStats = Object.assign({}, ireneStatsHistory[ireneStatsHistory.length - 1]);
+                const cPct = Math.round((ireneStats.C / 7) * 100);
+                const sPct = Math.round((ireneStats.S / 6) * 100);
+                const rPct = Math.round((ireneStats.R / 8) * 100);
+                anxiety = Math.round((cPct + sPct + rPct) / 3);
+            } else {
                 clareStatsHistory.pop();
                 clareStats = Object.assign({}, clareStatsHistory[clareStatsHistory.length - 1]);
             }
@@ -617,6 +658,11 @@
             const charImg = document.getElementById('char-image');
             
             if (selectedCharacter === 'IRENE') {
+                const cPct = Math.round((ireneStats.C / 7) * 100);
+                const sPct = Math.round((ireneStats.S / 6) * 100);
+                const rPct = Math.round((ireneStats.R / 8) * 100);
+                anxiety = Math.round((cPct + sPct + rPct) / 3);
+                
                 const gaugeContainer = document.getElementById('anxiety-gauge-container');
                 if (anxiety > 50) {
                     charImg.className = "w-full h-full object-cover transition-all duration-1000 sepia-anxiety";
@@ -630,8 +676,22 @@
                 
                 const anxietyBar = document.getElementById('anxiety-bar');
                 const anxietyText = document.getElementById('anxiety-text');
-                if (anxietyBar) anxietyBar.style.width = `${Math.min(anxiety, 100)}%`;
+                if (anxietyBar) anxietyBar.style.width = `${anxiety}%`;
                 if (anxietyText) anxietyText.innerText = `${anxiety}%`;
+                
+                const cBar = document.getElementById('c-bar');
+                const cVal = document.getElementById('c-val');
+                const sBar = document.getElementById('s-bar');
+                const sVal = document.getElementById('s-val');
+                const rBar = document.getElementById('r-bar');
+                const rVal = document.getElementById('r-val');
+                
+                if (cBar) cBar.style.width = `${cPct}%`;
+                if (cVal) cVal.innerText = `${cPct}%`;
+                if (sBar) sBar.style.width = `${sPct}%`;
+                if (sVal) sVal.innerText = `${sPct}%`;
+                if (rBar) rBar.style.width = `${rPct}%`;
+                if (rVal) rVal.innerText = `${rPct}%`;
             } else {
                 charImg.className = "w-full h-full object-cover transition-all duration-1000 grayscale";
                 
@@ -656,8 +716,15 @@
             const choice = q.choices[choiceIdx];
             
             if (selectedCharacter === 'IRENE') {
-                anxiety += choice.score;
-                anxietyHistory.push(anxiety);
+                ireneStats.C += choice.cChange || 0;
+                ireneStats.S += choice.sChange || 0;
+                ireneStats.R += choice.rChange || 0;
+                ireneStatsHistory.push(Object.assign({}, ireneStats));
+                
+                const cPct = Math.round((ireneStats.C / 7) * 100);
+                const sPct = Math.round((ireneStats.S / 6) * 100);
+                const rPct = Math.round((ireneStats.R / 8) * 100);
+                anxiety = Math.round((cPct + sPct + rPct) / 3);
             } else {
                 clareStats.P = Math.max(0, Math.min(100, clareStats.P + (choice.pChange || 0)));
                 clareStats.C = Math.max(0, Math.min(100, clareStats.C + (choice.cChange || 0)));
@@ -682,7 +749,11 @@
             const endingImg = document.getElementById('ending-img');
             
             if (selectedCharacter === 'IRENE') {
-                document.getElementById('final-score-badge').innerHTML = `Final Anxiety Score: <span id="final-anxiety-val" class="font-black text-red-500 text-base md:text-xl ml-2">${anxiety}%</span>`;
+                const cPct = Math.round((ireneStats.C / 7) * 100);
+                const sPct = Math.round((ireneStats.S / 6) * 100);
+                const rPct = Math.round((ireneStats.R / 8) * 100);
+                anxiety = Math.round((cPct + sPct + rPct) / 3);
+                document.getElementById('final-score-badge').innerHTML = `Final Anxiety: <span class="font-black text-red-500 text-base md:text-xl ml-2">${anxiety}%</span> <span class="text-xs text-neutral-400 ml-2">(C:${cPct}% S:${sPct}% R:${rPct}%)</span>`;
             } else {
                 document.getElementById('final-score-badge').innerHTML = `Final Stats: <span class="font-black text-blue-400 text-sm ml-2">P:${clareStats.P}%</span> <span class="font-black text-green-400 text-sm ml-2">C:${clareStats.C}%</span> <span class="font-black text-yellow-400 text-sm ml-2">S:${clareStats.S}%</span>`;
             }
