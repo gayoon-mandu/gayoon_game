@@ -133,12 +133,14 @@
                     <span id="current-char-name" class="text-white opacity-100 font-black"></span>
                 </div>
             </div>
-            <div class="flex items-center gap-4 w-full md:w-auto">
-                <div class="text-[10px] uppercase tracking-widest font-bold opacity-70">Anxiety</div>
-                <div id="anxiety-gauge-container" class="flex-1 md:w-48 h-2 bg-white/10 border border-white/20 relative overflow-hidden">
-                    <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
+            <div id="gauge-section" class="w-full md:w-auto">
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <div class="text-[10px] uppercase tracking-widest font-bold opacity-70">Anxiety</div>
+                    <div id="anxiety-gauge-container" class="flex-1 md:w-48 h-2 bg-white/10 border border-white/20 relative overflow-hidden">
+                        <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
+                    </div>
+                    <div id="anxiety-text" class="text-[10px] font-mono w-8 font-bold">0%</div>
                 </div>
-                <div id="anxiety-text" class="text-[10px] font-mono w-8 font-bold">0%</div>
             </div>
         </div>
 
@@ -152,7 +154,7 @@
                 <div class="space-y-3 md:space-y-4">
                     <div id="scene-num" class="text-[10px] md:text-xs text-red-500 uppercase tracking-widest font-black font-sans"></div>
                     <div id="scene-desc" class="text-[10px] md:text-sm italic opacity-50 border-l-2 border-white/20 pl-3 md:pl-4"></div>
-                    <h3 id="question-text" class="text-xl md:text-5xl font-black leading-tight"></h3>
+                    <h3 id="question-text" class="text-xl md:text-5xl font-black leading-tight font-sans"></h3>
                 </div>
 
                 <div id="choices-container" class="grid gap-3 md:gap-6 pb-8"></div>
@@ -194,8 +196,13 @@
         let isPlayingBgm = false;
         const bgm = document.getElementById('bgm');
         const endingSfx = document.getElementById('ending-sfx');
+        let questions = [];
 
-        const questions = [
+        // Clare-specific Stats
+        let clareStats = { P: 50, C: 50, S: 50 };
+        let clareStatsHistory = [{ P: 50, C: 50, S: 50 }];
+
+        const ireneQuestions = [
             {
                 id: 1,
                 scene: "백인 전용 호텔 공간에서 CLARE와의 첫 만남",
@@ -206,30 +213,204 @@
                 ]
             },
             {
-                id: 2,
+                id: "1-2",
+                scene: "백인 전용 호텔 공간에서 CLARE와의 첫 만남",
+                text: "Clare가 자신의 'Passing' 생활을 이야기하며 당신의 근황을 묻는다.",
+                choices: [
+                    { text: "A. 나는 할렘에서 평범하고 만족스럽게 잘 지내.", score: 5 },
+                    { text: "B. 백인으로 살아간다는 건 어때? 행복해?", score: 20 }
+                ]
+            },
+            {
+                id: "2-1",
                 scene: "IRENE의 집",
-                text: "CLARE가 자신의 'PASSING' 생활을 자랑하며 당신의 근황을 묻는다.",
+                text: '갑자기 찾아 온 Clare가 "가끔은 예전 삶이 그리워. 남편에게 들킬까봐 겁이 나."라고 말한다.',
                 choices: [
-                    { text: "나는 할렘에서 평범하고 안전하게 잘 지내.", score: 5 },
-                    { text: "남편 몰래 이런 짓을 하는 게 무섭지는 않아? 행복하니?", score: 20 }
+                    { text: "A. 그리우면 돌아오면 되잖아. 왜 그렇게 위험한 삶을 살아?", score: 15 },
+                    { text: "B. 네가 왜 그런 선택을 했는지.. 조금은 이해할 것 같아.", score: 5 }
                 ]
             },
             {
-                id: 3,
+                id: "2-2",
+                scene: "IRENE의 집",
+                text: "Clare는 앞으로 자주 만나고 싶다고 이야기한다.",
+                choices: [
+                    { text: "A. 망설여지지만 차마 거절하지 못해 '그래...'라고 답한다.", score: 10 },
+                    { text: "B. '이번주에 흑인 파티가 있는데... 같이 갈래?'라고 답한다.", score: 20 }
+                ]
+            },
+            {
+                id: "3-1",
+                scene: "IRENE의 집",
+                text: "BRIAN은 “이 도시를 떠나고 싶다”고 말한다.",
+                choices: [
+                    { text: "A. 지금 삶도 충분히 안정적이야. 왜 굳이 변화를 원해?", score: 5 },
+                    { text: "B. 여기서 계속 살아가는 게 답답한 건 이해해.", score: 15 }
+                ]
+            },
+            {
+                id: "3-2",
+                scene: "IRENE의 집",
+                text: "BRIAN이 아이들에게 인종차별의 현실을 알려줘야 한다고 말한다.",
+                choices: [
+                    { text: "A. 아이들은 아직 어려. 위험한 현실은 최대한 늦게 알게 하고 싶어.", score: 5 },
+                    { text: "B. 언젠간 마주해야 할 현실이라면 숨길 수만은 없어.", score: 20 }
+                ]
+            },
+            {
+                id: "4-1",
+                scene: "IRENE의 집",
+                text: "BRIAN과 CLARE가 웃으며 대화하는 모습을 본다.",
+                choices: [
+                    { text: "A. 애써 아무렇지 않은 척 자리를 피한다.", score: 10 },
+                    { text: "B. 둘 사이의 분위기를 의식하며 대화에 끼어든다.", score: 20 }
+                ]
+            },
+            {
+                id: "4-2",
+                scene: "IRENE의 집",
+                text: "BRIAN이 CLARE와 대화 후, Clare를 두둔하는 듯한 말을 한다.",
+                choices: [
+                    { text: "A. 현실적인 위험성과 도덕적 책임감을 들어 브라이언의 감성을 차단한다", score: 15 },
+                    { text: "B. 브라이언이 품고 있는 현실 도피(이민) 욕구를 클레어의 삶에 빗대어 우회적으로 꼬집는다.", score: 25 }
+                ]
+            },
+            {
+                id: "5-1",
                 scene: "할렘 사교 파티 장면",
-                text: "파티장 한편에서 누군가 'PASSING'에 대해 수근거리는 소리가 들린다.",
+                text: "파티장에서 CLARE는 자연스럽게 사람들의 시선을 사로잡는다. 그녀를 바라보는 당신의 감정은?",
                 choices: [
-                    { text: "못 들은 척하며 자리를 피한다.", score: 15 },
-                    { text: "대화에 끼어들어 당당하게 의견을 말한다.", score: 5 }
+                    { text: "A. 내 일상을 흔들 수 있는 불안한 존재로 느껴진다.", score: 20 },
+                    { text: "B. 그녀의 자유롭고 거리낌 없는 태도에 묘하게 끌린다.", score: 5 }
                 ]
             },
             {
-                id: 4,
-                scene: "폭풍전야의 밤",
-                text: "모든 비밀이 밝혀질 것 같은 예감이 든다. 당신의 선택은?",
+                id: "5-2",
+                scene: "할렘 사교 파티 장면",
+                text: "CLARE가 “여기서는 숨을 쉴 수 있는 것 같아”라고 말한다.",
                 choices: [
-                    { text: "끝까지 비밀을 지키며 침묵한다.", score: 10 },
-                    { text: "모든 것을 고백하고 상황을 정면 돌파한다.", score: 25 }
+                    { text: "A. 그 말이 진심이라기보다, 이곳을 잠시 이용하는 것처럼 느껴진다.", score: 10 },
+                    { text: "B. 이곳도, 나도 완전히 자유로운 곳은 아닐지도 모른다고 느낀다.", score: 20 }
+                ]
+            },
+            {
+                id: "6-1",
+                scene: "폭풍전야의 밤",
+                text: "Clare의 남편이 갑자기 파티장에 나타난다.",
+                choices: [
+                    { text: "A. 상황이 커지기 전에 Clare를 피하게 만든다.", score: 10 },
+                    { text: "B. 지켜본다.", score: 25 }
+                ]
+            },
+            {
+                id: "6-2",
+                scene: "폭풍전야의 밤",
+                text: "방 안의 소음이 멀어지는 것 처럼 느껴지고, 당신은 창가에 서 있는 Clare를 발견한다.",
+                choices: [
+                    { text: "A. 조용히 그녀를 바라본다.", score: 10 },
+                    { text: "B. 아무 말도 하지 않은 채, Clare에게 다가간다.", score: 25 }
+                ]
+            }
+        ];
+
+        const clareQuestions = [
+            {
+                id: "1-1",
+                scene: "백인 전용 호텔 공간에서 IRENE와의 첫 만남",
+                text: "백인 호텔에서 옛 친구 아이린을 발견했다. 아는 척을 할까?",
+                choices: [
+                    { text: "A. 과거의 나를 아는 사람을 발견하다니, 바로 반갑게 아는 척 한다.", pChange: -10, cChange: 10, sChange: -10 },
+                    { text: "B. 혹시 내 과거를 소문내면 어떡하지? 걱정하며 조심스럽게 아는 척 한다.", pChange: 0, cChange: 5, sChange: -5 }
+                ]
+            },
+            {
+                id: "2-1",
+                scene: "백인 전용 호텔 공간에서 IRENE와의 첫 만남",
+                text: "Irene에게 자신의 현재 삶을 얼마나 솔직하게 얘기할까?",
+                choices: [
+                    { text: "A. 부유한 백인 남편과의 안정적인 결혼 생활만 강조하며, 일부러 행복한 삶만을 얘기한다.", pChange: 10, cChange: -10, sChange: 10 },
+                    { text: "B. 백인으로 살아가는 삶이 주는 불안과 두려움도 조심스럽게 털어놓는다.", pChange: -10, cChange: 10, sChange: -10 }
+                ]
+            },
+            {
+                id: "2-2",
+                scene: "백인 전용 호텔 공간에서 IRENE와의 첫 만남",
+                text: "패싱을 선택한 이유를 어떻게 말할까?",
+                choices: [
+                    { text: "A. 이 선택이 자신과 가족에게 최선이었다고, 거의 후회 없는 선택처럼 말한다.", pChange: 10, cChange: -10, sChange: 10 },
+                    { text: "B. 살아남기 위한 선택이었지만, 여전히 옳은 선택이었는지 스스로 확신하지 못한다고 말한다.", pChange: -10, cChange: 10, sChange: -10 }
+                ]
+            },
+            {
+                id: "3-1",
+                scene: "IRENE의 집",
+                text: "Irene의 집에 들어왔다, 그녀의 집과 가족에 대해서 뭐라고 말을 할까?",
+                choices: [
+                    { text: "A. 이곳이 답답해 보인다는 농담 섞인 말을 건넨다.", pChange: 10, cChange: -10, sChange: 10 },
+                    { text: "B. 이런 공기와 사람들의 온기가 그리웠다고 말한다.", pChange: -10, cChange: 20, sChange: -10 }
+                ]
+            },
+            {
+                id: "3-2",
+                scene: "IRENE의 집",
+                text: "Irene과 나눈 대화가 즐거웠다. 하지만 앞으로 Irene에 대해서 어떻게 생각할지 고민이 된다.",
+                choices: [
+                    { text: "A. 예전 시절을 떠올리게 해 주는 ‘좋은 옛 친구’ 정도로 생각한다.", pChange: 5, cChange: 5, sChange: 10 },
+                    { text: "B. 경계를 함께 넘나들 수 있는, 위험하지만 끌리는 동료처럼 느끼기 시작한다.", pChange: -20, cChange: 20, sChange: -20 }
+                ]
+            },
+            {
+                id: "4-1",
+                scene: "JOHN의 사택",
+                text: "사람들이 흑인에 대한 비하 발언을 하며 나에게 그렇지 않냐고 물어본다, 뭐라고 대답할까?",
+                choices: [
+                    { text: "A. “그들이 조금 그런 편이지”라며 마음에도 없는 말을 한다.", pChange: 10, cChange: -10, sChange: 10 },
+                    { text: "B. “그들도 우리와 다르지 않다.”고 조심스럽게 말한다.", pChange: 0, cChange: 10, sChange: -10 }
+                ]
+            },
+            {
+                id: "4-2",
+                scene: "JOHN의 사택",
+                text: "John이 내 피부가 갈수록 까매진다며, 조만간 흑인이 되는 거 아니냐는 농담을 한다.",
+                choices: [
+                    { text: "A. 과하게 웃으며 강하게 부정해, 의심 자체를 불쾌하게 받아친다.", pChange: 10, cChange: -10, sChange: 0 },
+                    { text: "B. 가벼운 농담으로 받아치며, 자연스럽게 다른 화제로 넘어간다.", pChange: 0, cChange: 0, sChange: 10 }
+                ]
+            },
+            {
+                id: "5-1",
+                scene: "할렘 사교 파티 장면",
+                text: "오랜만에 느끼는 흑인 사교회의 해방감이 좋으면서도, 깊이 엮였다가 혹시 내 패싱이 들통날까 봐 두렵다. 나는 어떻게 행동할까?",
+                choices: [
+                    { text: "A. 사람들 사이로 들어가 이야기를 나누고, 적극적으로 어울린다.", pChange: -10, cChange: 10, sChange: -10 },
+                    { text: "B. 잠깐 둘러보기만 하고, 곧 자리를 떠나거나 멀찍이서 지켜본다.", pChange: 0, cChange: 0, sChange: 0 }
+                ]
+            },
+            {
+                id: "5-2",
+                scene: "할렘 사교 파티 장면",
+                text: "사람들이 나에게 아이린과 어떻게 아는 사이냐고 물어본다.",
+                choices: [
+                    { text: "A. 예전에는 흑인 동네에서 지냈었다고, 아주 조심스럽게 털어놓는다.", pChange: -10, cChange: 10, sChange: -10 },
+                    { text: "B. 그저 우연히 들른 손님일 뿐이라며, 곧 돌아갈 사람처럼 자신을 소개한다.", pChange: 10, cChange: -10, sChange: 10 }
+                ]
+            },
+            {
+                id: "6-1",
+                scene: "폭풍전야의 밤",
+                text: "한 흑인 남성이 다가와 나에게 함께 춤을 추자고 권한다.",
+                choices: [
+                    { text: "A. 살짝 미소를 지으며 뒤로 물러서서, 들고 있던 와인잔을 만지작거리며 사람들을 구경한다.", pChange: 20, cChange: -20, sChange: 20 },
+                    { text: "B. 모피 코트를 벗어 던지고, 웃음을 터뜨리며 사람들 한가운데로 걸어 들어가 함께 춤을 춘다.", pChange: -20, cChange: 20, sChange: -20 }
+                ]
+            },
+            {
+                id: "6-2",
+                scene: "갑자기 현관문이 열린다. 문 쪽에 한 남자가 서 있다. 사람들의 웃음소리가 순간 멈춘다. 몇몇 사람들이 문 쪽을 바라본다. 클레어도 시선을 돌린다.",
+                text: "분노한 존이 성큼성큼 다가와서 나의 정체를 의심하며 화를 낸다, 어떻게 할까?",
+                choices: [
+                    { text: "A. 붙잡히려는 팔을 살짝 빼내어 자신의 화려한 모피 코트를 여미며, 차갑고 우아한 목소리로 대꾸한다.", pChange: 20, cChange: -20, sChange: 10 },
+                    { text: "B. 존을 향해 섰던 몸을 돌려, 열린 창문 근처에 선 아이린의 곁으로 바짝 다가가 선다.", pChange: -20, cChange: 20, sChange: -20 }
                 ]
             }
         ];
@@ -279,6 +460,11 @@
 
         function selectCharacter(char) {
             selectedCharacter = char;
+            if (char === 'IRENE') {
+                questions = ireneQuestions;
+            } else {
+                questions = clareQuestions;
+            }
             document.getElementById('select-screen').classList.add('hidden');
             playVideo('question1b.mp4', finishVideo);
         }
@@ -323,6 +509,48 @@
             document.getElementById('play-screen').classList.remove('hidden');
             document.getElementById('current-char-name').innerText = selectedCharacter;
             document.getElementById('char-image').src = selectedCharacter === 'IRENE' ? 'character02.png' : 'character01.png';
+            
+            // Build dynamic gauge section
+            const gaugeSec = document.getElementById('gauge-section');
+            if (selectedCharacter === 'IRENE') {
+                gaugeSec.innerHTML = `
+                    <div class="flex items-center gap-4 w-full md:w-auto font-sans">
+                        <div class="text-[10px] uppercase tracking-widest font-bold opacity-70">Anxiety</div>
+                        <div id="anxiety-gauge-container" class="flex-1 md:w-48 h-2 bg-white/10 border border-white/20 relative overflow-hidden">
+                            <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
+                        </div>
+                        <div id="anxiety-text" class="text-[10px] font-mono w-8 font-bold">0%</div>
+                    </div>
+                `;
+            } else {
+                gaugeSec.innerHTML = `
+                    <div class="flex flex-col gap-1 w-full md:w-64 bg-black/40 p-2 border border-white/10 rounded font-sans">
+                        <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
+                            <span>Passing (P)</span>
+                            <span id="p-val" class="font-mono text-blue-400">50%</span>
+                        </div>
+                        <div class="h-1 bg-white/10 relative overflow-hidden mb-1">
+                            <div id="p-bar" class="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 50%"></div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
+                            <span>Community (C)</span>
+                            <span id="c-val" class="font-mono text-green-400">50%</span>
+                        </div>
+                        <div class="h-1 bg-white/10 relative overflow-hidden mb-1">
+                            <div id="c-bar" class="absolute top-0 left-0 h-full bg-green-500 transition-all duration-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" style="width: 50%"></div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
+                            <span>Security (S)</span>
+                            <span id="s-val" class="font-mono text-yellow-400">50%</span>
+                        </div>
+                        <div class="h-1 bg-white/10 relative overflow-hidden">
+                            <div id="s-bar" class="absolute top-0 left-0 h-full bg-yellow-500 transition-all duration-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]" style="width: 50%"></div>
+                        </div>
+                    </div>
+                `;
+            }
             renderQuestion();
         }
 
@@ -332,10 +560,16 @@
                 document.getElementById('select-screen').classList.remove('hidden');
                 anxiety = 0;
                 anxietyHistory = [0];
+                clareStats = { P: 50, C: 50, S: 50 };
+                clareStatsHistory = [{ P: 50, C: 50, S: 50 }];
             } else {
                 currentQuestionIndex--;
                 anxietyHistory.pop();
                 anxiety = anxietyHistory[anxietyHistory.length - 1];
+                if (selectedCharacter === 'CLARE') {
+                    clareStatsHistory.pop();
+                    clareStats = Object.assign({}, clareStatsHistory[clareStatsHistory.length - 1]);
+                }
                 renderQuestion();
             }
         }
@@ -353,6 +587,10 @@
             currentQuestionIndex = questions.length - 1;
             anxietyHistory.pop();
             anxiety = anxietyHistory[anxietyHistory.length - 1];
+            if (selectedCharacter === 'CLARE') {
+                clareStatsHistory.pop();
+                clareStats = Object.assign({}, clareStatsHistory[clareStatsHistory.length - 1]);
+            }
             renderQuestion();
         }
 
@@ -364,11 +602,11 @@
             
             const container = document.getElementById('choices-container');
             container.innerHTML = '';
-            q.choices.forEach(choice => {
+            q.choices.forEach((choice, idx) => {
                 const btn = document.createElement('button');
                 btn.className = "w-full text-left p-4 md:p-6 border border-white/20 hover:border-white hover:bg-white/10 transition-all group flex justify-between items-center bg-white/5 font-sans";
                 btn.innerHTML = `<span class="text-sm md:text-xl font-bold">${choice.text}</span><span class="opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all text-xl">→</span>`;
-                btn.onclick = () => handleChoice(choice.score, choice.text);
+                btn.onclick = () => handleChoice(idx, choice.text);
                 container.appendChild(btn);
             });
 
@@ -377,23 +615,55 @@
 
         function updateVisuals() {
             const charImg = document.getElementById('char-image');
-            const gaugeContainer = document.getElementById('anxiety-gauge-container');
             
-            if (anxiety > 50) {
-                charImg.className = "w-full h-full object-cover transition-all duration-1000 sepia-anxiety";
-                gaugeContainer.classList.add('anxiety-shake');
-                setTimeout(() => gaugeContainer.classList.remove('anxiety-shake'), 500);
+            if (selectedCharacter === 'IRENE') {
+                const gaugeContainer = document.getElementById('anxiety-gauge-container');
+                if (anxiety > 50) {
+                    charImg.className = "w-full h-full object-cover transition-all duration-1000 sepia-anxiety";
+                    if (gaugeContainer) {
+                        gaugeContainer.classList.add('anxiety-shake');
+                        setTimeout(() => gaugeContainer.classList.remove('anxiety-shake'), 500);
+                    }
+                } else {
+                    charImg.className = "w-full h-full object-cover transition-all duration-1000 grayscale";
+                }
+                
+                const anxietyBar = document.getElementById('anxiety-bar');
+                const anxietyText = document.getElementById('anxiety-text');
+                if (anxietyBar) anxietyBar.style.width = `${Math.min(anxiety, 100)}%`;
+                if (anxietyText) anxietyText.innerText = `${anxiety}%`;
             } else {
                 charImg.className = "w-full h-full object-cover transition-all duration-1000 grayscale";
+                
+                const pBar = document.getElementById('p-bar');
+                const pVal = document.getElementById('p-val');
+                const cBar = document.getElementById('c-bar');
+                const cVal = document.getElementById('c-val');
+                const sBar = document.getElementById('s-bar');
+                const sVal = document.getElementById('s-val');
+                
+                if (pBar) pBar.style.width = `${clareStats.P}%`;
+                if (pVal) pVal.innerText = `${clareStats.P}%`;
+                if (cBar) cBar.style.width = `${clareStats.C}%`;
+                if (cVal) cVal.innerText = `${clareStats.C}%`;
+                if (sBar) sBar.style.width = `${clareStats.S}%`;
+                if (sVal) sVal.innerText = `${clareStats.S}%`;
             }
-            
-            document.getElementById('anxiety-bar').style.width = `${Math.min(anxiety, 100)}%`;
-            document.getElementById('anxiety-text').innerText = `${anxiety}%`;
         }
 
-        function handleChoice(score, choiceText) {
-            anxiety += score;
-            anxietyHistory.push(anxiety);
+        function handleChoice(choiceIdx, choiceText) {
+            const q = questions[currentQuestionIndex];
+            const choice = q.choices[choiceIdx];
+            
+            if (selectedCharacter === 'IRENE') {
+                anxiety += choice.score;
+                anxietyHistory.push(anxiety);
+            } else {
+                clareStats.P = Math.max(0, Math.min(100, clareStats.P + (choice.pChange || 0)));
+                clareStats.C = Math.max(0, Math.min(100, clareStats.C + (choice.cChange || 0)));
+                clareStats.S = Math.max(0, Math.min(100, clareStats.S + (choice.sChange || 0)));
+                clareStatsHistory.push(Object.assign({}, clareStats));
+            }
             
             if (currentQuestionIndex === 0) {
                 // Play branching video for the first question
@@ -419,66 +689,166 @@
             
             const content = document.getElementById('ending-content');
             const endingImg = document.getElementById('ending-img');
-            document.getElementById('final-anxiety-val').innerText = `${anxiety}%`;
+            
+            if (selectedCharacter === 'IRENE') {
+                document.getElementById('final-score-badge').innerHTML = `Final Anxiety Score: <span id="final-anxiety-val" class="font-black text-red-500 text-base md:text-xl ml-2">${anxiety}%</span>`;
+            } else {
+                document.getElementById('final-score-badge').innerHTML = `Final Stats: <span class="font-black text-blue-400 text-sm ml-2">P:${clareStats.P}%</span> <span class="font-black text-green-400 text-sm ml-2">C:${clareStats.C}%</span> <span class="font-black text-yellow-400 text-sm ml-2">S:${clareStats.S}%</span>`;
+            }
+            
             let html = '';
             
-            if (anxiety >= 70) {
-                document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
-                endingImg.src = 'ending_b.png';
-                endingSfx.src = 'woman.mp3';
-                html = `
-                    <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Ending B</h2>
-                    <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight">THE PASSING</h3>
-                    <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0">
-                        당신은 CLARE의 삶에 완전히 잠식되었습니다.<br>
-                        거울을 보니 당신의 얼굴이 아닌, 기괴한 미소를 짓고 있는 CLARE의 얼굴이 보입니다.<br><br>
-                        …하지만 이것이 끝이라고 확신할 수 있나요?<br><br>
-                        당신이 본 것은 단지 일부일지도 모릅니다.<br>
-                        숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 확인해보세요.
-                    </p>
-                    <div class="pt-8">
-                        <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-sm">
-                            진실된 결말 보러가기
-                        </a>
-                    </div>
-                    <p class="text-base md:text-2xl font-bold pt-6 md:pt-12 text-purple-300 opacity-50 font-sans italic">"We're all of us passing for something or other..."</p>
-                `;
-            } else if (anxiety > 40) {
-                document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
-                endingImg.src = 'ending_a.png';
-                endingSfx.src = 'siren.mp3';
-                html = `
-                    <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">Ending A</h2>
-                    <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight">THE TRAGEDY</h3>
-                    <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0">
-                        혼란스러운 상황 속에서 CLARE는 창밖으로 추락한다.<br>
-                        사고였을까, 아니면...? <br>
-                        사이렌 소리만이 멀리서 울려 퍼진다.<br><br>
-                        …하지만 이것이 끝이라고 확신할 수 있나요?<br><br>
-                        당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
-                        숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
-                    </p>
-                    <div class="pt-8">
-                        <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm">
-                            진실된 결말 보러가기
-                        </a>
-                    </div>
-                    <p class="text-xl md:text-4xl font-black pt-6 md:pt-12 text-red-600 font-sans animate-pulse">"IS SHE... IS SHE...?"</p>
-                `;
+            if (selectedCharacter === 'IRENE') {
+                if (anxiety >= 85) {
+                    // Ending 4: Passing
+                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
+                    endingImg.src = 'ending_b.png';
+                    endingSfx.src = 'woman.mp3';
+                    html = `
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Passing</h2>
+                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">PASSING</h3>
+                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
+                            IRENE는 자신의 과거를 숨긴 채, 새로운 삶을 선택한다.<br>
+                            그 누구도 그녀의 진실을 알지 못하지만, 끊임없는 불안이 따라온다.<br>
+                            숨기는 삶은 안전할수록 더욱 위태로워진다.<br><br>
+                            …당신은 끝까지 자신의 진짜 모습을 감출 수 있나요?<br><br>
+                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
+                            숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
+                        </p>
+                        <div class="pt-8">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                                진실된 결말 보러가기
+                            </a>
+                        </div>
+                    `;
+                } else if (anxiety >= 60) {
+                    // Ending 1: The Fall
+                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
+                    endingImg.src = 'ending_a.png';
+                    endingSfx.src = 'siren.mp3';
+                    html = `
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">The Fall</h2>
+                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">THE FALL</h3>
+                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
+                            혼란스러운 상황 속에서 CLARE는 창밖으로 추락한다.<br>
+                            사고였을까, 아니면...?<br>
+                            사이렌 소리만이 멀리서 울려 퍼진다.<br><br>
+                            …하지만 이것이 끝이라고 확신할 수 있나요?<br><br>
+                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
+                            숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
+                        </p>
+                        <div class="pt-8">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                                진실된 결말 보러가기
+                            </a>
+                        </div>
+                    `;
+                } else if (anxiety >= 35) {
+                    // Ending 3: Quiet Collapse
+                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
+                    endingImg.src = 'ending_b.png';
+                    endingSfx.src = 'woman.mp3';
+                    html = `
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Quiet Collapse</h2>
+                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">QUIET COLLAPSE</h3>
+                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
+                            끝없는 불안 끝에, IRENE과 BRIAN은 결국 서로를 놓아준다.<br><br>
+                            무너진 것은 단순한 관계가 아니라, 인종차별과 사회적 압박 속에서 간신히 유지되던 삶이었다.<br>
+                            두 사람의 균열은 개인보다 그들이 살아가던 세계의 불안에서 비롯되고 있었다.<br><br>
+                            …불안으로부터 벗어난 삶은 정말 존재할까요?<br><br>
+                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
+                            숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
+                        </p>
+                        <div class="pt-8">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-sm font-sans">
+                                진실된 결말 보러가기
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    // Ending 2: Return
+                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
+                    endingImg.src = 'ending_c.png';
+                    endingSfx.src = 'calm.mp3';
+                    html = `
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Return</h2>
+                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">RETURN</h3>
+                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
+                            CLARE의 흔적은 점점 멀어지고, IRENE은 아무 일도 없었다는 듯 자신의 삶으로 돌아간다.<br>
+                            안정된 가정, 익숙한 일상, 조용한 밤. 모든 것은 예전처럼 평온해 보인다.<br>
+                            하지만 문득 스치는 웃음소리와 기억 속에서 IRENE은 여전히 CLARE를 떠올린다.<br><br>
+                            …정말 안전한 삶은 존재할까요?<br><br>
+                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
+                            숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
+                        </p>
+                        <div class="pt-8">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                                진실된 결말 보러가기
+                            </a>
+                        </div>
+                    `;
+                }
             } else {
-                document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
-                endingImg.src = 'ending_c.png';
-                endingSfx.src = 'calm.mp3';
-                html = `
-                    <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Ending C</h2>
-                    <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight">ROOTED</h3>
-                    <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0">
-                        폭풍이 지나가고, 아무 일도 없었던 것처럼 일상은 이어진다.<br>
-                        당신은 다시 완벽하게 다려진 옷을 입고 정자세로 앉아 찻잔을 든다.
-                    </p>
-                    <p class="text-xs md:text-lg opacity-40 pt-6 md:pt-12 uppercase tracking-[0.2em] font-sans">Still in the same world.</p>
-                `;
+                // selectedCharacter === 'CLARE'
+                if (clareStats.S < 40) {
+                    // Tragedy Fall (Ending A)
+                    endingImg.src = 'ending_a.png';
+                    endingSfx.src = 'siren.mp3';
+                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
+                    html = `
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">The Fall</h2>
+                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">THE FALL</h3>
+                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
+                            혼란스러운 상황 속에서 CLARE는 창밖으로 추락한다.<br>
+                            사고였을까, 아니면...?<br>
+                            사이렌 소리만이 멀리서 울려 퍼진다.<br><br>
+                            …하지만 이것이 끝이라고 확신할 수 있나요?<br><br>
+                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
+                            숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
+                        </p>
+                        <div class="pt-8">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                                진실된 결말 보러가기
+                            </a>
+                        </div>
+                    `;
+                } else if (clareStats.C > 60) {
+                    // Return to Harlem (Ending B)
+                    endingImg.src = 'ending_b.png';
+                    endingSfx.src = 'woman.mp3';
+                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
+                    html = `
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Return to Harlem</h2>
+                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">RETURN TO HARLEM</h3>
+                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
+                            당신은 백인으로서의 가짜 삶(Passing: ${clareStats.P}%)을 던져버리고 흑인 커뮤니티(Community: ${clareStats.C}%)로 완전히 돌아옵니다.<br>
+                            존과의 파국을 피할 수 없었지만, 마침내 온전한 자신으로 숨을 쉴 수 있게 되었습니다.<br>
+                            하지만 앞으로 마주해야 할 냉혹한 현실의 파도는 여전히 차갑고 무겁습니다.
+                        </p>
+                        <div class="pt-8">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-sm font-sans">
+                                진실된 결말 보러가기
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    // Safe / Isolated (Ending C)
+                    endingImg.src = 'ending_c.png';
+                    endingSfx.src = 'calm.mp3';
+                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
+                    html = `
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Silent Cell</h2>
+                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">SILENT CELL</h3>
+                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
+                            당신은 기어코 자신의 안전과 부(Passing: ${clareStats.P}%, Security: ${clareStats.S}%)를 지켜내는 데 성공합니다.<br>
+                            그러나 흑인 동네(Community: ${clareStats.C}%)와 동료들은 다시 멀어지고, 당신은 백인 사회라는 화려한 유리 감옥에 갇힙니다.<br>
+                            완벽하게 다려진 옷을 입고 숨죽여 살아가는 삶, 그것은 진정한 행복일까요?
+                        </p>
+                        <p class="text-xs md:text-lg opacity-40 pt-6 md:pt-12 uppercase tracking-[0.2em] font-sans text-center">Still in the same world.</p>
+                    `;
+                }
             }
+            
             content.innerHTML = html;
             endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
         }
