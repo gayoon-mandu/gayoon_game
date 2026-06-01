@@ -526,13 +526,29 @@
             setTimeout(() => {
                 document.getElementById('intro-screen').classList.add('hidden');
                 
-                // Play the opening intro trailer video before character selection!
-                playVideo('select_intro.mp4', finishIntroVideo);
+                // 1. Show the quote screen first!
+                const quoteScreen = document.getElementById('quote-screen');
+                quoteScreen.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    quoteScreen.classList.remove('opacity-0');
+                    
+                    setTimeout(() => {
+                        quoteScreen.classList.add('opacity-0');
+                        
+                        setTimeout(() => {
+                            quoteScreen.classList.add('hidden');
+                            
+                            // 2. Play the opening trailer video AFTER the quote screen has finished!
+                            playVideo('select_intro.mp4', finishIntroVideo);
+                        }, 1000);
+                    }, 3000); // Show quote for 3 seconds
+                }, 100);
             }, 1000);
         }
 
         function finishIntroVideo() {
-            // Start BGM with sound only after the intro trailer video has finished or been skipped
+            // 3. Start BGM with sound only AFTER the intro trailer video has finished or been skipped
             bgm.volume = 0.5;
             bgm.play().then(() => {
                 isPlayingBgm = true;
@@ -541,21 +557,8 @@
             
             document.getElementById('audio-toggle').classList.remove('hidden');
 
-            const quoteScreen = document.getElementById('quote-screen');
-            quoteScreen.classList.remove('hidden');
-            
-            setTimeout(() => {
-                quoteScreen.classList.remove('opacity-0');
-                
-                setTimeout(() => {
-                    quoteScreen.classList.add('opacity-0');
-                    
-                    setTimeout(() => {
-                        quoteScreen.classList.add('hidden');
-                        document.getElementById('select-screen').classList.remove('hidden');
-                    }, 1000);
-                }, 3000);
-            }, 100);
+            // 4. Transition straight to the character selection screen!
+            document.getElementById('select-screen').classList.remove('hidden');
         }
 
         function goBackToIntro() {
