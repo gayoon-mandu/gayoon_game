@@ -870,6 +870,14 @@
                         showEnding();
                     }
                 });
+            } else if (selectedCharacter === 'CLARE' && q.id === "5-2") {
+                playVideo('클레어 씬6 영상.mp4', () => {
+                    if (currentQuestionIndex < questions.length) {
+                        renderQuestion();
+                    } else {
+                        showEnding();
+                    }
+                });
             } else {
                 if (currentQuestionIndex < questions.length) {
                     renderQuestion();
