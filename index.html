@@ -846,10 +846,20 @@
             }
             
             currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                renderQuestion();
+            if (selectedCharacter === 'CLARE' && q.id === "2-2") {
+                playVideo('클레어 씬3 영상.mp4', () => {
+                    if (currentQuestionIndex < questions.length) {
+                        renderQuestion();
+                    } else {
+                        showEnding();
+                    }
+                });
             } else {
-                showEnding();
+                if (currentQuestionIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showEnding();
+                }
             }
         }
 
