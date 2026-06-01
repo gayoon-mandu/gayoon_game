@@ -9,11 +9,27 @@
     <style>
         body {
             font-family: 'Playfair Display', serif;
-            background-color: #171717;
+            background-color: #080808;
             color: white;
             cursor: default;
-            overflow-x: hidden;
             margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #game-container {
+            aspect-ratio: 16 / 9;
+            width: 100vw;
+            height: 56.25vw;
+            max-height: 100vh;
+            max-width: 177.78vh;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            background-color: #171717;
         }
 
         .font-sans { font-family: 'Roboto', sans-serif; }
@@ -51,15 +67,16 @@
         /* Mobile Scroll Optimization */
         .custom-scroll {
             overflow-y: auto;
-            max-height: 100vh;
+            max-height: 100%;
             -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col relative transition-all duration-1000 bg-neutral-900 custom-scroll">
+<body class="transition-all duration-1000">
     
-    <!-- Video Screen -->
-    <div id="video-screen" style="display: none; position: fixed; inset: 0; z-index: 99999; background-color: #000; align-items: center; justify-content: center;">
+    <div id="game-container">
+        <!-- Video Screen -->
+        <div id="video-screen" style="display: none; position: absolute; inset: 0; z-index: 99999; background-color: #000; align-items: center; justify-content: center;">
         <video id="game-video" src="question1b.mp4" muted controls playsinline webkit-playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; z-index: 99999; transform: translateZ(0); filter: none;">
             Your browser does not support the video tag.
         </video>
@@ -69,30 +86,30 @@
     <audio id="bgm" src="timersound.mp3" loop preload="auto"></audio>
     <audio id="ending-sfx" preload="auto"></audio>
 
-    <!-- Intro Screen -->
-    <div id="intro-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black transition-opacity duration-1000">
-        <div class="text-center space-y-6 md:space-y-8 max-w-2xl px-6">
-            <h1 class="text-5xl md:text-9xl font-black tracking-[0.2em] uppercase animate-pulse-slow leading-none text-center w-full -mr-[0.2em]">PASSING</h1>
-            <div class="pt-8 md:pt-12 flex justify-center w-full">
-                <button onclick="startSelect()" class="group relative px-10 md:px-12 py-3 md:py-4 border-2 border-white text-lg md:text-xl uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-500 overflow-hidden mx-auto">
-                    <span class="relative z-10 font-black">Start</span>
-                </button>
+        <!-- Intro Screen -->
+        <div id="intro-screen" class="absolute inset-0 z-[100] flex flex-col items-center justify-center bg-black transition-opacity duration-1000">
+            <div class="text-center space-y-6 md:space-y-8 max-w-2xl px-6">
+                <h1 class="text-5xl md:text-9xl font-black tracking-[0.2em] uppercase animate-pulse-slow leading-none text-center w-full -mr-[0.2em]">PASSING</h1>
+                <div class="pt-8 md:pt-12 flex justify-center w-full">
+                    <button onclick="startSelect()" class="group relative px-10 md:px-12 py-3 md:py-4 border-2 border-white text-lg md:text-xl uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-500 overflow-hidden mx-auto">
+                        <span class="relative z-10 font-black">Start</span>
+                    </button>
+                </div>
+            </div>
+            <div class="absolute bottom-8 text-[10px] opacity-30 uppercase tracking-widest font-sans px-4 text-center">
+                Based on the novel by Nella Larsen & the movie by Rebecca Hall
             </div>
         </div>
-        <div class="absolute bottom-8 text-[10px] opacity-30 uppercase tracking-widest font-sans px-4 text-center">
-            Based on the novel by Nella Larsen & the movie by Rebecca Hall
-        </div>
-    </div>
 
-    <!-- Quote Screen -->
-    <div id="quote-screen" class="hidden fixed inset-0 z-[110] flex flex-col items-center justify-center bg-black transition-opacity duration-1000 opacity-0">
+        <!-- Quote Screen -->
+        <div id="quote-screen" class="hidden absolute inset-0 z-[110] flex flex-col items-center justify-center bg-black transition-opacity duration-1000 opacity-0">
         <p class="text-xl md:text-3xl italic opacity-80 border-y border-white/30 py-8 px-6 max-w-4xl text-center leading-relaxed">
             “It’s funny about ‘passing.’<br><br>We disapprove of it and at the same time condone it.”
         </p>
     </div>
 
-    <!-- Character Selection Screen -->
-    <div id="select-screen" class="hidden min-h-screen flex flex-col items-center justify-center p-4 md:p-8 animate-fade-in relative">
+        <!-- Character Selection Screen -->
+        <div id="select-screen" class="hidden h-full w-full flex flex-col items-center justify-center p-4 md:p-8 animate-fade-in relative overflow-y-auto custom-scroll">
         <div class="absolute top-6 left-6 z-50">
             <button onclick="goBackToIntro()" class="text-[10px] md:text-sm uppercase tracking-widest border border-white/20 px-4 py-2 md:px-6 md:py-3 hover:bg-white hover:text-black transition-all font-sans font-bold">← Back</button>
         </div>
@@ -124,8 +141,8 @@
         </div>
     </div>
 
-    <!-- Play Screen -->
-    <div id="play-screen" class="hidden flex-1 flex flex-col p-4 md:p-16 animate-fade-in relative pt-20 md:pt-16">
+        <!-- Play Screen -->
+        <div id="play-screen" class="hidden h-full w-full flex flex-col p-4 md:p-8 animate-fade-in relative overflow-y-auto custom-scroll">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12 font-sans relative z-50 gap-4">
             <div class="flex items-center gap-4 md:gap-8 w-full md:w-auto justify-between md:justify-start">
                 <button onclick="goBackFromPlay()" class="text-[10px] md:text-sm uppercase tracking-widest border border-white/40 px-3 py-1.5 md:px-4 md:py-2 hover:bg-white hover:text-black transition-all font-bold">← Back</button>
@@ -162,8 +179,8 @@
         </div>
     </div>
 
-    <!-- Ending Screen -->
-    <div id="ending-screen" class="hidden flex-1 flex flex-col items-center p-6 md:p-8 text-center relative animate-fade-in overflow-y-auto">
+        <!-- Ending Screen -->
+        <div id="ending-screen" class="hidden h-full w-full flex flex-col items-center p-6 md:p-8 text-center relative animate-fade-in overflow-y-auto custom-scroll">
         <div id="final-score-badge" class="mt-12 md:mt-0 mb-6 px-6 py-2 md:px-8 md:py-3 border-2 border-white/50 rounded-full font-sans text-[10px] md:text-sm uppercase tracking-widest bg-black/60 backdrop-blur-md z-50">
             Final Anxiety Score: <span id="final-anxiety-val" class="font-black text-red-500 text-base md:text-xl ml-2"></span>
         </div>
@@ -182,11 +199,13 @@
         </div>
     </div>
 
-    <!-- Audio Control Toggle -->
-    <button id="audio-toggle" onclick="toggleBgm()" class="hidden fixed top-4 right-4 md:top-6 md:right-6 z-[200] p-2 md:p-3 border-2 border-white/30 rounded-full hover:bg-white/10 bg-black/40 backdrop-blur-md">
-        <svg id="audio-icon-on" class="w-5 h-5 md:w-6 md:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-        <svg id="audio-icon-off" class="hidden w-5 h-5 md:w-6 md:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
-    </button>
+        <!-- Audio Control Toggle -->
+        <button id="audio-toggle" onclick="toggleBgm()" class="hidden absolute top-4 right-4 z-[200] p-2 md:p-3 border-2 border-white/30 rounded-full hover:bg-white/10 bg-black/40 backdrop-blur-md">
+            <svg id="audio-icon-on" class="w-5 h-5 md:w-6 md:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            <svg id="audio-icon-off" class="hidden w-5 h-5 md:w-6 md:h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+
+    </div>
 
     <script>
         let anxiety = 0;
@@ -591,8 +610,8 @@
                 anxietyHistory = [0];
                 ireneStats = { C: 0, S: 0, R: 0 };
                 ireneStatsHistory = [{ C: 0, S: 0, R: 0 }];
-                clareStats = { P: 50, C: 50, S: 50 };
-                clareStatsHistory = [{ P: 50, C: 50, S: 50 }];
+                clareStats = { P: 0, C: 0, S: 0 };
+                clareStatsHistory = [{ P: 0, C: 0, S: 0 }];
             } else {
                 currentQuestionIndex--;
                 if (selectedCharacter === 'IRENE') {
@@ -702,12 +721,18 @@
                 const sBar = document.getElementById('s-bar');
                 const sVal = document.getElementById('s-val');
                 
-                if (pBar) pBar.style.width = `${clareStats.P}%`;
-                if (pVal) pVal.innerText = `${clareStats.P}%`;
-                if (cBar) cBar.style.width = `${clareStats.C}%`;
-                if (cVal) cVal.innerText = `${clareStats.C}%`;
-                if (sBar) sBar.style.width = `${clareStats.S}%`;
-                if (sVal) sVal.innerText = `${clareStats.S}%`;
+                // Map raw integer (-11 to +11) to UI percentages (0% to 100%)
+                // Neutral (0) is mapped to 50%
+                const pPct = Math.max(0, Math.min(100, Math.round(((clareStats.P + 11) / 22) * 100)));
+                const cPct = Math.max(0, Math.min(100, Math.round(((clareStats.C + 11) / 22) * 100)));
+                const sPct = Math.max(0, Math.min(100, Math.round(((clareStats.S + 11) / 22) * 100)));
+                
+                if (pBar) pBar.style.width = `${pPct}%`;
+                if (pVal) pVal.innerText = `${pPct}%`;
+                if (cBar) cBar.style.width = `${cPct}%`;
+                if (cVal) cVal.innerText = `${cPct}%`;
+                if (sBar) sBar.style.width = `${sPct}%`;
+                if (sVal) sVal.innerText = `${sPct}%`;
             }
         }
 
@@ -726,9 +751,9 @@
                 const rPct = Math.round((ireneStats.R / 8) * 100);
                 anxiety = Math.round((cPct + sPct + rPct) / 3);
             } else {
-                clareStats.P = Math.max(0, Math.min(100, clareStats.P + (choice.pChange || 0)));
-                clareStats.C = Math.max(0, Math.min(100, clareStats.C + (choice.cChange || 0)));
-                clareStats.S = Math.max(0, Math.min(100, clareStats.S + (choice.sChange || 0)));
+                clareStats.P = clareStats.P + (choice.pChange || 0);
+                clareStats.C = clareStats.C + (choice.cChange || 0);
+                clareStats.S = clareStats.S + (choice.sChange || 0);
                 clareStatsHistory.push(Object.assign({}, clareStats));
             }
             
@@ -747,15 +772,19 @@
             
             const content = document.getElementById('ending-content');
             const endingImg = document.getElementById('ending-img');
+            const endingVisual = document.getElementById('ending-visual');
             
             if (selectedCharacter === 'IRENE') {
+                if (endingVisual) endingVisual.style.display = 'block';
                 const cPct = Math.round((ireneStats.C / 7) * 100);
                 const sPct = Math.round((ireneStats.S / 6) * 100);
                 const rPct = Math.round((ireneStats.R / 8) * 100);
                 anxiety = Math.round((cPct + sPct + rPct) / 3);
                 document.getElementById('final-score-badge').innerHTML = `Final Anxiety: <span class="font-black text-red-500 text-base md:text-xl ml-2">${anxiety}%</span> <span class="text-xs text-neutral-400 ml-2">(C:${cPct}% S:${sPct}% R:${rPct}%)</span>`;
             } else {
-                document.getElementById('final-score-badge').innerHTML = `Final Stats: <span class="font-black text-blue-400 text-sm ml-2">P:${clareStats.P}%</span> <span class="font-black text-green-400 text-sm ml-2">C:${clareStats.C}%</span> <span class="font-black text-yellow-400 text-sm ml-2">S:${clareStats.S}%</span>`;
+                if (endingVisual) endingVisual.style.display = 'none';
+                const formatStat = (val) => (val >= 0 ? `+${val}` : `${val}`);
+                document.getElementById('final-score-badge').innerHTML = `Final Stats: <span class="font-black text-blue-400 text-sm ml-2">P: ${formatStat(clareStats.P)}</span> <span class="font-black text-green-400 text-sm ml-2">C: ${formatStat(clareStats.C)}</span> <span class="font-black text-yellow-400 text-sm ml-2">S: ${formatStat(clareStats.S)}</span>`;
             }
             
             let html = '';
@@ -780,7 +809,7 @@
                 if (ending === 'Passing') {
                     // Ending 4: Passing
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
-                    endingImg.src = 'ending_b.png';
+                    endingImg.src = 'irene_ending_4.png';
                     endingSfx.src = 'woman.mp3';
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Passing</h2>
@@ -794,7 +823,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -802,7 +831,7 @@
                 } else if (ending === 'The Fall') {
                     // Ending 1: The Fall
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
-                    endingImg.src = 'ending_a.png';
+                    endingImg.src = 'irene_ending_1.png';
                     endingSfx.src = 'siren.mp3';
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">The Fall</h2>
@@ -816,7 +845,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -824,7 +853,7 @@
                 } else if (ending === 'Quiet Collapse') {
                     // Ending 3: Quiet Collapse
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
-                    endingImg.src = 'ending_b.png';
+                    endingImg.src = 'irene_ending_3.png';
                     endingSfx.src = 'woman.mp3';
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Quiet Collapse</h2>
@@ -838,7 +867,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-sm font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -846,7 +875,7 @@
                 } else {
                     // Ending 2: Return
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
-                    endingImg.src = 'ending_c.png';
+                    endingImg.src = 'irene_ending_2.jpg';
                     endingSfx.src = 'calm.mp3';
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Return</h2>
@@ -860,7 +889,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -870,32 +899,23 @@
                 // selectedCharacter === 'CLARE'
                 let ending = '';
                 
-                if (clareStats.P >= 3 && clareStats.C >= 3 && clareStats.S <= -2) {
+                // Simple 3-branch logic based on indicators
+                if (clareStats.S <= -1) {
                     ending = 'The Fall';
-                } else if (clareStats.P <= 1 && clareStats.C >= 4 && clareStats.S >= -1) {
-                    ending = 'Return to Harlem';
-                } else if (clareStats.P >= 4 && clareStats.C <= 1 && clareStats.S >= 3) {
-                    ending = 'Silent Cell';
-                } else if (clareStats.P <= 1 && clareStats.C >= 3 && clareStats.S >= -1 && clareStats.S <= 3) {
-                    ending = 'Crossing';
+                } else if (clareStats.P >= clareStats.C) {
+                    ending = 'Passing';
                 } else {
-                    // Fallback logically to prevent dead-ends
-                    if (clareStats.C > clareStats.P) {
-                        ending = 'Return to Harlem';
-                    } else if (clareStats.P > clareStats.C) {
-                        ending = 'Silent Cell';
-                    } else {
-                        ending = 'The Fall';
-                    }
+                    ending = 'Return to Harlem';
                 }
 
                 if (ending === 'The Fall') {
-                    // Ending 1: Tragedy Fall (The Fall)
-                    endingImg.src = 'ending_a.png';
+                    // Ending 3: 원작 비극 엔딩 (Tragedy Fall)
+                    if (endingVisual) endingVisual.style.display = 'block';
+                    endingImg.src = 'irene_ending_1.png';
                     endingSfx.src = 'siren.mp3';
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
                     html = `
-                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">The Fall</h2>
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">원작 비극 엔딩</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">THE FALL</h3>
                         <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
                             혼란스러운 상황 속에서 CLARE는 창밖으로 추락한다.<br>
@@ -906,60 +926,55 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
                     `;
                 } else if (ending === 'Return to Harlem') {
-                    // Ending 2: Return to Harlem
-                    endingImg.src = 'ending_b.png';
+                    // Ending 2: 흑인 공동체 귀환 (Return to Harlem)
+                    if (endingVisual) endingVisual.style.display = 'block';
+                    endingImg.src = 'clare_ending_2.jpg';
                     endingSfx.src = 'woman.mp3';
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     html = `
-                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Return to Harlem</h2>
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">흑인 공동체 귀환</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">RETURN TO HARLEM</h3>
                         <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
-                            당신은 백인으로서의 가짜 삶을 던져버리고 흑인 공동체로 완전히 돌아옵니다.<br>
-                            존과의 파국을 피할 수 없었지만, 마침내 온전한 자신으로 숨을 쉴 수 있게 되었습니다.<br><br>
-                            과거에 누렸던 백인 사회의 화려한 특권에 대한 쓸쓸한 미련이 마음에 남지만, 당신은 공동체와 자신의 정체성에 더 큰 가치를 두기로 선택했습니다.<br>
-                            하지만 앞으로 마주해야 할 냉혹한 현실의 파도는 여전히 차갑고 무겁습니다.
+                            Clare는 패싱을 멈춘 후 흑인 공동체로 돌아간다.<br>
+                            따스한 햇살, 익숙한 재즈 음악..<br><br>
+                            …하지만 이것이 행복이라고 확신할 수 있나요?<br><br>
+                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
+                            숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-sm font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
                     `;
-                } else if (ending === 'Silent Cell') {
-                    // Ending 3: Silent Cell (계속 패싱)
-                    endingImg.src = 'ending_c.png';
-                    endingSfx.src = 'calm.mp3';
-                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
-                    html = `
-                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Silent Cell</h2>
-                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">SILENT CELL</h3>
-                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
-                            당신은 백인으로서의 삶을 완벽하게 선택하여 자신의 특권과 안전을 지켜내는 데 성공합니다.<br>
-                            그러나 겉보기의 평온함과 높은 사회적 안정(Stability) 속에 감춰진 가짜 삶은 당신을 끊임없는 내면의 소외와 외로움으로 몰아넣습니다.<br><br>
-                            완벽하게 다려진 옷을 입고 숨죽여 살아가는 화려한 유리 감옥, 그것은 진정한 행복일까요?
-                        </p>
-                        <p class="text-xs md:text-lg opacity-40 pt-6 md:pt-12 uppercase tracking-[0.2em] font-sans text-center">Still in the same world.</p>
-                    `;
                 } else {
-                    // Ending 4: Crossing (교차 엔딩)
-                    endingImg.src = 'ending_c.png';
+                    // Ending 1: 계속 패싱 (Passing)
+                    if (endingVisual) endingVisual.style.display = 'block';
+                    endingImg.src = 'clare_ending_3.png';
                     endingSfx.src = 'calm.mp3';
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
                     html = `
-                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-blue-400 font-black font-sans">Crossing</h2>
-                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">CROSSING</h3>
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">계속 패싱</h2>
+                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">PASSING</h3>
                         <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
-                            클레어는 자신의 정체성을 찾아 흑인 공동체로 돌아가기로 결정하지만, 아이린은 오히려 억눌려 있던 불안 끝에 자신의 과거를 묻고 완벽한 패싱의 삶을 살기로 결심합니다.<br><br>
-                            서로 다른 방향의 경계를 교차하여 엇갈린 두 사람의 운명.<br>
-                            한 사람은 억압 속의 자유를 찾아, 다른 한 사람은 자유 속의 안전한 감옥을 찾아 떠납니다.
+                            Clare는 계속해서 자신의 과거를 숨긴 채, 패싱한 삶을 선택한다.<br>
+                            그 누구도 그녀의 진실을 알지 못하지만, 끊임없는 불안이 따라온다.<br>
+                            숨기는 삶은 안전할수록 더욱 위태로워진다.<br><br>
+                            …당신은 끝까지 자신의 진짜 모습을 감출 수 있나요?<br><br>
+                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
+                            숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.
                         </p>
-                        <p class="text-xs md:text-lg opacity-40 pt-6 md:pt-12 uppercase tracking-[0.2em] font-sans text-center">Intercrossed Destinies.</p>
+                        <div class="pt-8">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                                진실된 결말 보러가기
+                            </a>
+                        </div>
                     `;
                 }
             }
