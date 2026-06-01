@@ -645,8 +645,9 @@
             document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 bg-neutral-900 custom-scroll"; 
             
             endingSfx.pause();
-            bgm.play().catch(() => {});
-            isPlayingBgm = true;
+            if (isPlayingBgm) {
+                bgm.play().catch(() => {});
+            }
             updateAudioIcons();
 
             currentQuestionIndex = questions.length - 1;
@@ -990,14 +991,22 @@
             }
             
             content.innerHTML = html;
-            endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
+            if (isPlayingBgm) {
+                endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
+            }
         }
 
         function toggleBgm() {
             if (isPlayingBgm) {
                 bgm.pause();
+                endingSfx.pause();
             } else {
-                bgm.play().catch(() => {});
+                const isEndingScreen = !document.getElementById('ending-screen').classList.contains('hidden');
+                if (isEndingScreen) {
+                    endingSfx.play().catch(() => {});
+                } else {
+                    bgm.play().catch(() => {});
+                }
             }
             isPlayingBgm = !isPlayingBgm;
             updateAudioIcons();
