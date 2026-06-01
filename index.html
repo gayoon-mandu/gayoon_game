@@ -93,7 +93,7 @@
         <button onclick="skipVideo()" style="position: absolute; bottom: 40px; right: 40px; z-index: 100000; color: white; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; background: rgba(0,0,0,0.7); cursor: pointer; font-family: sans-serif; font-weight: bold;">Skip Video</button>
     </div>
     
-    <audio id="bgm" src="timersound.mp3" loop preload="auto"></audio>
+    <audio id="bgm" loop preload="auto"></audio>
     <audio id="ending-sfx" preload="auto"></audio>
 
         <!-- Intro Screen -->
@@ -548,12 +548,9 @@
         }
 
         function finishIntroVideo() {
-            // 3. Start BGM with sound only AFTER the intro trailer video has finished or been skipped
-            bgm.volume = 0.5;
-            bgm.play().then(() => {
-                isPlayingBgm = true;
-                updateAudioIcons();
-            }).catch(e => console.error("Audio play failed:", e));
+            // No gameplay BGM, but initialize sound state as true so ending SFX will play by default
+            isPlayingBgm = true;
+            updateAudioIcons();
             
             document.getElementById('audio-toggle').classList.remove('hidden');
 
@@ -567,7 +564,6 @@
             document.getElementById('intro-screen').classList.remove('hidden');
             document.getElementById('intro-screen').classList.remove('opacity-0');
             document.getElementById('audio-toggle').classList.add('hidden');
-            bgm.pause();
             isPlayingBgm = false;
             updateAudioIcons();
         }
@@ -729,9 +725,6 @@
             document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 bg-neutral-900 custom-scroll"; 
             
             endingSfx.pause();
-            if (isPlayingBgm) {
-                bgm.play().catch(() => {});
-            }
             updateAudioIcons();
 
             currentQuestionIndex = questions.length - 1;
@@ -861,7 +854,6 @@
         }
 
         function showEnding() {
-            bgm.pause();
             document.getElementById('play-screen').classList.add('hidden');
             document.getElementById('ending-screen').classList.remove('hidden');
             
@@ -1081,14 +1073,11 @@
 
         function toggleBgm() {
             if (isPlayingBgm) {
-                bgm.pause();
                 endingSfx.pause();
             } else {
                 const isEndingScreen = !document.getElementById('ending-screen').classList.contains('hidden');
                 if (isEndingScreen) {
                     endingSfx.play().catch(() => {});
-                } else {
-                    bgm.play().catch(() => {});
                 }
             }
             isPlayingBgm = !isPlayingBgm;
