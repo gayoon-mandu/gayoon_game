@@ -109,6 +109,35 @@
             <div class="absolute bottom-8 text-[10px] opacity-30 uppercase tracking-widest font-sans px-4 text-center">
                 Based on the novel by Nella Larsen & the movie by Rebecca Hall
             </div>
+            
+            <!-- 게임 방법 버튼 -->
+            <button onclick="openHowToPlay()" class="absolute bottom-6 right-6 md:bottom-8 md:right-8 z-[150] text-[10px] md:text-xs uppercase tracking-widest border border-white/20 px-3 py-1.5 md:px-4 md:py-2 hover:bg-white hover:text-black transition-all font-sans font-bold bg-black/40 backdrop-blur-sm text-neutral-300 hover:text-black">
+                게임 방법
+            </button>
+        </div>
+
+        <!-- 게임 방법 모달 -->
+        <div id="how-to-play-modal" class="hidden absolute inset-0 z-[250] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md animate-fade-in p-6">
+            <div class="max-w-xl text-center space-y-6 md:space-y-8 font-sans">
+                <h2 class="text-xl md:text-2xl font-black text-white border-b border-white/20 pb-4 tracking-wide font-sans">
+                    💡 패싱(passing)이란?
+                </h2>
+                <div class="text-sm md:text-base leading-relaxed text-neutral-300 space-y-3 font-sans font-medium">
+                    <p>흑인이라는 사실을 숨기고,</p>
+                    <p>백인으로 보이도록 꾸며 그 사회 안에 섞여 살아가는 일을 말합니다.</p>
+                </div>
+                <div class="h-px bg-white/10 my-4"></div>
+                <div class="text-sm md:text-base leading-relaxed text-neutral-300 space-y-3 font-sans font-medium">
+                    <p>이 게임의 선택지와 결과는,</p>
+                    <p>등장인물들이 ‘패싱을 할 것인가, 하지 않을 것인가’를</p>
+                    <p>어떻게 선택하는지에 따라 달라집니다.</p>
+                </div>
+                <div class="pt-8">
+                    <button onclick="closeHowToPlay()" class="px-8 py-3 border border-white text-xs md:text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 font-sans font-bold">
+                        닫기
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Quote Screen -->
@@ -1015,6 +1044,14 @@
         function updateAudioIcons() {
             document.getElementById('audio-icon-on').classList.toggle('hidden', !isPlayingBgm);
             document.getElementById('audio-icon-off').classList.toggle('hidden', isPlayingBgm);
+        }
+
+        function openHowToPlay() {
+            document.getElementById('how-to-play-modal').classList.remove('hidden');
+        }
+
+        function closeHowToPlay() {
+            document.getElementById('how-to-play-modal').classList.add('hidden');
         }
     </script>
 </body>
