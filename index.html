@@ -257,7 +257,7 @@
             {
                 id: "2-1",
                 scene: "IRENE의 집",
-                text: "갑자기 찾아 온 Clare가 “가끔은 예전 삶이 그리워, 패싱 한 걸 남편에게 들킬까봐 겁이 나”라고 말한다.",
+                text: "갑자기 찾아 온 Clare가 <br>“가끔은 예전 삶이 그리워, 패싱 한 걸 남편에게 들킬까봐 겁이 나”라고 말한다.",
                 choices: [
                     { text: "A. 그리우면 돌아오면 되잖아. 왜 그렇게 위험한 삶을 살아?", cChange: 1, sChange: 0, rChange: 0 },
                     { text: "B. 네가 왜 그런 선택을 했는지.. 조금은 이해할 것 같아.", cChange: 0, sChange: 1, rChange: 0 }
@@ -668,7 +668,7 @@
             const q = questions[currentQuestionIndex];
             document.getElementById('scene-num').innerText = `Scene ${q.id}`;
             document.getElementById('scene-desc').innerText = q.scene;
-            document.getElementById('question-text').innerText = q.text;
+            document.getElementById('question-text').innerHTML = q.text;
             
             const container = document.getElementById('choices-container');
             container.innerHTML = '';
