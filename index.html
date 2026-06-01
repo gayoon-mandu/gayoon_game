@@ -520,35 +520,42 @@
         ];
 
         function startSelect() {
-            bgm.volume = 0.5;
-            bgm.play().then(() => {
-                isPlayingBgm = true;
-                updateAudioIcons();
-            }).catch(e => console.error("Audio play failed:", e));
-
             document.body.classList.add('game-started');
             document.getElementById('intro-screen').classList.add('opacity-0');
             
             setTimeout(() => {
                 document.getElementById('intro-screen').classList.add('hidden');
                 
-                const quoteScreen = document.getElementById('quote-screen');
-                quoteScreen.classList.remove('hidden');
+                // Play the opening intro trailer video before character selection!
+                playVideo('select_intro.mp4', finishIntroVideo);
+            }, 1000);
+        }
+
+        function finishIntroVideo() {
+            // Start BGM with sound only after the intro trailer video has finished or been skipped
+            bgm.volume = 0.5;
+            bgm.play().then(() => {
+                isPlayingBgm = true;
+                updateAudioIcons();
+            }).catch(e => console.error("Audio play failed:", e));
+            
+            document.getElementById('audio-toggle').classList.remove('hidden');
+
+            const quoteScreen = document.getElementById('quote-screen');
+            quoteScreen.classList.remove('hidden');
+            
+            setTimeout(() => {
+                quoteScreen.classList.remove('opacity-0');
                 
                 setTimeout(() => {
-                    quoteScreen.classList.remove('opacity-0');
+                    quoteScreen.classList.add('opacity-0');
                     
                     setTimeout(() => {
-                        quoteScreen.classList.add('opacity-0');
-                        
-                        setTimeout(() => {
-                            quoteScreen.classList.add('hidden');
-                            document.getElementById('select-screen').classList.remove('hidden');
-                            document.getElementById('audio-toggle').classList.remove('hidden');
-                        }, 1000);
-                    }, 3000);
-                }, 100);
-            }, 1000);
+                        quoteScreen.classList.add('hidden');
+                        document.getElementById('select-screen').classList.remove('hidden');
+                    }, 1000);
+                }, 3000);
+            }, 100);
         }
 
         function goBackToIntro() {
@@ -579,6 +586,9 @@
             
             videoScreen.style.display = 'flex';
             video.src = src;
+            
+            // Unmute the video player to ensure the video's audio plays!
+            video.muted = false;
             
             video.currentTime = 0;
             video.load();
