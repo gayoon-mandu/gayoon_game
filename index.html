@@ -902,6 +902,22 @@
                         showEnding();
                     }
                 });
+            } else if (selectedCharacter === 'IRENE' && q.id === "3-2") {
+                playVideo('아이린 씬4-1.mp4', () => {
+                    if (currentQuestionIndex < questions.length) {
+                        renderQuestion();
+                    } else {
+                        showEnding();
+                    }
+                });
+            } else if (selectedCharacter === 'IRENE' && q.id === "4-2") {
+                playVideo('아이린 씬5-1.mp4', () => {
+                    if (currentQuestionIndex < questions.length) {
+                        renderQuestion();
+                    } else {
+                        showEnding();
+                    }
+                });
             } else if (selectedCharacter === 'CLARE' && q.id === "2-2") {
                 playVideo('클레어 씬3 영상.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
