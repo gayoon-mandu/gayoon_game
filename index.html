@@ -306,6 +306,7 @@
         const bgm = document.getElementById('bgm');
         const endingSfx = document.getElementById('ending-sfx');
         let questions = [];
+        let playedEndingFallVideo = false;
 
         // Irene-specific Stats
         let ireneStats = { C: 0, S: 0, R: 0 };
@@ -735,6 +736,8 @@
             
             endingSfx.pause();
             updateAudioIcons();
+            
+            playedEndingFallVideo = false;
 
             currentQuestionIndex = questions.length - 1;
             if (selectedCharacter === 'IRENE') {
@@ -897,6 +900,13 @@
         }
 
         function showEnding() {
+            if (selectedCharacter === 'CLARE' && clareStats.S <= -1 && !playedEndingFallVideo) {
+                playedEndingFallVideo = true;
+                playVideo('클레어 엔딩 추락.mp4', showEnding);
+                return;
+            }
+            playedEndingFallVideo = false;
+            
             document.getElementById('play-screen').classList.add('hidden');
             document.getElementById('ending-screen').classList.remove('hidden');
             
