@@ -310,6 +310,7 @@
         let playedEndingFallVideo = false;
         let playedIreneEndingPassingVideo = false;
         let playedIreneEndingCollapseVideo = false;
+        let playedIreneEndingReturnVideo = false;
 
         // Irene-specific Stats
         let ireneStats = { C: 0, S: 0, R: 0 };
@@ -765,6 +766,7 @@
             playedEndingFallVideo = false;
             playedIreneEndingPassingVideo = false;
             playedIreneEndingCollapseVideo = false;
+            playedIreneEndingReturnVideo = false;
 
             currentQuestionIndex = questions.length - 1;
             if (selectedCharacter === 'IRENE') {
@@ -1033,9 +1035,15 @@
                     playVideo('아이린 엔딩 이혼.mp4', showEnding);
                     return;
                 }
+                if (ireneEnding === 'Return' && !playedIreneEndingReturnVideo) {
+                    playedIreneEndingReturnVideo = true;
+                    playVideo('아이린 엔딩 외면.mp4', showEnding);
+                    return;
+                }
             }
             playedIreneEndingPassingVideo = false;
             playedIreneEndingCollapseVideo = false;
+            playedIreneEndingReturnVideo = false;
             
             document.getElementById('play-screen').classList.add('hidden');
             document.getElementById('ending-screen').classList.remove('hidden');
