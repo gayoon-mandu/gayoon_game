@@ -600,6 +600,13 @@
             videoScreen.style.pointerEvents = 'auto';
             video.src = src;
             
+            // Turn specific ending videos grayscale
+            if (src === '아이린 엔딩 이혼.mp4' || src === '아이린 엔딩 외면.mp4') {
+                video.style.filter = 'grayscale(100%)';
+            } else {
+                video.style.filter = 'none';
+            }
+            
             // Unmute the video player to ensure the video's audio plays!
             video.muted = false;
             
