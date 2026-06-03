@@ -637,6 +637,11 @@
                 startFadeOut();
             };
 
+            video.onerror = (e) => {
+                console.error("Video element error occurred. Code:", video.error ? video.error.code : 'unknown', "Message:", video.error ? video.error.message : '');
+                startFadeOut();
+            };
+
             // Update skip button to use the same callback
             window.skipVideo = () => {
                 startFadeOut();
