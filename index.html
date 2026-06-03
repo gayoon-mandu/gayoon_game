@@ -308,6 +308,7 @@
         const endingSfx = document.getElementById('ending-sfx');
         let questions = [];
         let playedEndingFallVideo = false;
+        let playedClareEndingPassingVideo = false;
         let playedIreneEndingPassingVideo = false;
         let playedIreneEndingCollapseVideo = false;
         let playedIreneEndingReturnVideo = false;
@@ -774,6 +775,7 @@
             updateAudioIcons();
             
             playedEndingFallVideo = false;
+            playedClareEndingPassingVideo = false;
             playedIreneEndingPassingVideo = false;
             playedIreneEndingCollapseVideo = false;
             playedIreneEndingReturnVideo = false;
@@ -1028,12 +1030,29 @@
         }
 
         function showEnding() {
-            if (selectedCharacter === 'CLARE' && clareStats.S <= -1 && !playedEndingFallVideo) {
-                playedEndingFallVideo = true;
-                playVideo('클레어 엔딩 추락.mp4', showEnding);
-                return;
+            if (selectedCharacter === 'CLARE') {
+                let clareEnding = '';
+                if (clareStats.S <= -1) {
+                    clareEnding = 'The Fall';
+                } else if (clareStats.P >= clareStats.C) {
+                    clareEnding = 'Passing';
+                } else {
+                    clareEnding = 'Return to Harlem';
+                }
+
+                if (clareEnding === 'The Fall' && !playedEndingFallVideo) {
+                    playedEndingFallVideo = true;
+                    playVideo('클레어 엔딩 추락.mp4', showEnding);
+                    return;
+                }
+                if (clareEnding === 'Passing' && !playedClareEndingPassingVideo) {
+                    playedClareEndingPassingVideo = true;
+                    playVideo('클레어 엔딩 패싱.mp4', showEnding);
+                    return;
+                }
             }
             playedEndingFallVideo = false;
+            playedClareEndingPassingVideo = false;
             
             if (selectedCharacter === 'IRENE') {
                 const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
