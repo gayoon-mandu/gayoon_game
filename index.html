@@ -307,6 +307,7 @@
         const endingSfx = document.getElementById('ending-sfx');
         let questions = [];
         let playedEndingFallVideo = false;
+        let playedIreneEndingPassingVideo = false;
 
         // Irene-specific Stats
         let ireneStats = { C: 0, S: 0, R: 0 };
@@ -738,6 +739,7 @@
             updateAudioIcons();
             
             playedEndingFallVideo = false;
+            playedIreneEndingPassingVideo = false;
 
             currentQuestionIndex = questions.length - 1;
             if (selectedCharacter === 'IRENE') {
@@ -906,6 +908,31 @@
                 return;
             }
             playedEndingFallVideo = false;
+            
+            if (selectedCharacter === 'IRENE' && !playedIreneEndingPassingVideo) {
+                const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
+                let highestStats = [];
+                if (ireneStats.C === maxVal) highestStats.push('C');
+                if (ireneStats.S === maxVal) highestStats.push('S');
+                if (ireneStats.R === maxVal) highestStats.push('R');
+                
+                let ireneEnding = '';
+                if (highestStats.length >= 2) {
+                    ireneEnding = 'The Fall';
+                } else {
+                    const dominant = highestStats[0];
+                    if (dominant === 'C') ireneEnding = 'Return';
+                    else if (dominant === 'R') ireneEnding = 'Quiet Collapse';
+                    else if (dominant === 'S') ireneEnding = 'Passing';
+                }
+                
+                if (ireneEnding === 'Passing') {
+                    playedIreneEndingPassingVideo = true;
+                    playVideo('아이린 엔딩 패싱.mp4', showEnding);
+                    return;
+                }
+            }
+            playedIreneEndingPassingVideo = false;
             
             document.getElementById('play-screen').classList.add('hidden');
             document.getElementById('ending-screen').classList.remove('hidden');
