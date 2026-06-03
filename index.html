@@ -586,11 +586,13 @@
             selectedCharacter = char;
             if (char === 'IRENE') {
                 questions = ireneQuestions;
+                document.getElementById('select-screen').classList.add('hidden');
+                continueToPlay();
             } else {
                 questions = clareQuestions;
+                document.getElementById('select-screen').classList.add('hidden');
+                playVideo('클레어 씬1.mp4', continueToPlay);
             }
-            document.getElementById('select-screen').classList.add('hidden');
-            continueToPlay();
         }
 
         function playVideo(src, callback) {
