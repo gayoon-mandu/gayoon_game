@@ -311,6 +311,7 @@
         let playedIreneEndingPassingVideo = false;
         let playedIreneEndingCollapseVideo = false;
         let playedIreneEndingReturnVideo = false;
+        let playedIreneEndingFallVideo = false;
 
         // Irene-specific Stats
         let ireneStats = { C: 0, S: 0, R: 0 };
@@ -776,6 +777,7 @@
             playedIreneEndingPassingVideo = false;
             playedIreneEndingCollapseVideo = false;
             playedIreneEndingReturnVideo = false;
+            playedIreneEndingFallVideo = false;
 
             currentQuestionIndex = questions.length - 1;
             if (selectedCharacter === 'IRENE') {
@@ -1057,10 +1059,16 @@
                     playVideo('아이린 엔딩 외면.mp4', showEnding);
                     return;
                 }
+                if (ireneEnding === 'The Fall' && !playedIreneEndingFallVideo) {
+                    playedIreneEndingFallVideo = true;
+                    playVideo('클레어 엔딩 추락.mp4', showEnding);
+                    return;
+                }
             }
             playedIreneEndingPassingVideo = false;
             playedIreneEndingCollapseVideo = false;
             playedIreneEndingReturnVideo = false;
+            playedIreneEndingFallVideo = false;
             
             document.getElementById('play-screen').classList.add('hidden');
             document.getElementById('ending-screen').classList.remove('hidden');
