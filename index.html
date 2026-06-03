@@ -309,6 +309,7 @@
         let questions = [];
         let playedEndingFallVideo = false;
         let playedIreneEndingPassingVideo = false;
+        let playedIreneEndingCollapseVideo = false;
 
         // Irene-specific Stats
         let ireneStats = { C: 0, S: 0, R: 0 };
@@ -763,6 +764,7 @@
             
             playedEndingFallVideo = false;
             playedIreneEndingPassingVideo = false;
+            playedIreneEndingCollapseVideo = false;
 
             currentQuestionIndex = questions.length - 1;
             if (selectedCharacter === 'IRENE') {
@@ -1004,7 +1006,7 @@
             }
             playedEndingFallVideo = false;
             
-            if (selectedCharacter === 'IRENE' && !playedIreneEndingPassingVideo) {
+            if (selectedCharacter === 'IRENE') {
                 const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
                 let highestStats = [];
                 if (ireneStats.C === maxVal) highestStats.push('C');
@@ -1021,13 +1023,19 @@
                     else if (dominant === 'S') ireneEnding = 'Passing';
                 }
                 
-                if (ireneEnding === 'Passing') {
+                if (ireneEnding === 'Passing' && !playedIreneEndingPassingVideo) {
                     playedIreneEndingPassingVideo = true;
                     playVideo('아이린 엔딩 패싱.mp4', showEnding);
                     return;
                 }
+                if (ireneEnding === 'Quiet Collapse' && !playedIreneEndingCollapseVideo) {
+                    playedIreneEndingCollapseVideo = true;
+                    playVideo('아이린 엔딩 이혼.mp4', showEnding);
+                    return;
+                }
             }
             playedIreneEndingPassingVideo = false;
+            playedIreneEndingCollapseVideo = false;
             
             document.getElementById('play-screen').classList.add('hidden');
             document.getElementById('ending-screen').classList.remove('hidden');
