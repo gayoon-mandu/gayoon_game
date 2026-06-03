@@ -887,7 +887,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "2-2") {
-                playVideo('아이린 씬3-1.mp4', () => {
+                playVideo('아이린 씬3-2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -895,7 +895,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "3-1") {
-                playVideo('아이린 씬3-2.mp4', () => {
+                playVideo('아이린 씬3-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -1229,7 +1229,7 @@
 
         document.addEventListener('click', (e) => {
             const target = e.target.closest('button, a, [onclick], .cursor-pointer, [role="button"]');
-            if (target) {
+            if (target && !target.closest('[onclick*="selectCharacter"]')) {
                 playClickSound();
             }
         });
