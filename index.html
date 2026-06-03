@@ -86,7 +86,7 @@
     
     <div id="game-container">
         <!-- Video Screen -->
-        <div id="video-screen" style="display: none; position: absolute; inset: 0; z-index: 99999; background-color: #000; align-items: center; justify-content: center;">
+        <div id="video-screen" style="display: flex; position: absolute; inset: 0; z-index: 99999; background-color: #000; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.5s ease-in-out;">
         <video id="game-video" src="question1b.mp4" muted playsinline webkit-playsinline preload="auto" style="width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; z-index: 99999; transform: translateZ(0); filter: none;">
             Your browser does not support the video tag.
         </video>
@@ -594,7 +594,7 @@
             const videoScreen = document.getElementById('video-screen');
             const video = document.getElementById('game-video');
             
-            videoScreen.style.display = 'flex';
+            videoScreen.style.pointerEvents = 'auto';
             video.src = src;
             
             // Unmute the video player to ensure the video's audio plays!
@@ -612,16 +612,33 @@
                 });
             }
             
+            // Force layout reflow before opacity change to ensure transition triggers
+            void videoScreen.offsetWidth;
+            videoScreen.style.opacity = '1';
+            
+            let isFadingOut = false;
+            const startFadeOut = () => {
+                if (isFadingOut) return;
+                isFadingOut = true;
+                
+                video.muted = true;
+                video.pause();
+                
+                videoScreen.style.opacity = '0';
+                
+                setTimeout(() => {
+                    videoScreen.style.pointerEvents = 'none';
+                    if (callback) callback();
+                }, 500);
+            };
+            
             video.onended = () => {
-                videoScreen.style.display = 'none';
-                if (callback) callback();
+                startFadeOut();
             };
 
             // Update skip button to use the same callback
             window.skipVideo = () => {
-                video.pause();
-                videoScreen.style.display = 'none';
-                if (callback) callback();
+                startFadeOut();
             };
         }
 
