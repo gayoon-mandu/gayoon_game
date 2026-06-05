@@ -903,7 +903,7 @@
             
             currentQuestionIndex++;
             if (selectedCharacter === 'IRENE' && q.id === "1-2") {
-                playVideo('아이린 씬2.mp4', () => {
+                playVideo('아이린 씬/아이린 씬2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -919,7 +919,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "2-2") {
-                playVideo('아이린 씬3-2.mp4', () => {
+                playVideo('아이린 씬/아이린 씬3-2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -927,7 +927,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "3-1") {
-                playVideo('아이린 씬3-1.mp4', () => {
+                playVideo('아이린 씬/아이린 씬3-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -935,7 +935,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "3-2") {
-                playVideo('아이린씬 4-1.mp4', () => {
+                playVideo('아이린 씬/아이린씬 4-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -943,7 +943,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "4-1") {
-                playVideo('아이린 씬4-2 찐.mp4', () => {
+                playVideo('아이린 씬/아이린 씬4-2 찐.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -951,7 +951,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "4-2") {
-                playVideo('아이린 씬5-1.mp4', () => {
+                playVideo('아이린 씬/아이린 씬5-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -959,7 +959,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "5-1") {
-                playVideo('아이린 씬5-2.mp4', () => {
+                playVideo('아이린 씬/아이린 씬5-2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -967,7 +967,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "5-2") {
-                playVideo('아이린 씬6-1.mp4', () => {
+                playVideo('아이린 씬/아이린 씬6-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -975,7 +975,7 @@
                     }
                 });
             } else if (selectedCharacter === 'IRENE' && q.id === "6-1") {
-                playVideo('아이린 씬6-2.mp4', () => {
+                playVideo('아이린 씬/아이린 씬6-2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
@@ -1016,6 +1016,14 @@
                 });
             } else if (selectedCharacter === 'CLARE' && q.id === "5-2") {
                 playVideo('클레어 씬6 영상.mp4', () => {
+                    if (currentQuestionIndex < questions.length) {
+                        renderQuestion();
+                    } else {
+                        showEnding();
+                    }
+                });
+            } else if (selectedCharacter === 'CLARE' && q.id === "6-1") {
+                playVideo('아이린 씬/아이린 씬6-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
