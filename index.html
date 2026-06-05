@@ -93,7 +93,7 @@
         <button onclick="skipVideo()" style="position: absolute; bottom: 40px; right: 40px; z-index: 100000; color: white; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; background: rgba(0,0,0,0.7); cursor: pointer; font-family: sans-serif; font-weight: bold;">Skip</button>
     </div>
     
-    <audio id="bgm" loop preload="auto"></audio>
+    <audio id="bgm" src="게임BGM.mp3" loop preload="auto"></audio>
     <audio id="ending-sfx" preload="auto"></audio>
     <audio id="click-sfx" src="클릭소리 찐.mp3" preload="auto"></audio>
 
@@ -154,7 +154,7 @@
 
         <!-- Quote Screen -->
         <div id="quote-screen" class="hidden absolute inset-0 z-[110] flex flex-col items-center justify-center bg-black transition-opacity duration-1000 opacity-0">
-        <p class="text-xl md:text-3xl italic opacity-80 border-y border-white/30 py-8 px-6 max-w-4xl text-center leading-relaxed">
+        <p class="text-3xl md:text-5xl italic opacity-95 border-y border-white/30 py-12 px-10 max-w-5xl text-center leading-relaxed">
             “It’s funny about ‘passing.’<br><br>We disapprove of it and at the same time condone it.”
         </p>
     </div>
@@ -181,20 +181,20 @@
                     </div>
                     
                     <!-- Irene Hover Profile Overlay -->
-                    <div class="absolute inset-4 md:inset-6 bg-black/90 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-center items-start text-left p-5 md:p-6 z-20 pointer-events-none rounded-[1.5rem] border border-white/5 space-y-3 shadow-[0_20px_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.05)]">
+                    <div class="absolute bottom-4 left-4 right-4 top-[45%] md:top-[50%] bg-black/90 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-start items-start text-left p-4 md:p-5 z-20 pointer-events-none rounded-[1.5rem] border border-white/5 space-y-2 md:space-y-3 shadow-[0_20px_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.05)] overflow-y-auto custom-scroll">
                         <h4 class="text-base md:text-lg font-black text-white tracking-wide border-b border-white/10 pb-1.5 w-full font-sans">
                             아이린 레드필드 <span class="text-[10px] md:text-xs text-neutral-400 font-normal ml-1">(Irene Redfield)</span>
                         </h4>
                         <div class="space-y-1 text-[10px] md:text-xs text-neutral-300 font-sans leading-relaxed">
-                            <p><strong class="text-white">이름:</strong> 아이린 레드필드</p>
-                            <p><strong class="text-white">남편:</strong> 브라이언 레드필드 (Brian Redfield)</p>
-                            <p><strong class="text-white">직업:</strong> 상류층 가정의 주부</p>
-                            <p><strong class="text-white">성격:</strong> 신중함, 책임감, 현실적</p>
-                            <p><strong class="text-white">특징:</strong> 안정된 삶을 중요하게 여기며 가족을 지키고자 함</p>
+                            <p><strong class="text-white">Name:</strong> Irene Redfield</p>
+                            <p><strong class="text-white">Husband:</strong> Dr. Brian Redfield</p>
+                            <p><strong class="text-white">Occupation:</strong> Black upper-middle class housewife in Harlem</p>
+                            <p><strong class="text-white">Personality:</strong> Cautious, Responsible, Realistic</p>
+                            <p><strong class="text-white">Trait:</strong> Prioritizes stability and is committed to protecting her family.</p>
                         </div>
                         <div class="w-full h-px bg-white/5 my-1"></div>
                         <p class="text-[10px] md:text-xs text-neutral-400 font-sans leading-relaxed italic">
-                            평온한 일상을 유지하려 하지만, 클레어의 등장으로 점차 균열이 생기기 시작한다.
+                            Though she strives to maintain her peaceful daily life, cracks begin to form with Clare's sudden appearance.
                         </p>
                     </div>
                 </div>
@@ -211,20 +211,20 @@
                     </div>
                     
                     <!-- Clare Hover Profile Overlay -->
-                    <div class="absolute inset-4 md:inset-6 bg-black/90 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-center items-start text-left p-5 md:p-6 z-20 pointer-events-none rounded-[1.5rem] border border-white/5 space-y-3 shadow-[0_20px_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.05)]">
+                    <div class="absolute bottom-4 left-4 right-4 top-[45%] md:top-[50%] bg-black/90 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-start items-start text-left p-4 md:p-5 z-20 pointer-events-none rounded-[1.5rem] border border-white/5 space-y-2 md:space-y-3 shadow-[0_20px_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.05)] overflow-y-auto custom-scroll">
                         <h4 class="text-base md:text-lg font-black text-white tracking-wide border-b border-white/10 pb-1.5 w-full font-sans">
                             클레어 벨루 <span class="text-[10px] md:text-xs text-neutral-400 font-normal ml-1">(Clare Bellew)</span>
                         </h4>
                         <div class="space-y-1 text-[10px] md:text-xs text-neutral-300 font-sans leading-relaxed">
-                            <p><strong class="text-white">이름:</strong> 클레어 벨루</p>
-                            <p><strong class="text-white">남편:</strong> 존 벨루 (John Bellew)</p>
-                            <p><strong class="text-white">직업:</strong> 백인 사교계의 상류층 부인</p>
-                            <p><strong class="text-white">성격:</strong> 대담함, 열정적, 매혹적</p>
-                            <p><strong class="text-white">특징:</strong> 자신의 혈통을 완벽히 숨긴 채 '패싱'의 삶을 살아감</p>
+                            <p><strong class="text-white">Name:</strong> Clare Bellew</p>
+                            <p><strong class="text-white">Husband:</strong> John Bellew</p>
+                            <p><strong class="text-white">Occupation:</strong> Upper-class lady in white society</p>
+                            <p><strong class="text-white">Personality:</strong> Bold, Passionate, Charming</p>
+                            <p><strong class="text-white">Trait:</strong> Lives a life of 'passing', completely hiding her heritage.</p>
                         </div>
                         <div class="w-full h-px bg-white/5 my-1"></div>
                         <p class="text-[10px] md:text-xs text-neutral-400 font-sans leading-relaxed italic">
-                            위험을 무릅쓰고 옛 친구 아이린을 찾아와, 할렘의 온기와 옛 삶에 다시 강하게 끌리기 시작한다.
+                            Despite the risks, reconnecting with her childhood friend Irene draws her back to the warmth of Harlem and the life she thought she had left behind.
                         </p>
                     </div>
                 </div>
@@ -305,6 +305,9 @@
         let selectedCharacter = '';
         let isPlayingBgm = true;
         const bgm = document.getElementById('bgm');
+        if (bgm) {
+            bgm.volume = 0.3; // Lower background music volume to be more comfortable
+        }
         const endingSfx = document.getElementById('ending-sfx');
         let questions = [];
         let playedEndingFallVideo = false;
@@ -446,8 +449,8 @@
             },
             {
                 id: "2-1",
-                scene: "백인 전용 호텔 공간에서 CLARE의 객실 복도",
-                text: "Irene에게 자신의 현재 삶을 얼마나 솔직하게 얘기할까?",
+                scene: "백인 전용 카페에서 만난 아이린을 외롭고 반가운 마음에 자신의 집에 초대한 아이린",
+                text: "Irene에게 현재의 삶에 대해 얼마나 솔직하게 얘기할까?",
                 choices: [
                     { text: "A. 부유한 백인 남편과의 안정적인 결혼 생활만 강조하며, 일부러 행복한 삶만을 얘기한다.", pChange: 1, cChange: 0, sChange: 1 },
                     { text: "B. 백인으로 살아가는 삶이 주는 불안과 두려움도 조심스럽게 털어놓는다.", pChange: -1, cChange: 1, sChange: -1 }
@@ -539,6 +542,7 @@
         function startSelect() {
             document.body.classList.add('game-started');
             document.getElementById('intro-screen').classList.add('opacity-0');
+            updateBgmState();
             
             setTimeout(() => {
                 document.getElementById('intro-screen').classList.add('hidden');
@@ -565,7 +569,7 @@
         }
 
         function finishIntroVideo() {
-            // No gameplay BGM, but initialize sound state as true so ending SFX will play by default
+            // Initialize sound state as true
             isPlayingBgm = true;
             updateAudioIcons();
             
@@ -573,6 +577,7 @@
 
             // 4. Transition straight to the character selection screen!
             document.getElementById('select-screen').classList.remove('hidden');
+            updateBgmState();
         }
 
         function goBackToIntro() {
@@ -581,7 +586,8 @@
             document.getElementById('intro-screen').classList.remove('hidden');
             document.getElementById('intro-screen').classList.remove('opacity-0');
             document.getElementById('audio-toggle').classList.add('hidden');
-            isPlayingBgm = false;
+            isPlayingBgm = true;
+            updateBgmState();
             updateAudioIcons();
         }
 
@@ -630,6 +636,7 @@
             // Force layout reflow before opacity change to ensure transition triggers
             void videoScreen.offsetWidth;
             videoScreen.style.opacity = '1';
+            updateBgmState();
             
             let isFadingOut = false;
             const startFadeOut = () => {
@@ -739,6 +746,7 @@
                 `;
             }
             renderQuestion();
+            updateBgmState();
         }
         function goBackFromPlay() {
             if (currentQuestionIndex === 0) {
@@ -750,6 +758,7 @@
                 ireneStatsHistory = [{ C: 0, S: 0, R: 0 }];
                 clareStats = { P: 0, C: 0, S: 0 };
                 clareStatsHistory = [{ P: 0, C: 0, S: 0 }];
+                updateBgmState();
             } else {
                 currentQuestionIndex--;
                 if (selectedCharacter === 'IRENE') {
@@ -796,6 +805,7 @@
                 clareStats = Object.assign({}, clareStatsHistory[clareStatsHistory.length - 1]);
             }
             renderQuestion();
+            updateBgmState();
         }
 
         function renderQuestion() {
@@ -1115,6 +1125,7 @@
             
             document.getElementById('play-screen').classList.add('hidden');
             document.getElementById('ending-screen').classList.remove('hidden');
+            updateBgmState();
             
             const content = document.getElementById('ending-content');
             const endingImg = document.getElementById('ending-img');
@@ -1169,7 +1180,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1191,7 +1202,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1213,7 +1224,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-purple-600 hover:bg-purple-500 text-white font-black rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1235,7 +1246,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1272,7 +1283,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1294,7 +1305,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-purple-600 hover:bg-purple-500 text-white font-black rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1316,7 +1327,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-8 py-3 bg-white hover:bg-neutral-200 text-black font-bold rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-sm font-sans">
+                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1330,16 +1341,40 @@
             }
         }
 
-        function toggleBgm() {
-            if (isPlayingBgm) {
-                endingSfx.pause();
+        function updateBgmState() {
+            if (!bgm) return;
+            const introScreen = document.getElementById('intro-screen');
+            const selectScreen = document.getElementById('select-screen');
+            const playScreen = document.getElementById('play-screen');
+            const endingScreen = document.getElementById('ending-screen');
+            const videoScreen = document.getElementById('video-screen');
+            
+            const isIntroVisible = introScreen && !introScreen.classList.contains('hidden') && !introScreen.classList.contains('opacity-0');
+            const isSelectVisible = selectScreen && !selectScreen.classList.contains('hidden');
+            const isPlayVisible = playScreen && !playScreen.classList.contains('hidden');
+            const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
+            const isVideoPlaying = videoScreen && videoScreen.style.opacity === '1';
+            
+            const shouldPlayOnThisScreen = (isIntroVisible || isSelectVisible || isPlayVisible || isEndingVisible) && !isVideoPlaying;
+            
+            if (isPlayingBgm && shouldPlayOnThisScreen) {
+                bgm.play().catch(() => {});
             } else {
+                bgm.pause();
+            }
+        }
+
+        function toggleBgm() {
+            isPlayingBgm = !isPlayingBgm;
+            if (isPlayingBgm) {
                 const isEndingScreen = !document.getElementById('ending-screen').classList.contains('hidden');
                 if (isEndingScreen) {
                     endingSfx.play().catch(() => {});
                 }
+            } else {
+                endingSfx.pause();
             }
-            isPlayingBgm = !isPlayingBgm;
+            updateBgmState();
             updateAudioIcons();
         }
 
@@ -1369,6 +1404,16 @@
             if (target && !target.closest('[onclick*="selectCharacter"]')) {
                 playClickSound();
             }
+        });
+
+        // Autoplay workaround: start/update BGM on first user interaction
+        document.addEventListener('click', () => {
+            updateBgmState();
+        }, { once: true });
+
+        // Try playing on DOMContentLoaded as well
+        window.addEventListener('DOMContentLoaded', () => {
+            updateBgmState();
         });
     </script>
 </body>
