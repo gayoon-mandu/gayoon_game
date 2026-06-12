@@ -737,7 +737,13 @@
             };
 
             video.ontimeupdate = () => {
-                if (isGameplayTransition && video.duration && video.duration > 1.0 && video.currentTime >= video.duration - 0.7) {
+                let offset = 0.7;
+                if (isGameplayTransition && typeof questions !== 'undefined' && questions[currentQuestionIndex]) {
+                    if (questions[currentQuestionIndex].id === '6-2') {
+                        offset = 1.0;
+                    }
+                }
+                if (isGameplayTransition && video.duration && video.duration > 1.0 && video.currentTime >= video.duration - offset) {
                     video.ontimeupdate = null;
                     startFadeOut();
                 }
