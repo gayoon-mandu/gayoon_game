@@ -235,7 +235,7 @@
     </div>
 
         <!-- Play Screen -->
-        <div id="play-screen" class="hidden h-full w-full flex flex-col p-4 md:p-8 animate-fade-in relative z-20 overflow-y-auto custom-scroll">
+        <div id="play-screen" class="hidden h-full w-full flex flex-col p-4 md:p-8 animate-fade-in relative z-20 overflow-y-auto overflow-x-hidden custom-scroll">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12 font-sans relative z-50 gap-4">
             <div class="flex items-center gap-4 md:gap-8 w-full md:w-auto justify-between md:justify-start">
                 <button onclick="goBackFromPlay()" class="text-[10px] md:text-sm uppercase tracking-widest border border-white/40 px-3 py-1.5 md:px-4 md:py-2 hover:bg-white hover:text-black transition-all font-bold">← Back</button>
@@ -337,8 +337,8 @@
                 scene: "백인 전용 호텔 공간에서 CLARE와의 첫 만남",
                 text: "낯선 여자가 나를 빤히 쳐다본다. 어떻게 할까?",
                 choices: [
-                    { text: "A. 커피를 마시는 척하며 시선을 피한다.", cChange: 1, sChange: 0, rChange: 0 },
-                    { text: "B. 나도 쳐다본다.", cChange: 0, sChange: 1, rChange: 0 }
+                    { text: "A. 나도 쳐다본다.", cChange: 0, sChange: 1, rChange: 0 },
+                    { text: "B. 커피를 마시는 척하며 시선을 피한다.", cChange: 1, sChange: 0, rChange: 0 }
                 ]
             },
             {
@@ -355,8 +355,8 @@
                 scene: "IRENE의 집",
                 text: "갑자기 찾아 온 Clare가 남편의 사진을 보여주며<br>“가끔은 예전 삶이 그리워, 패싱 한 걸 남편에게 들킬까봐 겁이 나”라고 말한다.",
                 choices: [
-                    { text: "A. 그리우면 돌아오면 되잖아. 왜 그렇게 위험한 삶을 살아?", cChange: 1, sChange: 0, rChange: 0 },
-                    { text: "B. 네가 왜 그런 선택을 했는지.. 조금은 이해할 것 같아.", cChange: 0, sChange: 1, rChange: 0 }
+                    { text: "A. 네가 왜 그런 선택을 했는지.. 조금은 이해할 것 같아.", cChange: 0, sChange: 1, rChange: 0 },
+                    { text: "B. 그리우면 돌아오면 되잖아. 왜 그렇게 위험한 삶을 살아?", cChange: 1, sChange: 0, rChange: 0 }
                 ]
             },
             {
@@ -373,8 +373,8 @@
                 scene: "IRENE의 집",
                 text: "BRIAN은 “이 도시를 떠나고 싶다”고 말한다.",
                 choices: [
-                    { text: "A. 지금 삶도 충분히 안정적이야. 왜 굳이 변화를 원해?", cChange: 0, sChange: 0, rChange: 1 },
-                    { text: "B. 여기서 계속 살아가는 게 답답한 건 이해해.", cChange: 1, sChange: 0, rChange: 0 }
+                    { text: "A. 여기서 계속 살아가는 게 답답한 건 이해해.", cChange: 1, sChange: 0, rChange: 0 },
+                    { text: "B. 지금 삶도 충분히 안정적이야. 왜 굳이 변화를 원해?", cChange: 0, sChange: 0, rChange: 1 }
                 ]
             },
             {
@@ -409,8 +409,8 @@
                 scene: "할렘 사교 파티 장면",
                 text: "파티장에서 CLARE는 자연스럽게 사람들의 시선을 사로잡는다. 그녀를 바라보는 당신의 감정은?",
                 choices: [
-                    { text: "A. 내 일상을 흔들 수 있는 불안한 존재로 느껴진다.", cChange: 1, sChange: 0, rChange: 0 },
-                    { text: "B. 그녀의 자유롭고 거리낌 없는 태도에 묘하게 끌린다.", cChange: 0, sChange: 1, rChange: 0 }
+                    { text: "A. 그녀의 자유롭고 거리낌 없는 태도에 묘하게 끌린다.", cChange: 0, sChange: 1, rChange: 0 },
+                    { text: "B. 내 일상을 흔들 수 있는 불안한 존재로 느껴진다.", cChange: 1, sChange: 0, rChange: 0 }
                 ]
             },
             {
@@ -457,8 +457,8 @@
                 scene: "백인 전용 카페에서 만난 아이린을 외롭고 반가운 마음에 자신의 호텔 방에 초대한 아이린",
                 text: "Irene에게 현재의 삶에 대해 얼마나 솔직하게 얘기할까?",
                 choices: [
-                    { text: "A. 부유한 백인 남편과의 안정적인 결혼 생활만 강조하며, 일부러 행복한 삶만을 얘기한다.", pChange: 1, cChange: 0, sChange: 1 },
-                    { text: "B. 백인으로 살아가는 삶이 주는 불안과 두려움도 조심스럽게 털어놓는다.", pChange: -1, cChange: 1, sChange: -1 }
+                    { text: "A. 백인으로 살아가는 삶이 주는 불안과 두려움도 조심스럽게 털어놓는다.", pChange: -1, cChange: 1, sChange: -1 },
+                    { text: "B. 부유한 백인 남편과의 안정적인 결혼 생활만 강조하며, 일부러 행복한 삶만을 얘기한다.", pChange: 1, cChange: 0, sChange: 1 }
                 ]
             },
             {
@@ -475,8 +475,8 @@
                 scene: "IRENE의 집",
                 text: "Irene의 집에 들어왔다, 그녀의 집과 가족에 대해서 뭐라고 말을 할까?",
                 choices: [
-                    { text: "A. 이곳이 답답해 보인다는 농담 섞인 말을 건넨다.", pChange: 1, cChange: -1, sChange: 1 },
-                    { text: "B. 이런 공기와 사람들의 온기가 그리웠다고 말한다.", pChange: -1, cChange: 1, sChange: -1 }
+                    { text: "A. 이런 공기와 사람들의 온기가 그리웠다고 말한다.", pChange: -1, cChange: 1, sChange: -1 },
+                    { text: "B. 이곳이 답답해 보인다는 농담 섞인 말을 건넨다.", pChange: 1, cChange: -1, sChange: 1 }
                 ]
             },
             {
@@ -493,8 +493,8 @@
                 scene: "백인 파티 / 호텔",
                 text: "사람들이 흑인에 대한 비하 발언을 하며 나에게 그렇지 않냐고 물어본다, 뭐라고 대답할까?",
                 choices: [
-                    { text: "A. “그들이 조금 그런 편이지”라며 마음에도 없는 말을 한다.", pChange: 1, cChange: -1, sChange: 1 },
-                    { text: "B. “그들도 우리와 다르지 않다.”고 조심스럽게 말한다.", pChange: 0, cChange: 1, sChange: -1 }
+                    { text: "A. “그들도 우리와 다르지 않다.”고 조심스럽게 말한다.", pChange: 0, cChange: 1, sChange: -1 },
+                    { text: "B. “그들이 조금 그런 편이지”라며 마음에도 없는 말을 한다.", pChange: 1, cChange: -1, sChange: 1 }
                 ]
             },
             {
@@ -529,8 +529,8 @@
                 scene: "6층 아파트 파티 (마지막 장면)",
                 text: "한 흑인 남성이 다가와 나에게 함께 춤을 추자고 권한다.",
                 choices: [
-                    { text: "A. 살짝 미소를 지으며 뒤로 물러서서, 들고 있던 와인잔을 만지작거리며 사람들을 구경한다.", pChange: 2, cChange: -2, sChange: 2 },
-                    { text: "B. 모피 코트를 벗어 던지고, 웃음을 터뜨리며 사람들 한가운데로 걸어 들어가 함께 춤을 춘다.", pChange: -2, cChange: 2, sChange: -2 }
+                    { text: "A. 모피 코트를 벗어 던지고, 웃음을 터뜨리며 사람들 한가운데로 걸어 들어가 함께 춤을 춘다.", pChange: -2, cChange: 2, sChange: -2 },
+                    { text: "B. 살짝 미소를 지으며 뒤로 물러서서, 들고 있던 와인잔을 만지작거리며 사람들을 구경한다.", pChange: 2, cChange: -2, sChange: 2 }
                 ]
             },
             {
@@ -742,6 +742,8 @@
                     const qId = questions[currentQuestionIndex].id;
                     if (qId === '6-2' || qId === '5-1') {
                         offset = 1.0;
+                    } else if (qId === '4-1') {
+                        offset = 1.5;
                     }
                 }
                 if (isGameplayTransition && video.duration && video.duration > 1.0 && video.currentTime >= video.duration - offset) {
