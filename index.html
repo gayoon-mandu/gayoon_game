@@ -91,6 +91,7 @@
             Your browser does not support the video tag.
         </video>
         <div id="video-overlay-text" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[100000] text-white text-5xl md:text-8xl font-serif-cinematic tracking-widest select-none pointer-events-none transition-opacity duration-500 opacity-0" style="text-shadow: 0 4px 12px rgba(0,0,0,0.95);">That night...</div>
+        <div id="video-overlay-text-sub" class="hidden absolute bottom-[40px] left-[40px] z-[100000] text-white text-base md:text-2xl font-serif-cinematic tracking-widest opacity-75 select-none pointer-events-none transition-opacity duration-500 opacity-0" style="text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Irene's Home</div>
         <button onclick="skipVideo()" style="position: absolute; bottom: 40px; right: 40px; z-index: 100000; color: white; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; background: rgba(0,0,0,0.7); cursor: pointer; font-family: sans-serif; font-weight: bold;">Skip</button>
     </div>
     
@@ -611,6 +612,8 @@
             
             // Show overlay text only for Irene Scene 3-2 transition (between 2-2 and 3-1)
             const overlayText = document.getElementById('video-overlay-text');
+            const overlayTextSub = document.getElementById('video-overlay-text-sub');
+            
             if (overlayText) {
                 if (window.overlayTimeout) clearTimeout(window.overlayTimeout);
                 if (window.overlayHideTimeout) clearTimeout(window.overlayHideTimeout);
@@ -630,6 +633,18 @@
                 } else {
                     overlayText.style.opacity = '0';
                     overlayText.classList.add('hidden');
+                }
+            }
+            
+            if (overlayTextSub) {
+                if (src === '아이린 씬/아이린 씬3-2.mp4') {
+                    overlayTextSub.classList.remove('hidden');
+                    overlayTextSub.style.opacity = '0';
+                    void overlayTextSub.offsetWidth; // Force layout reflow
+                    overlayTextSub.style.opacity = '1';
+                } else {
+                    overlayTextSub.style.opacity = '0';
+                    overlayTextSub.classList.add('hidden');
                 }
             }
             
@@ -676,6 +691,11 @@
                     if (window.overlayHideTimeout) clearTimeout(window.overlayHideTimeout);
                     overlayText.style.opacity = '0';
                     overlayText.classList.add('hidden');
+                }
+                
+                if (overlayTextSub) {
+                    overlayTextSub.style.opacity = '0';
+                    overlayTextSub.classList.add('hidden');
                 }
                 
                 videoScreen.style.opacity = '0';
