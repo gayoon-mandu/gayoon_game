@@ -254,13 +254,13 @@
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start overflow-y-auto">
-            <div class="w-[45%] md:w-[22%] aspect-[3/4] max-h-[25vh] md:max-h-none border border-white/10 relative overflow-hidden bg-neutral-800/50 shadow-2xl flex-shrink-0">
+        <div id="play-layout-row" class="flex-1 flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start overflow-y-auto">
+            <div id="char-image-container" class="w-[45%] md:w-[22%] aspect-[3/4] max-h-[25vh] md:max-h-none border border-white/10 relative overflow-hidden bg-neutral-800/50 shadow-2xl flex-shrink-0">
                 <img id="char-image" src="" alt="character" class="w-full h-full object-cover transition-all duration-1000 grayscale">
                 <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent"></div>
             </div>
 
-            <div class="w-full md:w-[73%] space-y-6 md:space-y-12 pt-4 md:pt-12">
+            <div id="dialogue-container" class="w-full md:w-[73%] space-y-6 md:space-y-12 pt-4 md:pt-12">
                 <div class="space-y-3 md:space-y-4">
                     <div id="scene-num" class="text-sm md:text-lg text-red-500 uppercase tracking-widest font-black font-sans"></div>
                     <div id="scene-desc" class="text-base md:text-xl italic opacity-50 border-l-2 border-white/20 pl-3 md:pl-4"></div>
@@ -598,17 +598,22 @@
             if (char === 'IRENE') {
                 questions = ireneQuestions;
                 document.getElementById('select-screen').classList.add('hidden');
-                playVideo('아이린 씬1-1.mov', continueToPlay);
+                playVideo('아이린 씬1-1.mov', continueToPlay, true);
             } else {
                 questions = clareQuestions;
                 document.getElementById('select-screen').classList.add('hidden');
-                playVideo('클레어 씬1.mp4', continueToPlay);
+                playVideo('클레어 씬1.mp4', continueToPlay, true);
             }
         }
 
-        function playVideo(src, callback) {
+        function playVideo(src, callback, isGameplayTransition = false) {
             const videoScreen = document.getElementById('video-screen');
             const video = document.getElementById('game-video');
+            
+            // Show skip button and make sure z-index is set back to top overlay
+            const skipBtn = videoScreen.querySelector('button');
+            if (skipBtn) skipBtn.classList.remove('hidden');
+            videoScreen.style.zIndex = '99999';
             
             // Show overlay text only for Irene Scene 3-2 transition (between 2-2 and 3-1)
             const overlayText = document.getElementById('video-overlay-text');
@@ -683,7 +688,7 @@
                 if (isFadingOut) return;
                 isFadingOut = true;
                 
-                video.muted = true;
+                // Pause the video at its end frame
                 video.pause();
                 
                 if (overlayText) {
@@ -698,12 +703,23 @@
                     overlayTextSub.classList.add('hidden');
                 }
                 
-                videoScreen.style.opacity = '0';
-                
-                setTimeout(() => {
+                if (isGameplayTransition) {
+                    video.muted = true;
+                    // Lower z-index so play-screen can receive pointer events and sit on top
+                    videoScreen.style.zIndex = '10';
                     videoScreen.style.pointerEvents = 'none';
+                    if (skipBtn) skipBtn.classList.add('hidden');
+                    
                     if (callback) callback();
-                }, 500);
+                } else {
+                    video.muted = true;
+                    videoScreen.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        videoScreen.style.pointerEvents = 'none';
+                        if (callback) callback();
+                    }, 500);
+                }
             };
             
             video.onended = () => {
@@ -744,39 +760,11 @@
                         </div>
                         
                         <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
-                            <span>Social / Community (C)</span>
-                            <span id="c-val" class="font-mono text-purple-400">0%</span>
-                        </div>
-                        <div class="h-1.5 bg-white/10 relative overflow-hidden mb-1">
-                            <div id="c-bar" class="absolute top-0 left-0 h-full bg-purple-500 transition-all duration-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]" style="width: 0%"></div>
-                        </div>
-                        
-                        <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
-                            <span>Self / Identity (S)</span>
-                            <span id="s-val" class="font-mono text-blue-400">0%</span>
-                        </div>
-                        <div class="h-1.5 bg-white/10 relative overflow-hidden mb-1">
-                            <div id="s-bar" class="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 0%"></div>
-                        </div>
-                        
-                        <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
-                            <span>Relationship / Family (R)</span>
-                            <span id="r-val" class="font-mono text-green-400">0%</span>
-                        </div>
-                        <div class="h-1.5 bg-white/10 relative overflow-hidden">
-                            <div id="r-bar" class="absolute top-0 left-0 h-full bg-green-500 transition-all duration-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" style="width: 0%"></div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                gaugeSec.innerHTML = `
-                    <div class="flex flex-col gap-2 w-full md:w-80 bg-black/45 p-3 md:p-4 border border-white/10 rounded font-sans">
-                        <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
-                            <span>Passing (P)</span>
-                            <span id="p-val" class="font-mono text-blue-400">50%</span>
+                            <span>Relationship (R)</span>
+                            <span id="r-val" class="font-mono text-blue-400">50%</span>
                         </div>
                         <div class="h-1.5 bg-white/10 relative overflow-hidden mb-1.5">
-                            <div id="p-bar" class="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 50%"></div>
+                            <div id="r-bar" class="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 50%"></div>
                         </div>
                         
                         <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
@@ -796,12 +784,31 @@
                         </div>
                     </div>
                 `;
+            } else {
+                gaugeSec.innerHTML = `
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <div class="text-[10px] uppercase tracking-widest font-bold opacity-70">Anxiety</div>
+                        <div id="anxiety-gauge-container" class="flex-1 md:w-48 h-2 bg-white/10 border border-white/20 relative overflow-hidden">
+                            <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
+                        </div>
+                        <div id="anxiety-text" class="text-[10px] font-mono w-8 font-bold">0%</div>
+                    </div>
+                `;
             }
             renderQuestion();
             updateBgmState();
         }
+
         function goBackFromPlay() {
             if (currentQuestionIndex === 0) {
+                // Hide video background
+                const videoScreen = document.getElementById('video-screen');
+                videoScreen.style.opacity = '0';
+                videoScreen.style.zIndex = '99999';
+                const video = document.getElementById('game-video');
+                video.muted = true;
+                video.pause();
+                
                 document.getElementById('play-screen').classList.add('hidden');
                 document.getElementById('select-screen').classList.remove('hidden');
                 anxiety = 0;
@@ -824,7 +831,7 @@
                     clareStatsHistory.pop();
                     clareStats = Object.assign({}, clareStatsHistory[clareStatsHistory.length - 1]);
                 }
-                renderQuestion();
+                transitionToQuestion(currentQuestionIndex);
             }
         }
 
@@ -844,7 +851,7 @@
             playedIreneEndingReturnVideo = false;
             playedIreneEndingFallVideo = false;
 
-            currentQuestionIndex = questions.length - 1;
+            const targetIdx = questions.length - 1;
             if (selectedCharacter === 'IRENE') {
                 ireneStatsHistory.pop();
                 ireneStats = Object.assign({}, ireneStatsHistory[ireneStatsHistory.length - 1]);
@@ -856,8 +863,71 @@
                 clareStatsHistory.pop();
                 clareStats = Object.assign({}, clareStatsHistory[clareStatsHistory.length - 1]);
             }
-            renderQuestion();
+            transitionToQuestion(targetIdx);
             updateBgmState();
+        }
+
+        function getVideoSrcForQuestion(char, questionId) {
+            if (char === 'IRENE') {
+                switch (questionId) {
+                    case "1-1": return '아이린 씬1-1.mov';
+                    case "1-2": return '아이린 씬1-2.mov';
+                    case "2-1": return '아이린 씬/아이린 씬2.mp4';
+                    case "3-1": return '아이린 씬/아이린 씬3-2.mp4';
+                    case "3-2": return '아이린 씬/아이린 씬3-1.mp4';
+                    case "4-1": return '아이린 씬/아이린씬 4-1.mp4';
+                    case "4-2": return '아이린 씬/아이린 씬4-2 찐.mp4';
+                    case "5-1": return '아이린 씬/아이린 씬5-1.mp4';
+                    case "5-2": return '아이린 씬/아이린 씬5-2.mp4';
+                    case "6-1": return '아이린 씬/아이린 씬6-1.mp4';
+                    case "6-2": return '아이린 씬6-2.mp4';
+                    default: return null;
+                }
+            } else if (char === 'CLARE') {
+                switch (questionId) {
+                    case "1-1": return '클레어 씬1.mp4';
+                    case "2-1": return '클레어 씬2.mp4';
+                    case "3-1": return '클레어 씬3 영상.mp4';
+                    case "4-1": return '클레어 씬4 영상.mp4';
+                    case "5-1": return '클레어 씬5.mp4';
+                    case "5-2": return '클레어 씬5-1.mp4';
+                    case "6-1": return '클레어 씬6 영상.mp4';
+                    case "6-2": return '아이린 씬/아이린 씬6-1.mp4';
+                    default: return null;
+                }
+            }
+            return null;
+        }
+
+        function hasVideoBackgroundForQuestion(char, questionId) {
+            if (char === 'IRENE') {
+                return questionId !== "2-2";
+            } else if (char === 'CLARE') {
+                const noVideoIds = ["1-2", "2-2", "3-2", "4-2"];
+                return !noVideoIds.includes(questionId);
+            }
+            return false;
+        }
+
+        function transitionToQuestion(index) {
+            currentQuestionIndex = index;
+            const q = questions[currentQuestionIndex];
+            const videoSrc = getVideoSrcForQuestion(selectedCharacter, q.id);
+            if (videoSrc) {
+                playVideo(videoSrc, () => {
+                    renderQuestion();
+                }, true);
+            } else {
+                // Hide video screen
+                const videoScreen = document.getElementById('video-screen');
+                videoScreen.style.opacity = '0';
+                videoScreen.style.zIndex = '99999';
+                const video = document.getElementById('game-video');
+                video.muted = true;
+                video.pause();
+                
+                renderQuestion();
+            }
         }
 
         function renderQuestion() {
@@ -875,6 +945,32 @@
                 btn.onclick = () => handleChoice(idx, choice.text);
                 container.appendChild(btn);
             });
+
+            // Adjust layout based on video background
+            const hasVideo = hasVideoBackgroundForQuestion(selectedCharacter, q.id);
+            const charImgContainer = document.getElementById('char-image-container');
+            const dialogueContainer = document.getElementById('dialogue-container');
+            const playLayoutRow = document.getElementById('play-layout-row');
+            const videoScreen = document.getElementById('video-screen');
+
+            if (hasVideo) {
+                // If it is a video background, hide character image container and style dialogue-container as a transparent card overlay
+                charImgContainer.classList.add('hidden');
+                dialogueContainer.className = "w-full max-w-2xl mx-auto space-y-6 md:space-y-8 bg-black/75 p-6 md:p-8 border border-white/15 rounded-md shadow-2xl mt-4 md:mt-12 backdrop-blur-md";
+                playLayoutRow.className = "flex-1 flex flex-col items-center justify-center overflow-y-auto w-full";
+            } else {
+                // Standard layout
+                charImgContainer.classList.remove('hidden');
+                dialogueContainer.className = "w-full md:w-[73%] space-y-6 md:space-y-12 pt-4 md:pt-12";
+                playLayoutRow.className = "flex-1 flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start overflow-y-auto";
+                
+                // Hide video player since we don't have video background here
+                videoScreen.style.opacity = '0';
+                videoScreen.style.zIndex = '99999';
+                const video = document.getElementById('game-video');
+                video.muted = true;
+                video.pause();
+            }
 
             updateVisuals();
         }
@@ -971,7 +1067,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "1-2") {
                 playVideo('아이린 씬/아이린 씬2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -979,7 +1075,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "1-1") {
                 playVideo('클레어 씬2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -987,7 +1083,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "2-2") {
                 playVideo('아이린 씬/아이린 씬3-2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -995,7 +1091,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "3-1") {
                 playVideo('아이린 씬/아이린 씬3-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1003,7 +1099,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "3-2") {
                 playVideo('아이린 씬/아이린씬 4-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1011,7 +1107,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "4-1") {
                 playVideo('아이린 씬/아이린 씬4-2 찐.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1019,7 +1115,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "4-2") {
                 playVideo('아이린 씬/아이린 씬5-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1027,7 +1123,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "5-1") {
                 playVideo('아이린 씬/아이린 씬5-2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1035,7 +1131,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "5-2") {
                 playVideo('아이린 씬/아이린 씬6-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1043,7 +1139,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "6-1") {
                 playVideo('아이린 씬6-2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1051,7 +1147,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "2-2") {
                 playVideo('클레어 씬3 영상.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1059,7 +1155,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "3-2") {
                 playVideo('클레어 씬4 영상.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1067,7 +1163,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "4-2") {
                 playVideo('클레어 씬5.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1075,7 +1171,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "5-1") {
                 playVideo('클레어 씬5-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1083,7 +1179,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "5-2") {
                 playVideo('클레어 씬6 영상.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1091,7 +1187,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "6-1") {
                 playVideo('아이린 씬/아이린 씬6-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1099,7 +1195,7 @@
                     } else {
                         showEnding();
                     }
-                });
+                }, true);
             } else {
                 if (currentQuestionIndex < questions.length) {
                     renderQuestion();
