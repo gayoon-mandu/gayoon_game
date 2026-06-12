@@ -261,13 +261,15 @@
             </div>
 
             <div id="dialogue-container" class="w-full md:w-[73%] space-y-6 md:space-y-12 pt-4 md:pt-12">
-                <div class="space-y-3 md:space-y-4">
-                    <div id="scene-num" class="text-sm md:text-lg text-red-500 uppercase tracking-widest font-black font-sans"></div>
-                    <div id="scene-desc" class="text-base md:text-xl italic opacity-50 border-l-2 border-white/20 pl-3 md:pl-4"></div>
-                    <h3 id="question-text" class="text-base md:text-2xl font-black leading-tight font-sans"></h3>
-                </div>
+                <div id="dialogue-content-wrapper" class="w-full space-y-6 md:space-y-12">
+                    <div class="space-y-3 md:space-y-4">
+                        <div id="scene-num" class="text-sm md:text-lg text-red-500 uppercase tracking-widest font-black font-sans"></div>
+                        <div id="scene-desc" class="text-base md:text-xl italic opacity-50 border-l-2 border-white/20 pl-3 md:pl-4"></div>
+                        <h3 id="question-text" class="text-base md:text-2xl font-black leading-tight font-sans"></h3>
+                    </div>
 
-                <div id="choices-container" class="grid gap-3 md:gap-6 pb-8"></div>
+                    <div id="choices-container" class="grid gap-3 md:gap-6 pb-8"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -962,14 +964,16 @@
             const videoScreen = document.getElementById('video-screen');
 
             if (hasVideo) {
-                // If it is a video background, hide character image container and style dialogue-container as a transparent card overlay
+                // If it is a video background, hide character image container and style dialogue-container as a full-width cinematic transparent card overlay
                 charImgContainer.classList.add('hidden');
-                dialogueContainer.className = "w-full md:w-3/5 mx-auto space-y-6 md:space-y-8 bg-black/60 p-6 md:p-8 border border-white/15 rounded-md shadow-2xl mt-4 md:mt-12 backdrop-blur-md";
+                dialogueContainer.className = "w-full bg-black/60 p-6 md:p-8 border-y border-white/15 shadow-2xl mt-4 md:mt-12 backdrop-blur-md";
+                document.getElementById('dialogue-content-wrapper').className = "w-full md:w-3/5 mx-auto space-y-6 md:space-y-12";
                 playLayoutRow.className = "flex-1 flex flex-col items-center justify-center overflow-y-auto w-full";
             } else {
                 // Standard layout
                 charImgContainer.classList.remove('hidden');
-                dialogueContainer.className = "w-full md:w-[73%] space-y-6 md:space-y-12 pt-4 md:pt-12";
+                dialogueContainer.className = "w-full md:w-[73%] pt-4 md:pt-12";
+                document.getElementById('dialogue-content-wrapper').className = "w-full space-y-6 md:space-y-12";
                 playLayoutRow.className = "flex-1 flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start overflow-y-auto";
                 
                 // Hide video player since we don't have video background here
