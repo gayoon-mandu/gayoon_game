@@ -739,7 +739,8 @@
             video.ontimeupdate = () => {
                 let offset = 0.7;
                 if (isGameplayTransition && typeof questions !== 'undefined' && questions[currentQuestionIndex]) {
-                    if (questions[currentQuestionIndex].id === '6-2') {
+                    const qId = questions[currentQuestionIndex].id;
+                    if (qId === '6-2' || qId === '5-1') {
                         offset = 1.0;
                     }
                 }
