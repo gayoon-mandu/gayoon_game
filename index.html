@@ -307,6 +307,7 @@
         let anxietyHistory = [0]; 
         let currentQuestionIndex = 0;
         let selectedCharacter = '';
+        let currentVideoSrc = '';
         let isPlayingBgm = true;
         const bgm = document.getElementById('bgm');
         if (bgm) {
@@ -609,6 +610,7 @@
         }
 
         function playVideo(src, callback, isGameplayTransition = false) {
+            currentVideoSrc = src;
             const videoScreen = document.getElementById('video-screen');
             const video = document.getElementById('game-video');
             
@@ -818,6 +820,7 @@
                 const video = document.getElementById('game-video');
                 video.muted = true;
                 video.pause();
+                currentVideoSrc = '';
                 
                 document.getElementById('play-screen').classList.add('hidden');
                 document.getElementById('select-screen').classList.remove('hidden');
@@ -910,31 +913,46 @@
         }
 
         function hasVideoBackgroundForQuestion(char, questionId) {
-            if (char === 'IRENE') {
-                return questionId !== "2-2";
-            } else if (char === 'CLARE') {
-                const noVideoIds = ["1-2", "2-2", "3-2", "4-2"];
-                return !noVideoIds.includes(questionId);
+            return true; // All gameplay scenes overlay on top of the frozen video frames
+        }
+
+        function getLatestVideoSrcForQuestion(index) {
+            for (let i = index; i >= 0; i--) {
+                const src = getVideoSrcForQuestion(selectedCharacter, questions[i].id);
+                if (src) return src;
             }
-            return false;
+            return null;
         }
 
         function transitionToQuestion(index) {
             currentQuestionIndex = index;
             const q = questions[currentQuestionIndex];
-            const videoSrc = getVideoSrcForQuestion(selectedCharacter, q.id);
-            if (videoSrc) {
-                playVideo(videoSrc, () => {
+            const targetVideoSrc = getLatestVideoSrcForQuestion(currentQuestionIndex);
+            
+            if (targetVideoSrc) {
+                if (currentVideoSrc === targetVideoSrc) {
+                    // The correct video is already loaded and paused on screen. Just render the question!
+                    const videoScreen = document.getElementById('video-screen');
+                    videoScreen.style.opacity = '1';
+                    videoScreen.style.zIndex = '10';
+                    videoScreen.style.pointerEvents = 'none';
+                    
                     renderQuestion();
-                }, true);
+                } else {
+                    // Different video. Play the transition video and freeze on its final frame!
+                    playVideo(targetVideoSrc, () => {
+                        renderQuestion();
+                    }, true);
+                }
             } else {
-                // Hide video screen
+                // No video exists for this path yet (fallback)
                 const videoScreen = document.getElementById('video-screen');
                 videoScreen.style.opacity = '0';
                 videoScreen.style.zIndex = '99999';
                 const video = document.getElementById('game-video');
                 video.muted = true;
                 video.pause();
+                currentVideoSrc = '';
                 
                 renderQuestion();
             }
