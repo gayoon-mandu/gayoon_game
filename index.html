@@ -737,7 +737,7 @@
             };
 
             video.ontimeupdate = () => {
-                if (isGameplayTransition && video.duration && video.duration > 1.0 && video.currentTime >= video.duration - 0.6) {
+                if (isGameplayTransition && video.duration && video.duration > 1.0 && video.currentTime >= video.duration - 0.7) {
                     video.ontimeupdate = null;
                     startFadeOut();
                 }
