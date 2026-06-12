@@ -268,6 +268,8 @@
                 </div>
 
                 <div id="choices-container" class="grid gap-3 md:gap-6 pb-8"></div>
+                <!-- Irene Gauges Container -->
+                <div id="irene-gauge-section-bottom" class="hidden w-full border-t border-white/10 pt-6"></div>
             </div>
         </div>
     </div>
@@ -732,43 +734,58 @@
             
             // Build dynamic gauge section
             const gaugeSec = document.getElementById('gauge-section');
+            const bottomGaugeSec = document.getElementById('irene-gauge-section-bottom');
             if (selectedCharacter === 'IRENE') {
-                gaugeSec.innerHTML = `
-                    <div class="flex flex-col gap-1 w-full md:w-64 bg-black/40 p-2 border border-white/10 rounded font-sans">
-                        <div class="flex items-center justify-between text-[10px] uppercase font-black tracking-widest text-red-400 mb-1">
-                            <span>Composite Anxiety</span>
-                            <span id="anxiety-text" class="font-mono text-red-500 font-bold">0%</span>
-                        </div>
-                        <div id="anxiety-gauge-container" class="h-2 bg-white/10 border border-white/20 relative overflow-hidden mb-2">
-                            <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
-                        </div>
-                        
-                        <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
-                            <span>Social / Community (C)</span>
-                            <span id="c-val" class="font-mono text-purple-400">0%</span>
-                        </div>
-                        <div class="h-1 bg-white/10 relative overflow-hidden mb-1">
-                            <div id="c-bar" class="absolute top-0 left-0 h-full bg-purple-500 transition-all duration-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]" style="width: 0%"></div>
+                gaugeSec.innerHTML = '';
+                bottomGaugeSec.classList.remove('hidden');
+                bottomGaugeSec.innerHTML = `
+                    <div class="w-full bg-black/45 p-4 border border-white/10 rounded font-sans space-y-4">
+                        <div class="flex flex-col gap-1.5">
+                            <div class="flex items-center justify-between text-xs md:text-sm uppercase font-black tracking-wider text-red-400">
+                                <span>Composite Anxiety</span>
+                                <span id="anxiety-text" class="font-mono text-red-500 font-bold text-sm md:text-base">0%</span>
+                            </div>
+                            <div id="anxiety-gauge-container" class="h-3 bg-white/10 border border-white/20 relative overflow-hidden rounded-sm">
+                                <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
+                            </div>
                         </div>
                         
-                        <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
-                            <span>Self / Identity (S)</span>
-                            <span id="s-val" class="font-mono text-blue-400">0%</span>
-                        </div>
-                        <div class="h-1 bg-white/10 relative overflow-hidden mb-1">
-                            <div id="s-bar" class="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 0%"></div>
-                        </div>
-                        
-                        <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
-                            <span>Relationship / Family (R)</span>
-                            <span id="r-val" class="font-mono text-green-400">0%</span>
-                        </div>
-                        <div class="h-1 bg-white/10 relative overflow-hidden">
-                            <div id="r-bar" class="absolute top-0 left-0 h-full bg-green-500 transition-all duration-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" style="width: 0%"></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-white/5 pt-3">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center justify-between text-[10px] uppercase font-bold tracking-widest text-neutral-300">
+                                    <span>Social / Community (C)</span>
+                                    <span id="c-val" class="font-mono text-purple-400 text-xs">0%</span>
+                                </div>
+                                <div class="h-1.5 bg-white/10 rounded-sm relative overflow-hidden">
+                                    <div id="c-bar" class="absolute top-0 left-0 h-full bg-purple-500 transition-all duration-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center justify-between text-[10px] uppercase font-bold tracking-widest text-neutral-300">
+                                    <span>Self / Identity (S)</span>
+                                    <span id="s-val" class="font-mono text-blue-400 text-xs">0%</span>
+                                </div>
+                                <div class="h-1.5 bg-white/10 rounded-sm relative overflow-hidden">
+                                    <div id="s-bar" class="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center justify-between text-[10px] uppercase font-bold tracking-widest text-neutral-300">
+                                    <span>Relationship / Family (R)</span>
+                                    <span id="r-val" class="font-mono text-green-400 text-xs">0%</span>
+                                </div>
+                                <div class="h-1.5 bg-white/10 rounded-sm relative overflow-hidden">
+                                    <div id="r-bar" class="absolute top-0 left-0 h-full bg-green-500 transition-all duration-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" style="width: 0%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
             } else {
+                bottomGaugeSec.innerHTML = '';
+                bottomGaugeSec.classList.add('hidden');
                 gaugeSec.innerHTML = `
                     <div class="flex flex-col gap-1 w-full md:w-64 bg-black/40 p-2 border border-white/10 rounded font-sans">
                         <div class="flex items-center justify-between text-[8px] uppercase font-black tracking-widest text-neutral-300">
