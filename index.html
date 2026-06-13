@@ -978,7 +978,7 @@
             if (char === 'IRENE') {
                 switch (questionId) {
                     case "1-1": return '아이린 씬1-1.mov';
-                    case "1-2": return '아이린 씬1-2.mov';
+                    case "1-2": return '아이린 씬2-1.mp4';
                     case "2-1": return '아이린 씬/아이린 씬2.mp4';
                     case "3-1": return '아이린 씬/아이린 씬3-2.mp4';
                     case "3-2": return '아이린 씬/아이린 씬3-1.mp4';
@@ -1186,7 +1186,7 @@
             
             currentQuestionIndex++;
             if (selectedCharacter === 'IRENE' && q.id === "1-1") {
-                playVideo('아이린 씬1-2.mov', () => {
+                playVideo('아이린 씬2-1.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
