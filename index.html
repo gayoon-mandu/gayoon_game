@@ -911,9 +911,17 @@
             } else {
                 gaugeSec.innerHTML = `
                     <div class="flex flex-col gap-2 w-full md:w-80 bg-black/45 p-3 md:p-4 border border-white/10 rounded font-sans">
+                        <div class="flex items-center justify-between text-xs md:text-sm uppercase font-black tracking-widest text-red-400 mb-1">
+                            <span>Composite Anxiety</span>
+                            <span id="anxiety-text" class="font-mono text-red-500 font-bold text-sm md:text-base">0%</span>
+                        </div>
+                        <div id="anxiety-gauge-container" class="h-3 bg-white/10 border border-white/20 relative overflow-hidden mb-2">
+                            <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
+                        </div>
+                        
                         <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
                             <span>Passing Attachment (P)</span>
-                            <span id="p-val" class="font-mono text-blue-400 font-bold">0</span>
+                            <span id="p-val" class="font-mono text-blue-400">50%</span>
                         </div>
                         <div class="h-1.5 bg-white/10 relative overflow-hidden mb-1.5">
                             <div id="p-bar" class="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 50%"></div>
@@ -921,18 +929,18 @@
                         
                         <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
                             <span>Community Longing (C)</span>
-                            <span id="c-val" class="font-mono text-emerald-400 font-bold">0</span>
+                            <span id="c-val" class="font-mono text-green-400">50%</span>
                         </div>
                         <div class="h-1.5 bg-white/10 relative overflow-hidden mb-1.5">
-                            <div id="c-bar" class="absolute top-0 left-0 h-full bg-emerald-500 transition-all duration-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" style="width: 50%"></div>
+                            <div id="c-bar" class="absolute top-0 left-0 h-full bg-green-500 transition-all duration-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" style="width: 50%"></div>
                         </div>
                         
                         <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
                             <span>Stability (S)</span>
-                            <span id="s-val" class="font-mono text-amber-400 font-bold">0</span>
+                            <span id="s-val" class="font-mono text-yellow-400">50%</span>
                         </div>
                         <div class="h-1.5 bg-white/10 relative overflow-hidden">
-                            <div id="s-bar" class="absolute top-0 left-0 h-full bg-amber-500 transition-all duration-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]" style="width: 50%"></div>
+                            <div id="s-bar" class="absolute top-0 left-0 h-full bg-yellow-500 transition-all duration-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]" style="width: 50%"></div>
                         </div>
                     </div>
                 `;
@@ -973,6 +981,10 @@
                 } else {
                     clareStatsHistory.pop();
                     clareStats = Object.assign({}, clareStatsHistory[clareStatsHistory.length - 1]);
+                    const pPct = Math.max(0, Math.min(100, Math.round(((clareStats.P + 8) / 16) * 100)));
+                    const cPct = Math.max(0, Math.min(100, Math.round(((clareStats.C + 8) / 16) * 100)));
+                    const sPct = Math.max(0, Math.min(100, Math.round(((clareStats.S + 8) / 16) * 100)));
+                    anxiety = Math.round((pPct + cPct + sPct) / 3);
                 }
                 transitionToQuestion(currentQuestionIndex);
             }
@@ -1006,6 +1018,10 @@
             } else {
                 clareStatsHistory.pop();
                 clareStats = Object.assign({}, clareStatsHistory[clareStatsHistory.length - 1]);
+                const pPct = Math.max(0, Math.min(100, Math.round(((clareStats.P + 8) / 16) * 100)));
+                const cPct = Math.max(0, Math.min(100, Math.round(((clareStats.C + 8) / 16) * 100)));
+                const sPct = Math.max(0, Math.min(100, Math.round(((clareStats.S + 8) / 16) * 100)));
+                anxiety = Math.round((pPct + cPct + sPct) / 3);
             }
             transitionToQuestion(targetIdx);
             updateBgmState();
@@ -1176,7 +1192,28 @@
                 if (rBar) rBar.style.width = `${rPct}%`;
                 if (rVal) rVal.innerText = `${rPct}%`;
             } else {
-                charImg.className = "w-full h-full object-cover transition-all duration-1000 grayscale";
+                // Map raw integer (-8 to +8) to UI percentages (0% to 100%)
+                // Neutral (0) is mapped to 50%
+                const pPct = Math.max(0, Math.min(100, Math.round(((clareStats.P + 8) / 16) * 100)));
+                const cPct = Math.max(0, Math.min(100, Math.round(((clareStats.C + 8) / 16) * 100)));
+                const sPct = Math.max(0, Math.min(100, Math.round(((clareStats.S + 8) / 16) * 100)));
+                anxiety = Math.round((pPct + cPct + sPct) / 3);
+
+                const gaugeContainer = document.getElementById('anxiety-gauge-container');
+                if (anxiety > 50) {
+                    charImg.className = "w-full h-full object-cover transition-all duration-1000 sepia-anxiety";
+                    if (gaugeContainer) {
+                        gaugeContainer.classList.add('anxiety-shake');
+                        setTimeout(() => gaugeContainer.classList.remove('anxiety-shake'), 500);
+                    }
+                } else {
+                    charImg.className = "w-full h-full object-cover transition-all duration-1000 grayscale";
+                }
+
+                const anxietyBar = document.getElementById('anxiety-bar');
+                const anxietyText = document.getElementById('anxiety-text');
+                if (anxietyBar) anxietyBar.style.width = `${anxiety}%`;
+                if (anxietyText) anxietyText.innerText = `${anxiety}%`;
                 
                 const pBar = document.getElementById('p-bar');
                 const pVal = document.getElementById('p-val');
@@ -1185,18 +1222,12 @@
                 const sBar = document.getElementById('s-bar');
                 const sVal = document.getElementById('s-val');
                 
-                // Map raw integer (-8 to +8) to UI percentages (0% to 100%)
-                // Neutral (0) is mapped to 50%
-                const pPct = Math.max(0, Math.min(100, Math.round(((clareStats.P + 8) / 16) * 100)));
-                const cPct = Math.max(0, Math.min(100, Math.round(((clareStats.C + 8) / 16) * 100)));
-                const sPct = Math.max(0, Math.min(100, Math.round(((clareStats.S + 8) / 16) * 100)));
-                
                 if (pBar) pBar.style.width = `${pPct}%`;
-                if (pVal) pVal.innerText = clareStats.P > 0 ? '+' + clareStats.P : clareStats.P;
+                if (pVal) pVal.innerText = `${pPct}%`;
                 if (cBar) cBar.style.width = `${cPct}%`;
-                if (cVal) cVal.innerText = clareStats.C > 0 ? '+' + clareStats.C : clareStats.C;
+                if (cVal) cVal.innerText = `${cPct}%`;
                 if (sBar) sBar.style.width = `${sPct}%`;
-                if (sVal) sVal.innerText = clareStats.S > 0 ? '+' + clareStats.S : clareStats.S;
+                if (sVal) sVal.innerText = `${sPct}%`;
             }
         }
 
@@ -1219,6 +1250,11 @@
                 clareStats.C = clareStats.C + (choice.cChange || 0);
                 clareStats.S = clareStats.S + (choice.sChange || 0);
                 clareStatsHistory.push(Object.assign({}, clareStats));
+                
+                const pPct = Math.max(0, Math.min(100, Math.round(((clareStats.P + 8) / 16) * 100)));
+                const cPct = Math.max(0, Math.min(100, Math.round(((clareStats.C + 8) / 16) * 100)));
+                const sPct = Math.max(0, Math.min(100, Math.round(((clareStats.S + 8) / 16) * 100)));
+                anxiety = Math.round((pPct + cPct + sPct) / 3);
             }
             
             currentQuestionIndex++;
@@ -1488,7 +1524,12 @@
                 document.getElementById('final-score-badge').innerHTML = `Final Anxiety: <span class="font-black text-red-500 text-base md:text-xl ml-2">${anxiety}%</span> <span class="text-xs text-neutral-400 ml-2">(C:${cPct}% S:${sPct}% R:${rPct}%)</span>`;
             } else {
                 if (endingVisual) endingVisual.style.display = 'none';
-                if (scoreBadge) scoreBadge.style.display = 'none';
+                if (scoreBadge) scoreBadge.style.display = 'block';
+                const pPct = Math.max(0, Math.min(100, Math.round(((clareStats.P + 8) / 16) * 100)));
+                const cPct = Math.max(0, Math.min(100, Math.round(((clareStats.C + 8) / 16) * 100)));
+                const sPct = Math.max(0, Math.min(100, Math.round(((clareStats.S + 8) / 16) * 100)));
+                anxiety = Math.round((pPct + cPct + sPct) / 3);
+                document.getElementById('final-score-badge').innerHTML = `Final Anxiety: <span class="font-black text-red-500 text-base md:text-xl ml-2">${anxiety}%</span> <span class="text-xs text-neutral-400 ml-2">(P:${pPct}% C:${cPct}% S:${sPct}%)</span>`;
             }
             
             let html = '';
