@@ -681,6 +681,27 @@
                 }
             }
             
+            // Seamless transition logic for transitions WITHOUT center text (specifically Scene 4-2)
+            let isSeamless = !centerText && isGameplayTransition;
+            if (isSeamless && video.videoWidth > 0 && video.videoHeight > 0) {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                try {
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const dataURL = canvas.toDataURL('image/jpeg', 0.95);
+                    videoScreen.style.backgroundImage = `url(${dataURL})`;
+                    videoScreen.style.backgroundSize = 'contain';
+                    videoScreen.style.backgroundPosition = 'center';
+                    videoScreen.style.backgroundRepeat = 'no-repeat';
+                } catch (e) {
+                    console.warn("Canvas capture failed:", e);
+                }
+            } else {
+                videoScreen.style.backgroundImage = 'none';
+            }
+
             videoScreen.style.pointerEvents = 'auto';
             video.src = src;
             
@@ -694,8 +715,21 @@
             // Unmute the video player to ensure the video's audio plays!
             video.muted = false;
             
-            video.currentTime = 0;
+            // Bypass black intro frames for Scene 4-2 video
+            if (src === '아이린 씬/아이린 씬4-2 찐.mp4') {
+                video.currentTime = 0.15;
+            } else {
+                video.currentTime = 0;
+            }
+            
             video.load();
+            
+            // Clear swapping frame cache when the new video starts playing
+            const onPlaying = () => {
+                videoScreen.style.backgroundImage = 'none';
+                video.removeEventListener('playing', onPlaying);
+            };
+            video.addEventListener('playing', onPlaying);
             
             const playPromise = video.play();
             if (playPromise !== undefined) {
@@ -703,6 +737,7 @@
                     console.log("Playback started successfully");
                 }).catch(e => {
                     console.error("Video play failed:", e);
+                    videoScreen.style.backgroundImage = 'none';
                 });
             }
             
@@ -762,12 +797,20 @@
 
             video.ontimeupdate = () => {
                 let offset = 0.7;
-                if (isGameplayTransition && typeof questions !== 'undefined' && questions[currentQuestionIndex]) {
-                    const qId = questions[currentQuestionIndex].id;
-                    if (qId === '6-2' || qId === '5-1') {
-                        offset = 1.0;
-                    } else if (qId === '4-1') {
-                        offset = 1.5;
+                if (isGameplayTransition) {
+                    if (selectedCharacter === 'IRENE') {
+                        if (src.includes('3-1') || src.includes('3-2') || src.includes('4-1') || src.includes('5-1') || src.includes('5-2') || src.includes('6-2')) {
+                            offset = 0.6;
+                        }
+                    } else if (selectedCharacter === 'CLARE') {
+                        if (typeof questions !== 'undefined' && questions[currentQuestionIndex]) {
+                            const qId = questions[currentQuestionIndex].id;
+                            if (qId === '6-2' || qId === '5-1') {
+                                offset = 1.0;
+                            } else if (qId === '4-1') {
+                                offset = 1.5;
+                            }
+                        }
                     }
                 }
                 if (isGameplayTransition && video.duration && video.duration > 1.0 && video.currentTime >= video.duration - offset) {
