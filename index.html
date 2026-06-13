@@ -464,10 +464,10 @@
             {
                 id: "2-1",
                 scene: "백인 전용 카페에서 만난 아이린을 외롭고 반가운 마음에 자신의 호텔 방에 초대한 아이린",
-                text: "Irene에게 현재의 삶에 대해 얼마나 솔직하게 얘기할까?",
+                text: "Irene에게 자신의 현재 삶을 얼마나 솔직하게 얘기할까?",
                 choices: [
-                    { text: "A. 백인으로 살아가는 삶이 주는 불안과 두려움도 조심스럽게 털어놓는다.", pChange: -1, cChange: 1, sChange: -1 },
-                    { text: "B. 부유한 백인 남편과의 안정적인 결혼 생활만 강조하며, 일부러 행복한 삶만을 얘기한다.", pChange: 1, cChange: 0, sChange: 1 }
+                    { text: "A. 부유한 백인 남편과의 안정적인 결혼 생활만 강조하며, 일부러 행복한 삶만을 얘기한다.", pChange: 1, cChange: 0, sChange: 1 },
+                    { text: "B. 백인으로 살아가는 삶이 주는 불안과 두려움도 조심스럽게 털어놓는다.", pChange: -1, cChange: 1, sChange: -1 }
                 ]
             },
             {
@@ -484,8 +484,8 @@
                 scene: "IRENE의 집",
                 text: "Irene의 집에 들어왔다, 그녀의 집과 가족에 대해서 뭐라고 말을 할까?",
                 choices: [
-                    { text: "A. 이런 공기와 사람들의 온기가 그리웠다고 말한다.", pChange: -1, cChange: 1, sChange: -1 },
-                    { text: "B. 이곳이 답답해 보인다는 농담 섞인 말을 건넨다.", pChange: 1, cChange: -1, sChange: 1 }
+                    { text: "A. 이곳이 답답해 보인다는 농담 섞인 말을 건넨다.", pChange: 1, cChange: -1, sChange: 1 },
+                    { text: "B. 이런 공기와 사람들의 온기가 그리웠다고 말한다.", pChange: -1, cChange: 1, sChange: -1 }
                 ]
             },
             {
@@ -502,8 +502,8 @@
                 scene: "백인 파티 / 호텔",
                 text: "사람들이 흑인에 대한 비하 발언을 하며 나에게 그렇지 않냐고 물어본다, 뭐라고 대답할까?",
                 choices: [
-                    { text: "A. “그들도 우리와 다르지 않다.”고 조심스럽게 말한다.", pChange: 0, cChange: 1, sChange: -1 },
-                    { text: "B. “그들이 조금 그런 편이지”라며 마음에도 없는 말을 한다.", pChange: 1, cChange: -1, sChange: 1 }
+                    { text: "A. “그들이 조금 그런 편이지”라며 마음에도 없는 말을 한다.", pChange: 1, cChange: -1, sChange: 1 },
+                    { text: "B. “그들도 우리와 다르지 않다.”고 조심스럽게 말한다.", pChange: 0, cChange: 1, sChange: -1 }
                 ]
             },
             {
@@ -874,12 +874,30 @@
                 `;
             } else {
                 gaugeSec.innerHTML = `
-                    <div class="flex items-center gap-4 w-full md:w-auto">
-                        <div class="text-[10px] uppercase tracking-widest font-bold opacity-70">Anxiety</div>
-                        <div id="anxiety-gauge-container" class="flex-1 md:w-48 h-2 bg-white/10 border border-white/20 relative overflow-hidden">
-                            <div id="anxiety-bar" class="absolute top-0 left-0 h-full bg-red-600 transition-all duration-1000 shadow-[0_0_15px_rgba(220,38,38,0.7)]" style="width: 0%"></div>
+                    <div class="flex flex-col gap-2 w-full md:w-80 bg-black/45 p-3 md:p-4 border border-white/10 rounded font-sans">
+                        <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
+                            <span>Passing Attachment (P)</span>
+                            <span id="p-val" class="font-mono text-blue-400 font-bold">0</span>
                         </div>
-                        <div id="anxiety-text" class="text-[10px] font-mono w-8 font-bold">0%</div>
+                        <div class="h-1.5 bg-white/10 relative overflow-hidden mb-1.5">
+                            <div id="p-bar" class="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 50%"></div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
+                            <span>Community Longing (C)</span>
+                            <span id="c-val" class="font-mono text-emerald-400 font-bold">0</span>
+                        </div>
+                        <div class="h-1.5 bg-white/10 relative overflow-hidden mb-1.5">
+                            <div id="c-bar" class="absolute top-0 left-0 h-full bg-emerald-500 transition-all duration-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" style="width: 50%"></div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-[10px] md:text-[11px] uppercase font-black tracking-widest text-neutral-300">
+                            <span>Stability (S)</span>
+                            <span id="s-val" class="font-mono text-amber-400 font-bold">0</span>
+                        </div>
+                        <div class="h-1.5 bg-white/10 relative overflow-hidden">
+                            <div id="s-bar" class="absolute top-0 left-0 h-full bg-amber-500 transition-all duration-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]" style="width: 50%"></div>
+                        </div>
                     </div>
                 `;
             }
@@ -1079,6 +1097,7 @@
             }
 
             updateVisuals();
+            updateBgmState();
         }
 
         function updateVisuals() {
@@ -1129,18 +1148,18 @@
                 const sBar = document.getElementById('s-bar');
                 const sVal = document.getElementById('s-val');
                 
-                // Map raw integer (-11 to +11) to UI percentages (0% to 100%)
+                // Map raw integer (-8 to +8) to UI percentages (0% to 100%)
                 // Neutral (0) is mapped to 50%
-                const pPct = Math.max(0, Math.min(100, Math.round(((clareStats.P + 11) / 22) * 100)));
-                const cPct = Math.max(0, Math.min(100, Math.round(((clareStats.C + 11) / 22) * 100)));
-                const sPct = Math.max(0, Math.min(100, Math.round(((clareStats.S + 11) / 22) * 100)));
+                const pPct = Math.max(0, Math.min(100, Math.round(((clareStats.P + 8) / 16) * 100)));
+                const cPct = Math.max(0, Math.min(100, Math.round(((clareStats.C + 8) / 16) * 100)));
+                const sPct = Math.max(0, Math.min(100, Math.round(((clareStats.S + 8) / 16) * 100)));
                 
                 if (pBar) pBar.style.width = `${pPct}%`;
-                if (pVal) pVal.innerText = `${pPct}%`;
+                if (pVal) pVal.innerText = clareStats.P > 0 ? '+' + clareStats.P : clareStats.P;
                 if (cBar) cBar.style.width = `${cPct}%`;
-                if (cVal) cVal.innerText = `${cPct}%`;
+                if (cVal) cVal.innerText = clareStats.C > 0 ? '+' + clareStats.C : clareStats.C;
                 if (sBar) sBar.style.width = `${sPct}%`;
-                if (sVal) sVal.innerText = `${sPct}%`;
+                if (sVal) sVal.innerText = clareStats.S > 0 ? '+' + clareStats.S : clareStats.S;
             }
         }
 
@@ -1311,45 +1330,61 @@
             }
         }
 
-        function showEnding() {
-            if (selectedCharacter === 'CLARE') {
-                let clareEnding = '';
-                if (clareStats.S <= -1) {
-                    clareEnding = 'The Fall';
-                } else if (clareStats.P >= clareStats.C) {
-                    clareEnding = 'Passing';
-                } else {
-                    clareEnding = 'Return to Harlem';
-                }
+        // Clare-specific ending definitions
+        const clareEndings = {
+            'passing': {
+                title: "계속 패싱",
+                engTitle: "PASSING",
+                bgClass: "ending-c-bg",
+                sfx: "calm.mp3",
+                desc: `Clare는 계속해서 자신의 과거를 숨긴 채, 패싱한 삶을 선택한다.
+그 누구도 그녀의 진실을 알지 못하지만, 끊임없는 불안이 따라온다.
+숨기는 삶은 안전할수록 더욱 위태로워진다.
 
-                if (clareEnding === 'The Fall' && !playedEndingFallVideo) {
-                    playedEndingFallVideo = true;
-                    playVideo('클레어 엔딩 추락.mp4', showEnding);
-                    return;
-                }
-                if (clareEnding === 'Passing' && !playedClareEndingPassingVideo) {
-                    playedClareEndingPassingVideo = true;
-                    playVideo('클레어 엔딩 패싱.mp4', showEnding);
-                    return;
-                }
-                if (clareEnding === 'Return to Harlem' && !playedClareEndingReturnVideo) {
-                    playedClareEndingReturnVideo = true;
-                    playVideo('클레어 엔딩 공동체.mp4', showEnding);
-                    return;
-                }
+…당신은 끝까지 자신의 진짜 모습을 감출 수 있나요?
+
+당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.
+숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.`
+            },
+            'return': {
+                title: "흑인 공동체 귀환",
+                engTitle: "RETURN TO HARLEM",
+                bgClass: "ending-b-bg",
+                sfx: "woman.mp3",
+                desc: `Clare는 패싱을 멈춘 후 흑인 공동체로 돌아간다.
+따스한 햇살, 익숙한 재즈 음악..
+
+…하지만 이것이 행복이라고 확신할 수 있나요?
+
+당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.
+숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.`
+            },
+            'the_fall': {
+                title: "원작 비극 엔딩",
+                engTitle: "THE FALL",
+                bgClass: "ending-a-bg",
+                sfx: "siren.mp3",
+                desc: `혼란스러운 상황 속에서 CLARE는 창밖으로 추락한다.
+사고였을까, 아니면...?
+사이렌 소리만이 멀리서 울려 퍼진다.
+
+…하지만 이것이 끝이라고 확신할 수 있나요?
+
+당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.
+숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.`
             }
-            playedEndingFallVideo = false;
-            playedClareEndingPassingVideo = false;
-            playedClareEndingReturnVideo = false;
-            
+        };
+
+        function showEnding() {
+            // Clare route goes straight to typography endings without video plays
             if (selectedCharacter === 'IRENE') {
+                let ireneEnding = '';
                 const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
                 let highestStats = [];
                 if (ireneStats.C === maxVal) highestStats.push('C');
                 if (ireneStats.S === maxVal) highestStats.push('S');
                 if (ireneStats.R === maxVal) highestStats.push('R');
                 
-                let ireneEnding = '';
                 if (highestStats.length >= 2) {
                     ireneEnding = 'The Fall';
                 } else {
@@ -1392,9 +1427,11 @@
             const content = document.getElementById('ending-content');
             const endingImg = document.getElementById('ending-img');
             const endingVisual = document.getElementById('ending-visual');
+            const scoreBadge = document.getElementById('final-score-badge');
             
             if (selectedCharacter === 'IRENE') {
                 if (endingVisual) endingVisual.style.display = 'block';
+                if (scoreBadge) scoreBadge.style.display = 'block';
                 const cPct = Math.round((ireneStats.C / 7) * 100);
                 const sPct = Math.round((ireneStats.S / 6) * 100);
                 const rPct = Math.round((ireneStats.R / 8) * 100);
@@ -1402,8 +1439,7 @@
                 document.getElementById('final-score-badge').innerHTML = `Final Anxiety: <span class="font-black text-red-500 text-base md:text-xl ml-2">${anxiety}%</span> <span class="text-xs text-neutral-400 ml-2">(C:${cPct}% S:${sPct}% R:${rPct}%)</span>`;
             } else {
                 if (endingVisual) endingVisual.style.display = 'none';
-                const formatStat = (val) => (val >= 0 ? `+${val}` : `${val}`);
-                document.getElementById('final-score-badge').innerHTML = `Final Stats: <span class="font-black text-blue-400 text-sm ml-2">P: ${formatStat(clareStats.P)}</span> <span class="font-black text-green-400 text-sm ml-2">C: ${formatStat(clareStats.C)}</span> <span class="font-black text-yellow-400 text-sm ml-2">S: ${formatStat(clareStats.S)}</span>`;
+                if (scoreBadge) scoreBadge.style.display = 'none';
             }
             
             let html = '';
@@ -1442,7 +1478,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1464,7 +1500,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1486,7 +1522,7 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-purple-600 hover:bg-purple-500 text-white font-black rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-lg md:text-xl font-sans">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-purple-600 hover:bg-purple-500 text-white font-black rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
@@ -1508,93 +1544,89 @@
                             숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
                         </p>
                         <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
                     `;
+                }
+                content.innerHTML = html;
+                if (isPlayingBgm) {
+                    endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
                 }
             } else {
-                // selectedCharacter === 'CLARE'
-                let ending = '';
-                
-                // Simple 3-branch logic based on indicators
-                if (clareStats.S <= -1) {
-                    ending = 'The Fall';
-                } else if (clareStats.P >= clareStats.C) {
-                    ending = 'Passing';
+                // Clare Ending Branches logic
+                let defaultKey = 'passing';
+                if (clareStats.P >= 4 && clareStats.C <= 1 && clareStats.S >= 3) {
+                    defaultKey = 'passing';
+                } else if (clareStats.P <= 1 && clareStats.C >= 4 && clareStats.S >= -1 && clareStats.S <= 2) {
+                    defaultKey = 'return';
+                } else if (clareStats.P >= 4 && clareStats.C >= 3 && clareStats.S <= -2) {
+                    defaultKey = 'the_fall';
                 } else {
-                    ending = 'Return to Harlem';
+                    // Robust Fallback triggers
+                    if (clareStats.S <= -2) {
+                        defaultKey = 'the_fall';
+                    } else if (clareStats.C >= clareStats.P) {
+                        defaultKey = 'return';
+                    } else {
+                        defaultKey = 'passing';
+                    }
                 }
 
-                if (ending === 'The Fall') {
-                    // Ending 3: 원작 비극 엔딩 (Tragedy Fall)
-                    if (endingVisual) endingVisual.style.display = 'block';
-                    endingImg.src = 'irene_ending_1.png';
-                    endingSfx.src = 'siren.mp3';
-                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
-                    html = `
-                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">원작 비극 엔딩</h2>
-                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">THE FALL</h3>
-                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
-                            혼란스러운 상황 속에서 CLARE는 창밖으로 추락한다.<br>
-                            사고였을까, 아니면...?<br>
-                            사이렌 소리만이 멀리서 울려 퍼진다.<br><br>
-                            …하지만 이것이 끝이라고 확신할 수 있나요?<br><br>
-                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
-                            숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
+                window.changeClareEnding = function(key) {
+                    const data = clareEndings[key];
+                    if (!data) return;
+                    
+                    // Audio transition
+                    endingSfx.pause();
+                    endingSfx.src = data.sfx;
+                    if (isPlayingBgm) {
+                        endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
+                    }
+                    
+                    // Dynamic background transitions
+                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 " + data.bgClass + " custom-scroll";
+                    
+                    // Toggle active styles on tabs
+                    document.querySelectorAll('.clare-tab-btn').forEach(btn => {
+                        if (btn.getAttribute('data-key') === key) {
+                            btn.className = "clare-tab-btn px-6 py-2.5 bg-white text-black border border-white font-bold text-xs md:text-sm uppercase tracking-widest transition-all rounded-full shadow-[0_0_15px_rgba(255,255,255,0.3)]";
+                        } else {
+                            btn.className = "clare-tab-btn px-6 py-2.5 bg-black/40 text-white/60 border border-white/20 hover:text-white hover:border-white/50 font-medium text-xs md:text-sm uppercase tracking-widest transition-all rounded-full";
+                        }
+                    });
+                    
+                    // Typography centered contents (No images, clean lines)
+                    document.getElementById('clare-ending-body').innerHTML = `
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans mb-2">${data.title}</h2>
+                        <h3 class="text-4xl md:text-7xl font-black uppercase tracking-widest leading-tight font-sans mb-6">${data.engTitle}</h3>
+                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-90 px-4 md:px-0 text-left md:text-center font-sans max-w-3xl mx-auto whitespace-pre-line text-white/90">
+                            ${data.desc}
                         </p>
-                        <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
+                        <div class="pt-10">
+                            <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-10 py-4 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-[0_4px_20px_rgba(255,255,255,0.25)] hover:shadow-[0_4px_30px_rgba(255,255,255,0.5)] uppercase tracking-widest text-xs md:text-sm font-sans">
                                 진실된 결말 보러가기
                             </a>
                         </div>
                     `;
-                } else if (ending === 'Return to Harlem') {
-                    // Ending 2: 흑인 공동체 귀환 (Return to Harlem)
-                    if (endingVisual) endingVisual.style.display = 'block';
-                    endingImg.src = 'clare_ending_2.jpg';
-                    endingSfx.src = 'woman.mp3';
-                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
-                    html = `
-                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">흑인 공동체 귀환</h2>
-                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">RETURN TO HARLEM</h3>
-                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
-                            Clare는 패싱을 멈춘 후 흑인 공동체로 돌아간다.<br>
-                            따스한 햇살, 익숙한 재즈 음악..<br><br>
-                            …하지만 이것이 행복이라고 확신할 수 있나요?<br><br>
-                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
-                            숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
-                        </p>
-                        <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-purple-600 hover:bg-purple-500 text-white font-black rounded-full transition-all shadow-lg hover:shadow-purple-500/50 uppercase tracking-widest text-lg md:text-xl font-sans">
-                                진실된 결말 보러가기
-                            </a>
-                        </div>
-                    `;
-                } else {
-                    // Ending 1: 계속 패싱 (Passing)
-                    if (endingVisual) endingVisual.style.display = 'block';
-                    endingImg.src = 'clare_ending_3.png';
-                    endingSfx.src = 'calm.mp3';
-                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
-                    html = `
-                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">PASSING</h3>
-                        <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
-                            Clare는 계속해서 자신의 과거를 숨긴 채, 패싱한 삶을 선택한다.<br>
-                            그 누구도 그녀의 진실을 알지 못하지만, 끊임없는 불안이 따라온다.<br>
-                            숨기는 삶은 안전할수록 더욱 위태로워진다.<br><br>
-                            …당신은 끝까지 자신의 진짜 모습을 감출 수 있나요?<br><br>
-                            당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.<br>
-                            숨겨진 진실과 마지막 결말이 궁금하다면<br>아래 링크를 통해 직접 확인해보세요.
-                        </p>
-                        <div class="pt-8">
-                            <a href="https://www.notion.so/362d7bb5a1ba8088b788cbef9740d46a" target="_blank" class="inline-block px-10 py-4 md:px-12 md:py-5 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-lg hover:shadow-white/50 uppercase tracking-widest text-lg md:text-xl font-sans">
-                                진실된 결말 보러가기
-                            </a>
-                        </div>
-                    `;
-                }
+                };
+
+                html = `
+                    <div class="w-full max-w-2xl mx-auto mb-10 flex flex-wrap justify-center gap-3 relative z-[100] mt-4">
+                        <button onclick="changeClareEnding('passing')" data-key="passing" class="clare-tab-btn px-6 py-2.5 bg-white text-black border border-white font-bold text-xs md:text-sm uppercase tracking-widest transition-all rounded-full">계속 패싱</button>
+                        <button onclick="changeClareEnding('return')" data-key="return" class="clare-tab-btn px-6 py-2.5 bg-black/40 text-white/60 border border-white/20 hover:text-white hover:border-white/50 font-medium text-xs md:text-sm uppercase tracking-widest transition-all rounded-full">흑인 공동체 귀환</button>
+                        <button onclick="changeClareEnding('the_fall')" data-key="the_fall" class="clare-tab-btn px-6 py-2.5 bg-black/40 text-white/60 border border-white/20 hover:text-white hover:border-white/50 font-medium text-xs md:text-sm uppercase tracking-widest transition-all rounded-full">원작 비극 엔딩</button>
+                    </div>
+                    <div id="clare-ending-body" class="space-y-6 animate-fade-in mt-6"></div>
+                `;
+                
+                content.innerHTML = html;
+                
+                // Initialize default ending preview
+                setTimeout(() => {
+                    window.changeClareEnding(defaultKey);
+                }, 50);
             }
             
             content.innerHTML = html;
@@ -1619,10 +1651,30 @@
             
             const shouldPlayOnThisScreen = (isIntroVisible || isSelectVisible || isPlayVisible || isEndingVisible) && !isVideoPlaying;
             
+            console.log("updateBgmState Debug:", {
+                isIntroVisible,
+                isSelectVisible,
+                isPlayVisible,
+                isEndingVisible,
+                isVideoPlaying,
+                zIndex: videoScreen ? videoScreen.style.zIndex : null,
+                opacity: videoScreen ? videoScreen.style.opacity : null,
+                shouldPlayOnThisScreen,
+                isPlayingBgm
+            });
+            
             if (isPlayingBgm && shouldPlayOnThisScreen) {
-                bgm.play().catch(() => {});
+                console.log("Playing/Unmuting BGM...");
+                bgm.muted = false;
+                if (bgm.paused) {
+                    bgm.play().catch((e) => console.warn("BGM play catch:", e));
+                }
             } else {
-                bgm.pause();
+                console.log("Muting BGM...");
+                bgm.muted = true;
+                if (!isPlayingBgm) {
+                    bgm.pause();
+                }
             }
         }
 
@@ -1668,8 +1720,17 @@
             }
         });
 
-        // Autoplay workaround: start/update BGM on first user interaction
+        // Autoplay workaround: start/update BGM and unlock audio elements on first user interaction
         document.addEventListener('click', () => {
+            if (bgm && bgm.paused) {
+                bgm.play().catch(e => console.warn("Failed to play BGM on first click:", e));
+            }
+            if (endingSfx && endingSfx.paused) {
+                endingSfx.play().then(() => endingSfx.pause()).catch(() => {});
+            }
+            if (clickSfx && clickSfx.paused) {
+                clickSfx.play().then(() => clickSfx.pause()).catch(() => {});
+            }
             updateBgmState();
         }, { once: true });
 
