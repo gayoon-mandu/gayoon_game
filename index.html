@@ -1615,7 +1615,7 @@
             const isSelectVisible = selectScreen && !selectScreen.classList.contains('hidden');
             const isPlayVisible = playScreen && !playScreen.classList.contains('hidden');
             const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
-            const isVideoPlaying = videoScreen && videoScreen.style.opacity === '1';
+            const isVideoPlaying = videoScreen && videoScreen.style.zIndex === '99999' && videoScreen.style.opacity === '1';
             
             const shouldPlayOnThisScreen = (isIntroVisible || isSelectVisible || isPlayVisible || isEndingVisible) && !isVideoPlaying;
             
