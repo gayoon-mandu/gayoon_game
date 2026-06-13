@@ -628,15 +628,26 @@
             if (skipBtn) skipBtn.classList.remove('hidden');
             videoScreen.style.zIndex = '99999';
             
-            // Show overlay text only for Irene Scene 3-2 transition (between 2-2 and 3-1)
+            // Show overlay text only for specific transitions (Irene 3-2 and 4-1)
             const overlayText = document.getElementById('video-overlay-text');
             const overlayTextSub = document.getElementById('video-overlay-text-sub');
+            
+            let centerText = "";
+            let subText = "";
+            if (src === '아이린 씬/아이린 씬3-2.mp4') {
+                centerText = "That night...";
+                subText = "Irene's Home";
+            } else if (src === '아이린 씬/아이린씬 4-1.mp4') {
+                centerText = "A Few Days Later,<br>at a Harlem Party";
+                subText = "At a Harlem Party";
+            }
             
             if (overlayText) {
                 if (window.overlayTimeout) clearTimeout(window.overlayTimeout);
                 if (window.overlayHideTimeout) clearTimeout(window.overlayHideTimeout);
                 
-                if (src === '아이린 씬/아이린 씬3-2.mp4') {
+                if (centerText) {
+                    overlayText.innerHTML = centerText;
                     overlayText.classList.remove('hidden');
                     overlayText.style.opacity = '0';
                     void overlayText.offsetWidth; // Force layout reflow
@@ -655,7 +666,8 @@
             }
             
             if (overlayTextSub) {
-                if (src === '아이린 씬/아이린 씬3-2.mp4') {
+                if (subText) {
+                    overlayTextSub.innerHTML = subText;
                     overlayTextSub.classList.remove('hidden');
                     overlayTextSub.style.opacity = '0';
                     void overlayTextSub.offsetWidth; // Force layout reflow
