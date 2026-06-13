@@ -979,7 +979,7 @@
                 switch (questionId) {
                     case "1-1": return '아이린 씬1-1.mov';
                     case "1-2": return '아이린 씬1-2.mov';
-                    case "2-1": return '아이린 씬2-1.mp4';
+                    case "2-1": return '아이린 씬/아이린 씬2.mp4';
                     case "3-1": return '아이린 씬/아이린 씬3-2.mp4';
                     case "3-2": return '아이린 씬/아이린 씬3-1.mp4';
                     case "4-1": return '아이린 씬/아이린씬 4-1.mp4';
@@ -1194,7 +1194,7 @@
                     }
                 }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "1-2") {
-                playVideo('아이린 씬2-1.mp4', () => {
+                playVideo('아이린 씬/아이린 씬2.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
                         renderQuestion();
                     } else {
