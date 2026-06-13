@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Maru+Buri:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,900;1,400&display=swap" rel="stylesheet">
     <style>
-        body {
+        html, body {
             font-family: 'Maru Buri', serif;
             background-color: #080808;
             color: white;
@@ -18,6 +18,8 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
+            width: 100%;
+            height: 100%;
         }
 
         /* Force Maru Buri on all text components to prevent Tailwind overrides */
@@ -995,13 +997,13 @@
                 charImgContainer.classList.add('hidden');
                 dialogueContainer.className = "w-[calc(100%+4rem)] md:w-[calc(100%+8rem)] -mx-8 md:-mx-16 bg-black/60 p-6 md:p-8 border-y border-white/15 shadow-2xl mt-4 md:mt-12 backdrop-blur-md";
                 document.getElementById('dialogue-content-wrapper').className = "w-full md:w-3/5 mx-auto space-y-6 md:space-y-12";
-                playLayoutRow.className = "flex-1 flex flex-col items-stretch justify-center overflow-y-auto w-full";
+                playLayoutRow.className = "flex-1 flex flex-col items-stretch justify-center overflow-y-auto overflow-x-hidden w-full";
             } else {
                 // Standard layout
                 charImgContainer.classList.remove('hidden');
                 dialogueContainer.className = "w-full md:w-[73%] pt-4 md:pt-12";
                 document.getElementById('dialogue-content-wrapper').className = "w-full space-y-6 md:space-y-12";
-                playLayoutRow.className = "flex-1 flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start overflow-y-auto";
+                playLayoutRow.className = "flex-1 flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start overflow-y-auto overflow-x-hidden";
                 
                 // Hide video player since we don't have video background here
                 videoScreen.style.opacity = '0';
