@@ -156,29 +156,6 @@
             </div>
         </div>
 
-        <!-- 히든 엔딩 해금 모달 -->
-        <div id="hidden-ending-modal" class="hidden absolute inset-0 z-[300] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md animate-fade-in p-6">
-            <div class="max-w-xl text-center space-y-6 md:space-y-8 font-sans border border-white/20 p-8 md:p-12 bg-neutral-900/50 shadow-2xl rounded-lg">
-                <div class="space-y-4">
-                    <h2 class="text-xl md:text-3xl font-black text-red-500 tracking-widest uppercase font-serif-cinematic">
-                        Hidden Ending Unlocked
-                    </h2>
-                    <div class="h-px bg-white/20 my-4"></div>
-                    <div class="text-base md:text-lg leading-relaxed text-neutral-300 font-sans font-medium space-y-4">
-                        <p>서로 다른 선택의 끝에 도달했습니다.</p>
-                        <p>아이린과 클레어의 이야기를 모두 확인한 당신은<br>이제 숨겨진 진실을 마주할 수 있습니다.</p>
-                        <p class="text-white font-bold pt-2">히든 엔딩을 재생하시겠습니까?</p>
-                    </div>
-                </div>
-                
-                <div class="pt-6 flex justify-center">
-                    <button onclick="playHiddenEnding()" class="px-12 py-4 bg-white text-black text-sm uppercase tracking-widest hover:bg-neutral-200 transition-all font-black shadow-[0_0_25px_rgba(255,255,255,0.4)]">
-                        YES
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- Quote Screen -->
         <div id="quote-screen" class="hidden absolute inset-0 z-[110] flex flex-col items-center justify-center bg-black transition-opacity duration-1000 opacity-0">
             <div class="max-w-4xl px-8 md:px-12 text-center flex flex-col items-center space-y-6 md:space-y-8">
@@ -1486,8 +1463,6 @@
 
                 if (ending === 'Passing') {
                     // Ending 4: Passing
-                    localStorage.setItem('irene_passing_cleared', 'true');
-                    setTimeout(checkHiddenEnding, 1000);
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     endingImg.src = 'irene_ending_4.png';
                     endingSfx.src = 'woman.mp3';
@@ -1602,11 +1577,6 @@
                 window.changeClareEnding = function(key) {
                     const data = clareEndings[key];
                     if (!data) return;
-                    
-                    if (key === 'return') {
-                        localStorage.setItem('clare_return_cleared', 'true');
-                        setTimeout(checkHiddenEnding, 1000);
-                    }
                     
                     // Audio transition
                     endingSfx.pause();
@@ -1768,70 +1738,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             updateBgmState();
         });
-
-        // Hidden Ending logic
-        window.hasShownHiddenEndingThisSession = false;
-
-        function checkHiddenEnding() {
-            if (localStorage.getItem('irene_passing_cleared') === 'true' && localStorage.getItem('clare_return_cleared') === 'true') {
-                if (!window.hasShownHiddenEndingThisSession) {
-                    window.hasShownHiddenEndingThisSession = true;
-                    // Briefly delay showing the popup for a more cinematic feel
-                    setTimeout(() => {
-                        const modal = document.getElementById('hidden-ending-modal');
-                        if (modal) {
-                            modal.classList.remove('hidden');
-                        }
-                    }, 1000);
-                }
-            }
-        }
-
-        function playHiddenEnding() {
-            const modal = document.getElementById('hidden-ending-modal');
-            if (modal) {
-                modal.classList.add('hidden');
-            }
-            playVideo('공동 엔딩.mp4', showCommonEndingPage);
-        }
-
-        function showCommonEndingPage() {
-            document.getElementById('play-screen').classList.add('hidden');
-            document.getElementById('ending-screen').classList.remove('hidden');
-            updateBgmState();
-            
-            const content = document.getElementById('ending-content');
-            const endingImg = document.getElementById('ending-img');
-            const endingVisual = document.getElementById('ending-visual');
-            const scoreBadge = document.getElementById('final-score-badge');
-            
-            if (scoreBadge) scoreBadge.style.display = 'none';
-            if (endingVisual) endingVisual.style.display = 'block';
-            
-            endingImg.src = '공동엔딩.png';
-            document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
-            endingSfx.pause();
-            
-            const html = `
-                <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-yellow-500 font-black font-sans mb-2">Hidden Ending</h2>
-                <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans mb-6">HIDDEN ENDING</h3>
-                <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans max-w-3xl mx-auto whitespace-pre-line text-white/90">
-                    아이린과 클레어의 이야기를 모두 확인한 당신은 숨겨진 엔딩을 확인했습니다.
-
-                    …하지만 이것이 끝이라고 확신할 수 있나요?
-
-                    당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.
-                    숨겨진 진실과 마지막 결말이 궁금하다면
-                    아래 링크를 통해 직접 확인해보세요.
-                </p>
-                <div class="pt-8">
-                    <a href="https://product.kyobobook.co.kr/detail/S000000781087" target="_blank" class="inline-block px-10 py-4 bg-white hover:bg-neutral-200 text-black font-black rounded-full transition-all shadow-[0_4px_20px_rgba(255,255,255,0.25)] hover:shadow-[0_4px_30px_rgba(255,255,255,0.5)] uppercase tracking-widest text-xs md:text-sm font-sans">
-                        진실된 결말 보러가기
-                    </a>
-                </div>
-            `;
-            content.innerHTML = html;
-        }
     </script>
 </body>
 </html>
