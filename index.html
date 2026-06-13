@@ -158,10 +158,17 @@
 
         <!-- Quote Screen -->
         <div id="quote-screen" class="hidden absolute inset-0 z-[110] flex flex-col items-center justify-center bg-black transition-opacity duration-1000 opacity-0">
-        <p class="text-3xl md:text-5xl italic opacity-95 border-y border-white/30 py-12 px-10 max-w-5xl text-center leading-relaxed">
-            “It’s funny about ‘passing.’<br><br>We disapprove of it and at the same time condone it.”
-        </p>
-    </div>
+            <div class="max-w-4xl px-8 md:px-12 text-center flex flex-col items-center space-y-6 md:space-y-8">
+                <span class="font-serif-cinematic text-6xl md:text-8xl text-white/20 select-none leading-none -mb-4">“</span>
+                <p class="font-serif-cinematic text-2xl md:text-4xl italic opacity-90 leading-relaxed max-w-3xl">
+                    It’s funny about ‘passing.’<br>We disapprove of it and at the same time condone it.
+                </p>
+                <div class="w-16 h-px bg-white/20 my-4"></div>
+                <p class="text-[10px] md:text-xs uppercase tracking-[0.4em] opacity-50 font-bold" style="font-family: sans-serif !important;">
+                    Nella Larsen, Passing
+                </p>
+            </div>
+        </div>
 
         <!-- Character Selection Screen -->
         <div id="select-screen" class="hidden h-full w-full flex flex-col items-center justify-center p-4 md:p-8 animate-fade-in relative overflow-y-auto custom-scroll">
