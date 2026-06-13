@@ -1029,7 +1029,7 @@
                     case "3-1": return '클레어 씬3 영상.mp4';
                     case "4-1": return '클레어 씬4 영상.mp4';
                     case "5-1": return '클레어 씬5.mp4';
-                    case "5-2": return '클레어 씬5-1.mp4';
+                    case "5-2": return null;
                     case "6-1": return '클레어 씬6 영상.mp4';
                     case "6-2": return '아이린 씬/아이린 씬6-1.mp4';
                     default: return null;
@@ -1330,13 +1330,11 @@
                     }
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "5-1") {
-                playVideo('클레어 씬5-1.mp4', () => {
-                    if (currentQuestionIndex < questions.length) {
-                        renderQuestion();
-                    } else {
-                        showEnding();
-                    }
-                }, true);
+                if (currentQuestionIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showEnding();
+                }
             } else if (selectedCharacter === 'CLARE' && q.id === "5-2") {
                 playVideo('클레어 씬6 영상.mp4', () => {
                     if (currentQuestionIndex < questions.length) {
@@ -1409,6 +1407,19 @@
 
         function showEnding() {
             toggleHiddenEndingButton(false);
+            
+            // Hide the video screen to ensure Clare's typography endings are visible
+            const videoScreen = document.getElementById('video-screen');
+            if (videoScreen) {
+                videoScreen.style.opacity = '0';
+                videoScreen.style.zIndex = '0';
+                videoScreen.style.pointerEvents = 'none';
+            }
+            const video = document.getElementById('game-video');
+            if (video) {
+                video.pause();
+            }
+            
             // Clare route goes straight to typography endings without video plays
             if (selectedCharacter === 'IRENE') {
                 let ireneEnding = '';
