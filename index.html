@@ -879,7 +879,12 @@
 
                 if (isGameplayTransition) {
                     video.muted = true;
-                    // Render the next question first while video screen is still on top (z-index 99999)
+                    // Now lower z-index so the updated play-screen can receive pointer events and sit on top
+                    videoScreen.style.zIndex = '10';
+                    videoScreen.style.pointerEvents = 'none';
+                    if (skipBtn) skipBtn.classList.add('hidden');
+                    
+                    // Render the next question
                     if (callback) callback();
                     
                     // If callback started a new video transition, abort remaining cleanup
@@ -892,11 +897,6 @@
                     if (playScreen && !isEndingVisible) {
                         playScreen.classList.remove('hidden');
                     }
-                    
-                    // Now lower z-index so the updated play-screen can receive pointer events and sit on top
-                    videoScreen.style.zIndex = '10';
-                    videoScreen.style.pointerEvents = 'none';
-                    if (skipBtn) skipBtn.classList.add('hidden');
                 } else {
                     video.muted = true;
                     videoScreen.style.opacity = '0';
