@@ -1544,7 +1544,7 @@
                 title: "흑인 공동체 귀환",
                 engTitle: "RETURN TO HARLEM",
                 bgClass: "ending-b-bg",
-                sfx: "woman.mp3",
+                sfx: "음악4.mp3",
                 img: "클레어 엔딩 2.png",
                 desc: `Clare는 패싱을 멈춘 후 흑인 공동체로 돌아간다.
 따스한 햇살, 익숙한 재즈 음악..
@@ -1827,7 +1827,7 @@
                 }
                 
                 // Audio setting
-                setEndingSfx(data.sfx, false);
+                setEndingSfx(data.sfx, defaultKey === 'return');
                 
                 // Image setting
                 if (endingImg) endingImg.src = data.img;
@@ -1855,7 +1855,7 @@
             
             content.innerHTML = html;
             if (endingSfx) {
-                // Play ending SFX only for Irene's Return ending, if BGM is enabled
+                // Play ending SFX only for Irene's Return ending or Clare's Return ending, if BGM is enabled
                 let isIreneReturn = false;
                 if (selectedCharacter === 'IRENE') {
                     const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
@@ -1868,8 +1868,18 @@
                     }
                 }
                 
-                if (isIreneReturn && isPlayingBgm) {
-                    endingSfx.play().catch(e => console.warn("Failed to play Irene Return ending SFX:", e));
+                let isClareReturn = false;
+                if (selectedCharacter === 'CLARE') {
+                    const pVal = clareStats.P;
+                    const cVal = clareStats.C;
+                    const sVal = clareStats.S;
+                    if (cVal > pVal && cVal > sVal) {
+                        isClareReturn = true;
+                    }
+                }
+                
+                if ((isIreneReturn || isClareReturn) && isPlayingBgm) {
+                    endingSfx.play().catch(e => console.warn("Failed to play Return ending SFX:", e));
                 } else {
                     endingSfx.pause();
                 }
@@ -1948,19 +1958,31 @@
                     endingSfx.pause();
                 }
             } else {
-                // If unmuted on ending screen, check if it's Irene's Return ending and resume endingSfx
+                // If unmuted on ending screen, check if it's Irene's Return ending or Clare's Return ending and resume endingSfx
                 const endingScreen = document.getElementById('ending-screen');
                 const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
-                if (isEndingVisible && selectedCharacter === 'IRENE') {
-                    const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
-                    let highestStats = [];
-                    if (ireneStats.C === maxVal) highestStats.push('C');
-                    if (ireneStats.S === maxVal) highestStats.push('S');
-                    if (ireneStats.R === maxVal) highestStats.push('R');
-                    if (highestStats.length < 2 && highestStats[0] === 'C') {
-                        if (endingSfx) {
-                            endingSfx.play().catch(e => console.warn("Failed to resume Irene Return ending SFX:", e));
+                if (isEndingVisible) {
+                    let isReturn = false;
+                    if (selectedCharacter === 'IRENE') {
+                        const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
+                        let highestStats = [];
+                        if (ireneStats.C === maxVal) highestStats.push('C');
+                        if (ireneStats.S === maxVal) highestStats.push('S');
+                        if (ireneStats.R === maxVal) highestStats.push('R');
+                        if (highestStats.length < 2 && highestStats[0] === 'C') {
+                            isReturn = true;
                         }
+                    } else if (selectedCharacter === 'CLARE') {
+                        const pVal = clareStats.P;
+                        const cVal = clareStats.C;
+                        const sVal = clareStats.S;
+                        if (cVal > pVal && cVal > sVal) {
+                            isReturn = true;
+                        }
+                    }
+                    
+                    if (isReturn && endingSfx) {
+                        endingSfx.play().catch(e => console.warn("Failed to resume Return ending SFX:", e));
                     }
                 }
             }
