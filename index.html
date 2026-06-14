@@ -1542,7 +1542,7 @@
                 video.pause();
             }
             
-            // Clare route goes straight to typography endings without video plays
+            // Clare route plays transition video for Passing ending
             if (selectedCharacter === 'IRENE') {
                 let ireneEnding = '';
                 const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
@@ -1561,47 +1561,47 @@
                 }
                 
                 if (ireneEnding === 'Passing' && !playedIreneEndingPassingVideo) {
-                    setEndingSfx('woman.mp3', false);
-                    if (endingSfx) {
-                        endingSfx.muted = true;
-                        endingSfx.play().catch(() => {});
-                    }
                     playedIreneEndingPassingVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
                     playVideo('irene_ending_passing.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'Divorce' && !playedIreneEndingCollapseVideo) {
-                    setEndingSfx('irene_divorce.mp3', true);
-                    if (endingSfx) {
-                        endingSfx.muted = true;
-                        endingSfx.play().catch(() => {});
-                    }
                     playedIreneEndingCollapseVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
                     playVideo('irene_ending_divorce.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'Return' && !playedIreneEndingReturnVideo) {
-                    setEndingSfx('irene_divorce.mp3', true);
-                    if (endingSfx) {
-                        endingSfx.muted = true;
-                        endingSfx.play().catch(() => {});
-                    }
                     playedIreneEndingReturnVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
                     playVideo('irene_ending_return.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'The Fall' && !playedIreneEndingFallVideo) {
-                    setEndingSfx('siren.mp3', false);
-                    if (endingSfx) {
-                        endingSfx.muted = true;
-                        endingSfx.play().catch(() => {});
-                    }
                     playedIreneEndingFallVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
                     playVideo('clare_ending_fall.mp4', showEnding);
+                    return;
+                }
+            } else if (selectedCharacter === 'CLARE') {
+                let clareEnding = 'passing';
+                const pVal = clareStats.P;
+                const cVal = clareStats.C;
+                const sVal = clareStats.S;
+                
+                if (pVal > cVal && pVal > sVal) {
+                    clareEnding = 'passing';
+                } else if (cVal > pVal && cVal > sVal) {
+                    clareEnding = 'return';
+                } else {
+                    clareEnding = 'the_fall';
+                }
+                
+                if (clareEnding === 'passing' && !playedClareEndingPassingVideo) {
+                    playedClareEndingPassingVideo = true;
+                    document.getElementById('play-screen').classList.add('hidden');
+                    playVideo('clare_ending_passing.mp4', showEnding);
                     return;
                 }
             }
@@ -1802,16 +1802,8 @@
             }
             
             content.innerHTML = html;
-            if (isPlayingBgm) {
-                if (endingSfx) {
-                    endingSfx.muted = false;
-                    try {
-                        endingSfx.currentTime = 0;
-                    } catch (e) {
-                        console.warn("Could not reset currentTime:", e);
-                    }
-                }
-                endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
+            if (endingSfx) {
+                endingSfx.pause();
             }
         }
 
@@ -1853,7 +1845,7 @@
                 }
             }
             
-            const shouldPlayOnThisScreen = (isIntroVisible || isSelectVisible || isPlayVisible || isEndingVisible) && !isVideoPlaying && !isIreneSpecialEnding;
+            const shouldPlayOnThisScreen = (isIntroVisible || isSelectVisible || isPlayVisible) && !isVideoPlaying;
             
             console.log("updateBgmState Debug:", {
                 isIntroVisible,
@@ -1884,12 +1876,7 @@
 
         function toggleBgm() {
             isPlayingBgm = !isPlayingBgm;
-            if (isPlayingBgm) {
-                const isEndingScreen = !document.getElementById('ending-screen').classList.contains('hidden');
-                if (isEndingScreen) {
-                    endingSfx.play().catch(() => {});
-                }
-            } else {
+            if (!isPlayingBgm) {
                 if (endingSfx) {
                     endingSfx.pause();
                 }
