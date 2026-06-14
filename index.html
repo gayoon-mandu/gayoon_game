@@ -783,11 +783,19 @@
                 });
             }
             
-            // Make video screen instantly opaque to prevent ghosting of play screen
+            // Hide play-screen instantly to prevent ghosting during fade-in
+            const playScreen = document.getElementById('play-screen');
+            if (playScreen) playScreen.classList.add('hidden');
+
+            // Instantly set video screen opacity to 0 and z-index to 99999
             videoScreen.style.transition = 'none';
-            videoScreen.style.opacity = '1';
-            void videoScreen.offsetWidth;
+            videoScreen.style.opacity = '0';
+            videoScreen.style.zIndex = '99999';
+            void videoScreen.offsetWidth; // Force layout reflow
+            
+            // Fade in over 0.5s
             videoScreen.style.transition = 'opacity 0.5s ease-in-out';
+            videoScreen.style.opacity = '1';
             updateBgmState();
             
             let isFadingOut = false;
@@ -816,6 +824,14 @@
                     // Render the next question first while video screen is still on top (z-index 99999)
                     if (callback) callback();
                     
+                    // Show play-screen again if not showing ending screen
+                    const playScreen = document.getElementById('play-screen');
+                    const endingScreen = document.getElementById('ending-screen');
+                    const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
+                    if (playScreen && !isEndingVisible) {
+                        playScreen.classList.remove('hidden');
+                    }
+                    
                     // Now lower z-index so the updated play-screen can receive pointer events and sit on top
                     videoScreen.style.zIndex = '10';
                     videoScreen.style.pointerEvents = 'none';
@@ -824,6 +840,14 @@
                     video.muted = true;
                     // Render the next question first so it's ready when the video fades out
                     if (callback) callback();
+                    
+                    // Show play-screen again if not showing ending screen
+                    const playScreen = document.getElementById('play-screen');
+                    const endingScreen = document.getElementById('ending-screen');
+                    const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
+                    if (playScreen && !isEndingVisible) {
+                        playScreen.classList.remove('hidden');
+                    }
                     
                     videoScreen.style.opacity = '0';
                     setTimeout(() => {
