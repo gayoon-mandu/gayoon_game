@@ -1470,6 +1470,7 @@
                 engTitle: "PASSING",
                 bgClass: "ending-c-bg",
                 sfx: "calm.mp3",
+                img: "클레어 엔딩 3.png",
                 desc: `Clare는 계속해서 자신의 과거를 숨긴 채, 패싱한 삶을 선택한다.
 그 누구도 그녀의 진실을 알지 못하지만, 끊임없는 불안이 따라온다.
 숨기는 삶은 안전할수록 더욱 위태로워진다.
@@ -1484,6 +1485,7 @@
                 engTitle: "RETURN TO HARLEM",
                 bgClass: "ending-b-bg",
                 sfx: "woman.mp3",
+                img: "클레어 엔딩 2.png",
                 desc: `Clare는 패싱을 멈춘 후 흑인 공동체로 돌아간다.
 따스한 햇살, 익숙한 재즈 음악..
 
@@ -1497,6 +1499,7 @@
                 engTitle: "THE FALL",
                 bgClass: "ending-a-bg",
                 sfx: "siren.mp3",
+                img: "아이린 엔딩 1.png",
                 desc: `혼란스러운 상황 속에서 CLARE는 창밖으로 추락한다.
 사고였을까, 아니면...?
 사이렌 소리만이 멀리서 울려 퍼진다.
@@ -1589,7 +1592,7 @@
                 anxiety = Math.round((cPct + sPct + rPct) / 3);
                 document.getElementById('final-score-badge').innerHTML = `Final Anxiety: <span class="font-black text-red-500 text-base md:text-xl ml-2">${anxiety}%</span> <span class="text-xs text-neutral-400 ml-2">(C:${cPct}% S:${sPct}% R:${rPct}%)</span>`;
             } else {
-                if (endingVisual) endingVisual.style.display = 'none';
+                if (endingVisual) endingVisual.style.display = 'block';
                 if (scoreBadge) scoreBadge.style.display = 'block';
                 const pPct = Math.max(0, Math.min(100, Math.round((clareStats.P / 14) * 100)));
                 const cPct = Math.max(0, Math.min(100, Math.round((clareStats.C / 9) * 100)));
@@ -1737,6 +1740,9 @@
                 
                 // Audio setting
                 endingSfx.src = data.sfx;
+                
+                // Image setting
+                if (endingImg) endingImg.src = data.img;
                 
                 // Dynamic background transitions
                 document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 " + data.bgClass + " custom-scroll";
