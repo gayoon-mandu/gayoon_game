@@ -1604,11 +1604,19 @@
                     playVideo('clare_ending_passing.mp4', showEnding);
                     return;
                 }
+                if (clareEnding === 'return' && !playedClareEndingReturnVideo) {
+                    playedClareEndingReturnVideo = true;
+                    document.getElementById('play-screen').classList.add('hidden');
+                    playVideo('clare_ending_return.mp4', showEnding);
+                    return;
+                }
             }
             playedIreneEndingPassingVideo = false;
             playedIreneEndingCollapseVideo = false;
             playedIreneEndingReturnVideo = false;
             playedIreneEndingFallVideo = false;
+            playedClareEndingPassingVideo = false;
+            playedClareEndingReturnVideo = false;
             
             document.getElementById('play-screen').classList.add('hidden');
             document.getElementById('ending-screen').classList.remove('hidden');
