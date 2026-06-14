@@ -1573,6 +1573,7 @@
 
         function showEnding() {
             toggleHiddenEndingButton(false);
+            let shouldPlayEndingBgm = false;
             
             // Hide the video screen to ensure Clare's typography endings are visible
             const videoScreen = document.getElementById('video-screen');
@@ -1713,7 +1714,8 @@
                     toggleHiddenEndingButton(true);
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     endingImg.src = 'irene_ending_4.png';
-                    setEndingSfx('woman.mp3', false);
+                    setEndingSfx('음악6.mp3', true);
+                    shouldPlayEndingBgm = true;
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Passing</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">PASSING</h3>
@@ -1783,6 +1785,7 @@
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
                     endingImg.src = 'irene_ending_2.jpg';
                     setEndingSfx('음악3.mp3', true);
+                    shouldPlayEndingBgm = true;
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Return</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">RETURN</h3>
@@ -1822,6 +1825,7 @@
                 
                 if (defaultKey === 'return') {
                     toggleHiddenEndingButton(true);
+                    shouldPlayEndingBgm = true;
                 } else {
                     toggleHiddenEndingButton(false);
                 }
@@ -1855,31 +1859,8 @@
             
             content.innerHTML = html;
             if (endingSfx) {
-                // Play ending SFX only for Irene's Return ending or Clare's Return ending, if BGM is enabled
-                let isIreneReturn = false;
-                if (selectedCharacter === 'IRENE') {
-                    const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
-                    let highestStats = [];
-                    if (ireneStats.C === maxVal) highestStats.push('C');
-                    if (ireneStats.S === maxVal) highestStats.push('S');
-                    if (ireneStats.R === maxVal) highestStats.push('R');
-                    if (highestStats.length < 2 && highestStats[0] === 'C') {
-                        isIreneReturn = true;
-                    }
-                }
-                
-                let isClareReturn = false;
-                if (selectedCharacter === 'CLARE') {
-                    const pVal = clareStats.P;
-                    const cVal = clareStats.C;
-                    const sVal = clareStats.S;
-                    if (cVal > pVal && cVal > sVal) {
-                        isClareReturn = true;
-                    }
-                }
-                
-                if ((isIreneReturn || isClareReturn) && isPlayingBgm) {
-                    endingSfx.play().catch(e => console.warn("Failed to play Return ending SFX:", e));
+                if (shouldPlayEndingBgm && isPlayingBgm) {
+                    endingSfx.play().catch(e => console.warn("Failed to play ending BGM:", e));
                 } else {
                     endingSfx.pause();
                 }
@@ -1958,31 +1939,13 @@
                     endingSfx.pause();
                 }
             } else {
-                // If unmuted on ending screen, check if it's Irene's Return ending or Clare's Return ending and resume endingSfx
+                // If unmuted on ending screen, check if the ending is one that plays BGM and resume endingSfx
                 const endingScreen = document.getElementById('ending-screen');
                 const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
-                if (isEndingVisible) {
-                    let isReturn = false;
-                    if (selectedCharacter === 'IRENE') {
-                        const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
-                        let highestStats = [];
-                        if (ireneStats.C === maxVal) highestStats.push('C');
-                        if (ireneStats.S === maxVal) highestStats.push('S');
-                        if (ireneStats.R === maxVal) highestStats.push('R');
-                        if (highestStats.length < 2 && highestStats[0] === 'C') {
-                            isReturn = true;
-                        }
-                    } else if (selectedCharacter === 'CLARE') {
-                        const pVal = clareStats.P;
-                        const cVal = clareStats.C;
-                        const sVal = clareStats.S;
-                        if (cVal > pVal && cVal > sVal) {
-                            isReturn = true;
-                        }
-                    }
-                    
-                    if (isReturn && endingSfx) {
-                        endingSfx.play().catch(e => console.warn("Failed to resume Return ending SFX:", e));
+                if (isEndingVisible && endingSfx && endingSfx.src) {
+                    const src = decodeURIComponent(endingSfx.src);
+                    if (src.endsWith('음악3.mp3') || src.endsWith('음악4.mp3') || src.endsWith('음악6.mp3')) {
+                        endingSfx.play().catch(e => console.warn("Failed to resume ending SFX:", e));
                     }
                 }
             }
