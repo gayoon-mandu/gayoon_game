@@ -1963,7 +1963,6 @@
             }
         });
 
-        // Autoplay workaround: start/update BGM and unlock audio elements on first user interaction
         document.addEventListener('click', () => {
             if (bgm && bgm.paused) {
                 bgm.play().catch(e => console.warn("Failed to play BGM on first click:", e));
@@ -1976,6 +1975,29 @@
             }
             updateBgmState();
         }, { once: true });
+
+        // Continuous autoplay bypass for mobile browser interruptions
+        const autoResumeBgm = () => {
+            if (bgm && isPlayingBgm) {
+                const introScreen = document.getElementById('intro-screen');
+                const selectScreen = document.getElementById('select-screen');
+                const playScreen = document.getElementById('play-screen');
+                const videoScreen = document.getElementById('video-screen');
+                
+                const isIntroVisible = introScreen && !introScreen.classList.contains('hidden') && !introScreen.classList.contains('opacity-0');
+                const isSelectVisible = selectScreen && !selectScreen.classList.contains('hidden');
+                const isPlayVisible = playScreen && !playScreen.classList.contains('hidden');
+                const isVideoPlaying = videoScreen && videoScreen.style.zIndex === '99999' && videoScreen.style.opacity === '1';
+                
+                const shouldPlay = (isIntroVisible || isSelectVisible || isPlayVisible) && !isVideoPlaying;
+                
+                if (shouldPlay && bgm.paused) {
+                    bgm.play().catch(() => {});
+                }
+            }
+        };
+        document.addEventListener('click', autoResumeBgm);
+        document.addEventListener('touchstart', autoResumeBgm);
 
         // Try playing on DOMContentLoaded as well
         window.addEventListener('DOMContentLoaded', () => {
