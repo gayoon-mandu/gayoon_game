@@ -897,6 +897,7 @@
                     if (playScreen && !isEndingVisible) {
                         playScreen.classList.remove('hidden');
                     }
+                    updateBgmState();
                 } else {
                     video.muted = true;
                     videoScreen.style.opacity = '0';
@@ -918,6 +919,7 @@
                     if (playScreen && !isEndingVisible) {
                         playScreen.classList.remove('hidden');
                     }
+                    updateBgmState();
                 }
             };
             
@@ -1916,11 +1918,9 @@
                     bgm.play().catch((e) => console.warn("BGM play catch:", e));
                 }
             } else {
-                console.log("Muting BGM...");
+                console.log("Pausing BGM...");
                 bgm.muted = true;
-                if (!isPlayingBgm) {
-                    bgm.pause();
-                }
+                bgm.pause();
             }
         }
 
