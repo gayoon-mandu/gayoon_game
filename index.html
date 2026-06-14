@@ -812,6 +812,16 @@
                 if (centerText) {
                     overlayText.innerHTML = centerText;
                     overlayText.classList.remove('hidden');
+                    
+                    // Adjust font size based on text length to keep it on a single line
+                    if (centerText.length > 15) {
+                        overlayText.style.fontSize = 'clamp(1.2rem, 3.2cqw, 3.5rem)';
+                        overlayText.style.whiteSpace = 'nowrap';
+                    } else {
+                        overlayText.style.fontSize = '';
+                        overlayText.style.whiteSpace = '';
+                    }
+                    
                     overlayText.style.opacity = '0';
                     void overlayText.offsetWidth; // Force layout reflow
                     overlayText.style.opacity = '1';
@@ -1008,23 +1018,8 @@
             };
 
             video.ontimeupdate = () => {
-                let offset = 0.7;
-                if (isGameplayTransition) {
-                    if (selectedCharacter === 'IRENE') {
-                        if (src.includes('3-1') || src.includes('3-2') || src.includes('4-1') || src.includes('5-1') || src.includes('5-2') || src.includes('6-2')) {
-                            offset = 0.6;
-                        }
-                    } else if (selectedCharacter === 'CLARE') {
-                        if (typeof questions !== 'undefined' && questions[currentQuestionIndex]) {
-                            const qId = questions[currentQuestionIndex].id;
-                            if (qId === '6-2' || qId === '5-1') {
-                                offset = 1.0;
-                            } else if (qId === '4-1') {
-                                offset = 1.5;
-                            }
-                        }
-                    }
-                }
+                // Play almost to the very end to prevent early cut-off of typewriter/scene text
+                let offset = 0.2;
                 if (isGameplayTransition && video.currentTime > 0.5 && video.duration && video.duration > 1.0 && video.currentTime >= video.duration - offset) {
                     video.ontimeupdate = null;
                     startFadeOut();
