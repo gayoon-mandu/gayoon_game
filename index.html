@@ -1521,14 +1521,12 @@
                     }
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "2-2") {
-                playVideo('아이린 씬2-2 후 3-1전.mp4', () => {
-                    playVideo('클레어 씬3-1.mp4', () => {
-                        if (currentQuestionIndex < questions.length) {
-                            renderQuestion();
-                        } else {
-                            showEnding();
-                        }
-                    }, true);
+                playVideo('클레어 씬3-1.mp4', () => {
+                    if (currentQuestionIndex < questions.length) {
+                        renderQuestion();
+                    } else {
+                        showEnding();
+                    }
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "3-2") {
                 playVideo('클레어 씬4-1 전.mp4', () => {
