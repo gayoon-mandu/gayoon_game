@@ -899,6 +899,12 @@
                     if (skipBtn) skipBtn.classList.add('hidden');
                 } else {
                     video.muted = true;
+                    videoScreen.style.opacity = '0';
+                    videoScreen.style.zIndex = '0';
+                    setTimeout(() => {
+                        videoScreen.style.pointerEvents = 'none';
+                    }, 500);
+                    
                     // Render the next question first so it's ready when the video fades out
                     if (callback) callback();
                     
@@ -912,11 +918,6 @@
                     if (playScreen && !isEndingVisible) {
                         playScreen.classList.remove('hidden');
                     }
-                    
-                    videoScreen.style.opacity = '0';
-                    setTimeout(() => {
-                        videoScreen.style.pointerEvents = 'none';
-                    }, 500);
                 }
             };
             
