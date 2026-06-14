@@ -1045,6 +1045,7 @@
             document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 bg-neutral-900 custom-scroll"; 
             
             endingSfx.pause();
+            endingSfx.loop = false;
             updateAudioIcons();
             
             playedEndingFallVideo = false;
@@ -1626,6 +1627,7 @@
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     endingImg.src = 'irene_ending_4.png';
                     endingSfx.src = 'woman.mp3';
+                    endingSfx.loop = false;
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Passing</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">PASSING</h3>
@@ -1649,6 +1651,7 @@
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
                     endingImg.src = 'irene_ending_1.png';
                     endingSfx.src = 'siren.mp3';
+                    endingSfx.loop = false;
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">The Fall</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">THE FALL</h3>
@@ -1671,7 +1674,8 @@
                     // Ending 3: Divorce
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     endingImg.src = 'irene_ending_3.png';
-                    endingSfx.src = 'woman.mp3';
+                    endingSfx.src = '아이린 이혼.mp3';
+                    endingSfx.loop = true;
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Divorce</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">DIVORCE</h3>
@@ -1694,7 +1698,8 @@
                     // Ending 2: Return
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
                     endingImg.src = 'irene_ending_2.jpg';
-                    endingSfx.src = 'calm.mp3';
+                    endingSfx.src = '아이린 이혼.mp3';
+                    endingSfx.loop = true;
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Return</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">RETURN</h3>
@@ -1789,7 +1794,31 @@
             const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
             const isVideoPlaying = videoScreen && videoScreen.style.zIndex === '99999' && videoScreen.style.opacity === '1';
             
-            const shouldPlayOnThisScreen = (isIntroVisible || isSelectVisible || isPlayVisible || isEndingVisible) && !isVideoPlaying;
+            // Check if we are currently showing Irene's Divorce or Return ending
+            let isIreneSpecialEnding = false;
+            if (isEndingVisible && selectedCharacter === 'IRENE') {
+                const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
+                let highestStats = [];
+                if (ireneStats.C === maxVal) highestStats.push('C');
+                if (ireneStats.S === maxVal) highestStats.push('S');
+                if (ireneStats.R === maxVal) highestStats.push('R');
+                
+                let ending = '';
+                if (highestStats.length >= 2) {
+                    ending = 'The Fall';
+                } else {
+                    const dominant = highestStats[0];
+                    if (dominant === 'C') ending = 'Return';
+                    else if (dominant === 'R') ending = 'Divorce';
+                    else if (dominant === 'S') ending = 'Passing';
+                }
+                
+                if (ending === 'Divorce' || ending === 'Return') {
+                    isIreneSpecialEnding = true;
+                }
+            }
+            
+            const shouldPlayOnThisScreen = (isIntroVisible || isSelectVisible || isPlayVisible || isEndingVisible) && !isVideoPlaying && !isIreneSpecialEnding;
             
             console.log("updateBgmState Debug:", {
                 isIntroVisible,
