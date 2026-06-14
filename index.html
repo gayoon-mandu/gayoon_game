@@ -1428,12 +1428,14 @@
                     }, true);
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "4-2") {
-                playVideo('클레어 씬5.mp4', () => {
-                    if (currentQuestionIndex < questions.length) {
-                        renderQuestion();
-                    } else {
-                        showEnding();
-                    }
+                playVideo('클레어 씬5-1 전.mp4', () => {
+                    playVideo('클레어 씬5.mp4', () => {
+                        if (currentQuestionIndex < questions.length) {
+                            renderQuestion();
+                        } else {
+                            showEnding();
+                        }
+                    }, true);
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "5-1") {
                 if (currentQuestionIndex < questions.length) {
