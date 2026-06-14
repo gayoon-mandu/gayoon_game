@@ -1007,7 +1007,7 @@
                         }
                     }
                 }
-                if (isGameplayTransition && video.duration && video.duration > 1.0 && video.currentTime >= video.duration - offset) {
+                if (isGameplayTransition && video.currentTime > 0.5 && video.duration && video.duration > 1.0 && video.currentTime >= video.duration - offset) {
                     video.ontimeupdate = null;
                     startFadeOut();
                 }
@@ -1433,7 +1433,7 @@
                     }
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "1-1") {
-                playVideo('클레어 씬2-1.mp4', () => {
+                playVideo('아이린 씬1-2.mov', () => {
                     playVideo('클레어 씬2.mp4', () => {
                         if (currentQuestionIndex < questions.length) {
                             renderQuestion();
