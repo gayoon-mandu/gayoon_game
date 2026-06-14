@@ -743,6 +743,9 @@
         }
 
         function playVideo(src, callback, isGameplayTransition = false) {
+            if (endingSfx) {
+                endingSfx.pause();
+            }
             currentVideoSrc = src;
             const videoScreen = document.getElementById('video-screen');
             const video = document.getElementById('game-video');
