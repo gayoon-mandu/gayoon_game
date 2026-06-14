@@ -783,9 +783,11 @@
                 });
             }
             
-            // Force layout reflow before opacity change to ensure transition triggers
-            void videoScreen.offsetWidth;
+            // Make video screen instantly opaque to prevent ghosting of play screen
+            videoScreen.style.transition = 'none';
             videoScreen.style.opacity = '1';
+            void videoScreen.offsetWidth;
+            videoScreen.style.transition = 'opacity 0.5s ease-in-out';
             updateBgmState();
             
             let isFadingOut = false;
@@ -811,19 +813,21 @@
                 
                 if (isGameplayTransition) {
                     video.muted = true;
-                    // Lower z-index so play-screen can receive pointer events and sit on top
+                    // Render the next question first while video screen is still on top (z-index 99999)
+                    if (callback) callback();
+                    
+                    // Now lower z-index so the updated play-screen can receive pointer events and sit on top
                     videoScreen.style.zIndex = '10';
                     videoScreen.style.pointerEvents = 'none';
                     if (skipBtn) skipBtn.classList.add('hidden');
-                    
-                    if (callback) callback();
                 } else {
                     video.muted = true;
-                    videoScreen.style.opacity = '0';
+                    // Render the next question first so it's ready when the video fades out
+                    if (callback) callback();
                     
+                    videoScreen.style.opacity = '0';
                     setTimeout(() => {
                         videoScreen.style.pointerEvents = 'none';
-                        if (callback) callback();
                     }, 500);
                 }
             };
@@ -1499,21 +1503,25 @@
                 
                 if (ireneEnding === 'Passing' && !playedIreneEndingPassingVideo) {
                     playedIreneEndingPassingVideo = true;
+                    document.getElementById('play-screen').classList.add('hidden');
                     playVideo('아이린 엔딩 패싱.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'Quiet Collapse' && !playedIreneEndingCollapseVideo) {
                     playedIreneEndingCollapseVideo = true;
+                    document.getElementById('play-screen').classList.add('hidden');
                     playVideo('아이린 엔딩 이혼.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'Return' && !playedIreneEndingReturnVideo) {
                     playedIreneEndingReturnVideo = true;
+                    document.getElementById('play-screen').classList.add('hidden');
                     playVideo('아이린 엔딩 외면.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'The Fall' && !playedIreneEndingFallVideo) {
                     playedIreneEndingFallVideo = true;
+                    document.getElementById('play-screen').classList.add('hidden');
                     playVideo('클레어 엔딩 추락.mp4', showEnding);
                     return;
                 }
