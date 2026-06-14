@@ -1277,12 +1277,25 @@
                     }
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "1-1") {
-                playVideo('클레어 씬2.mp4', () => {
-                    if (currentQuestionIndex < questions.length) {
-                        renderQuestion();
-                    } else {
-                        showEnding();
-                    }
+                playVideo('클레어 씬2-1.mp4', () => {
+                    const videoScreen = document.getElementById('video-screen');
+                    const video = document.getElementById('game-video');
+                    video.style.transition = 'opacity 0.5s ease-in-out';
+                    video.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        playVideo('클레어 씬2.mp4', () => {
+                            if (currentQuestionIndex < questions.length) {
+                                renderQuestion();
+                            } else {
+                                showEnding();
+                            }
+                        }, true);
+                        video.style.opacity = '1';
+                        setTimeout(() => {
+                            video.style.transition = '';
+                        }, 500);
+                    }, 500);
                 }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "2-2") {
                 playVideo('아이린 씬/아이린 씬3-2.mp4', () => {
