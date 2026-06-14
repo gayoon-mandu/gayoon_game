@@ -342,7 +342,7 @@
     </div>
 
     <script>
-        // Viewport Adjustment for Mobile Devices to enforce 16:9 letterbox
+        // Viewport Adjustment for Mobile/PC to enforce fixed aspect ratio and canvas mode
         function adjustViewport() {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
                 || (window.matchMedia("(max-width: 768px)").matches && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
@@ -354,7 +354,10 @@
                 document.head.appendChild(viewportMeta);
             }
             
+            const container = document.getElementById('game-container');
+            
             if (isMobile) {
+                // Restore mobile viewport settings
                 const isPortrait = window.innerHeight > window.innerWidth;
                 if (isPortrait) {
                     const deviceWidth = Math.min(window.screen.width, window.screen.height);
@@ -363,8 +366,49 @@
                 } else {
                     viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0');
                 }
+                
+                // Reset styling to CSS defaults for mobile
+                if (container) {
+                    container.style.transform = 'none';
+                    container.style.width = '100vw';
+                    container.style.height = '56.25vw';
+                    container.style.maxWidth = '177.78vh';
+                    container.style.maxHeight = '100vh';
+                    container.style.position = 'relative';
+                    container.style.left = 'auto';
+                    container.style.top = 'auto';
+                    container.style.margin = '0';
+                }
             } else {
+                // PC Version: Reset meta viewport to standard
                 viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0');
+                
+                // Enforce fixed resolution canvas scaling (1920x1080) for PC
+                if (container) {
+                    const targetWidth = 1920;
+                    const targetHeight = 1080;
+                    
+                    container.style.width = `${targetWidth}px`;
+                    container.style.height = `${targetHeight}px`;
+                    container.style.maxWidth = 'none';
+                    container.style.maxHeight = 'none';
+                    container.style.position = 'absolute';
+                    
+                    const windowWidth = window.innerWidth;
+                    const windowHeight = window.innerHeight;
+                    
+                    const scaleX = windowWidth / targetWidth;
+                    const scaleY = windowHeight / targetHeight;
+                    const scale = Math.min(scaleX, scaleY);
+                    
+                    container.style.transform = `scale(${scale})`;
+                    container.style.transformOrigin = 'center center';
+                    
+                    const left = (windowWidth - targetWidth) / 2;
+                    const top = (windowHeight - targetHeight) / 2;
+                    container.style.left = `${left}px`;
+                    container.style.top = `${top}px`;
+                }
             }
         }
         
