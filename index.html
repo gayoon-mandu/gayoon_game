@@ -754,7 +754,7 @@
             video.src = src;
             
             // Turn specific ending videos grayscale
-            if (src === '아이린 엔딩 이혼.mp4' || src === '아이린 엔딩 외면.mp4') {
+            if (src === 'irene_ending_divorce.mp4' || src === 'irene_ending_return.mp4' || src === '아이린 엔딩 이혼.mp4' || src === '아이린 엔딩 외면.mp4') {
                 video.style.filter = 'grayscale(100%)';
             } else {
                 video.style.filter = 'none';
@@ -1554,25 +1554,25 @@
                 if (ireneEnding === 'Passing' && !playedIreneEndingPassingVideo) {
                     playedIreneEndingPassingVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
-                    playVideo('아이린 엔딩 패싱.mp4', showEnding);
+                    playVideo('irene_ending_passing.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'Divorce' && !playedIreneEndingCollapseVideo) {
                     playedIreneEndingCollapseVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
-                    playVideo('아이린 엔딩 이혼.mp4', showEnding);
+                    playVideo('irene_ending_divorce.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'Return' && !playedIreneEndingReturnVideo) {
                     playedIreneEndingReturnVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
-                    playVideo('아이린 엔딩 외면.mp4', showEnding);
+                    playVideo('irene_ending_return.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'The Fall' && !playedIreneEndingFallVideo) {
                     playedIreneEndingFallVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
-                    playVideo('클레어 엔딩 추락.mp4', showEnding);
+                    playVideo('clare_ending_fall.mp4', showEnding);
                     return;
                 }
             }
