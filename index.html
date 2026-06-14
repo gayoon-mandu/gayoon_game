@@ -1663,37 +1663,23 @@
                     defaultKey = 'the_fall';
                 }
 
-                window.changeClareEnding = function(key) {
-                    const data = clareEndings[key];
-                    if (!data) return;
-                    
-                    if (key === 'return') {
-                        toggleHiddenEndingButton(true);
-                    } else {
-                        toggleHiddenEndingButton(false);
-                    }
-                    
-                    // Audio transition
-                    endingSfx.pause();
-                    endingSfx.src = data.sfx;
-                    if (isPlayingBgm) {
-                        endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
-                    }
-                    
-                    // Dynamic background transitions
-                    document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 " + data.bgClass + " custom-scroll";
-                    
-                    // Toggle active styles on tabs
-                    document.querySelectorAll('.clare-tab-btn').forEach(btn => {
-                        if (btn.getAttribute('data-key') === key) {
-                            btn.className = "clare-tab-btn px-6 py-2.5 bg-white text-black border border-white font-bold text-xs md:text-sm uppercase tracking-widest transition-all rounded-full shadow-[0_0_15px_rgba(255,255,255,0.3)]";
-                        } else {
-                            btn.className = "clare-tab-btn px-6 py-2.5 bg-black/40 text-white/60 border border-white/20 hover:text-white hover:border-white/50 font-medium text-xs md:text-sm uppercase tracking-widest transition-all rounded-full";
-                        }
-                    });
-                    
-                    // Typography centered contents (No images, clean lines)
-                    document.getElementById('clare-ending-body').innerHTML = `
+                const data = clareEndings[defaultKey];
+                
+                if (defaultKey === 'return') {
+                    toggleHiddenEndingButton(true);
+                } else {
+                    toggleHiddenEndingButton(false);
+                }
+                
+                // Audio setting
+                endingSfx.src = data.sfx;
+                
+                // Dynamic background transitions
+                document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 " + data.bgClass + " custom-scroll";
+                
+                // Typography centered contents (No images, clean lines)
+                html = `
+                    <div class="space-y-6 animate-fade-in mt-6">
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans mb-2">${data.title}</h2>
                         <h3 class="text-4xl md:text-7xl font-black uppercase tracking-widest leading-tight font-sans mb-6">${data.engTitle}</h3>
                         <p class="text-sm md:text-2xl italic leading-relaxed opacity-90 px-4 md:px-0 text-left md:text-center font-sans max-w-3xl mx-auto whitespace-pre-line text-white/90">
@@ -1704,24 +1690,8 @@
                                 진실된 결말 보러가기
                             </a>
                         </div>
-                    `;
-                };
-
-                html = `
-                    <div class="w-full max-w-2xl mx-auto mb-10 flex flex-wrap justify-center gap-3 relative z-[100] mt-4">
-                        <button onclick="changeClareEnding('passing')" data-key="passing" class="clare-tab-btn px-6 py-2.5 bg-white text-black border border-white font-bold text-xs md:text-sm uppercase tracking-widest transition-all rounded-full">계속 패싱</button>
-                        <button onclick="changeClareEnding('return')" data-key="return" class="clare-tab-btn px-6 py-2.5 bg-black/40 text-white/60 border border-white/20 hover:text-white hover:border-white/50 font-medium text-xs md:text-sm uppercase tracking-widest transition-all rounded-full">흑인 공동체 귀환</button>
-                        <button onclick="changeClareEnding('the_fall')" data-key="the_fall" class="clare-tab-btn px-6 py-2.5 bg-black/40 text-white/60 border border-white/20 hover:text-white hover:border-white/50 font-medium text-xs md:text-sm uppercase tracking-widest transition-all rounded-full">원작 비극 엔딩</button>
                     </div>
-                    <div id="clare-ending-body" class="space-y-6 animate-fade-in mt-6"></div>
                 `;
-                
-                content.innerHTML = html;
-                
-                // Initialize default ending preview
-                setTimeout(() => {
-                    window.changeClareEnding(defaultKey);
-                }, 50);
             }
             
             content.innerHTML = html;
