@@ -485,7 +485,7 @@
             },
             {
                 id: "2-1",
-                scene: "One Month Later, Irene's House",
+                scene: "A month later, Irene's House",
                 text: "Clare, who visited suddenly, shows a photo of her husband and says,<br>“Sometimes I miss my old life, and I'm terrified my husband will find out I'm passing.”",
                 choices: [
                     { text: "A. I think I can understand a little... why you made that choice.", cChange: 0, sChange: 1, rChange: 0 },
@@ -494,7 +494,7 @@
             },
             {
                 id: "2-2",
-                scene: "One Month Later, Irene's House",
+                scene: "A month later, Irene's House",
                 text: "Clare says she'd like to see me more often.",
                 choices: [
                     { text: "A. Though hesitant, I can't bring myself to refuse. I answer, “Okay...”", cChange: 0, sChange: 0, rChange: 1 },
@@ -578,7 +578,7 @@
         const clareQuestions = [
             {
                 id: "1-1",
-                scene: "First encounter with Irene in a white-only hotel space",
+                scene: "First encounter with Irene in a white-only cafe",
                 text: "I spotted my old friend Irene at a hotel for white people. Should I go and say hello?",
                 choices: [
                     { text: "A. Thrilled to find someone who knows my past, I go and greet her warmly.", pChange: 0, cChange: 1, sChange: 0 },
@@ -759,7 +759,7 @@
             let centerText = "";
             let subText = "";
             if (src === '아이린 씬2-1.mp4') {
-                centerText = "One Month Later";
+                centerText = "A month later";
                 subText = "Irene's Home";
             } else if (src === '아이린 씬/아이린 씬3-2.mp4') {
                 centerText = "That night...";
@@ -845,6 +845,11 @@
             }
 
             videoScreen.style.pointerEvents = 'auto';
+            
+            // Set video element opacity to 0 instantly so the previous video's frozen frame doesn't leak
+            video.style.transition = 'none';
+            video.style.opacity = '0';
+            
             video.src = src;
             
             // Turn specific ending videos grayscale
@@ -869,6 +874,11 @@
             // Clear swapping frame cache when the new video starts playing
             const onPlaying = () => {
                 videoScreen.style.backgroundImage = 'none';
+                
+                // Fade in the video element over 0.5s once it actually starts playing
+                video.style.transition = 'opacity 0.5s ease-in-out';
+                video.style.opacity = '1';
+                
                 video.removeEventListener('playing', onPlaying);
             };
             video.addEventListener('playing', onPlaying);
@@ -880,6 +890,9 @@
                 }).catch(e => {
                     console.error("Video play failed:", e);
                     videoScreen.style.backgroundImage = 'none';
+                    // Restore opacity on failure
+                    video.style.transition = 'none';
+                    video.style.opacity = '1';
                 });
             }
             
@@ -887,15 +900,11 @@
             const playScreen = document.getElementById('play-screen');
             if (playScreen) playScreen.classList.add('hidden');
 
-            // Instantly set video screen opacity to 0 and z-index to 99999
+            // Instantly make the parent videoScreen fully opaque and overlay it on top
             videoScreen.style.transition = 'none';
-            videoScreen.style.opacity = '0';
+            videoScreen.style.opacity = '1';
             videoScreen.style.zIndex = '99999';
             void videoScreen.offsetWidth; // Force layout reflow
-            
-            // Fade in over 0.5s
-            videoScreen.style.transition = 'opacity 0.5s ease-in-out';
-            videoScreen.style.opacity = '1';
             updateBgmState();
             
             let isFadingOut = false;
@@ -906,6 +915,10 @@
                 video.ontimeupdate = null;
                 // Pause the video at its end frame
                 video.pause();
+                
+                // Reset video opacity to 1 instantly
+                video.style.transition = 'none';
+                video.style.opacity = '1';
                 
                 if (overlayText) {
                     if (window.overlayTimeout) clearTimeout(window.overlayTimeout);
@@ -1421,24 +1434,13 @@
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "1-1") {
                 playVideo('클레어 씬2-1.mp4', () => {
-                    const videoScreen = document.getElementById('video-screen');
-                    const video = document.getElementById('game-video');
-                    video.style.transition = 'opacity 0.5s ease-in-out';
-                    video.style.opacity = '0';
-                    
-                    setTimeout(() => {
-                        playVideo('클레어 씬2.mp4', () => {
-                            if (currentQuestionIndex < questions.length) {
-                                renderQuestion();
-                            } else {
-                                showEnding();
-                            }
-                        }, true);
-                        video.style.opacity = '1';
-                        setTimeout(() => {
-                            video.style.transition = '';
-                        }, 500);
-                    }, 500);
+                    playVideo('클레어 씬2.mp4', () => {
+                        if (currentQuestionIndex < questions.length) {
+                            renderQuestion();
+                        } else {
+                            showEnding();
+                        }
+                    }, true);
                 }, true);
             } else if (selectedCharacter === 'IRENE' && q.id === "2-2") {
                 playVideo('아이린 씬/아이린 씬3-2.mp4', () => {
