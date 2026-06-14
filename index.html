@@ -1220,7 +1220,7 @@
                 switch (questionId) {
                     case "1-1": return '클레어 씬1.mp4';
                     case "2-1": return '클레어 씬2.mp4';
-                    case "3-1": return '클레어 씬3 영상.mp4';
+                    case "3-1": return '클레어 3-1 영상.mp4';
                     case "4-1": return '클레어 씬4 영상.mp4';
                     case "5-1": return '클레어 씬5.mp4';
                     case "5-2": return null;
@@ -1522,7 +1522,7 @@
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "2-2") {
                 playVideo('아이린 씬2-2 후 3-1전.mp4', () => {
-                    playVideo('클레어 씬3 영상.mp4', () => {
+                    playVideo('클레어 3-1 영상.mp4', () => {
                         if (currentQuestionIndex < questions.length) {
                             renderQuestion();
                         } else {
