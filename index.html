@@ -769,6 +769,7 @@
             
             let centerText = "";
             let subText = "";
+            let centerTextDuration = 1200; // default 1.2s
             if (src === '아이린 씬2-1.mp4') {
                 centerText = "A month later";
                 subText = "Irene's Home";
@@ -784,6 +785,7 @@
             } else if (src === '클레어 씬4 영상.mp4') {
                 centerText = "Whites-Only Social Gathering";
                 subText = "White High-Society Party";
+                centerTextDuration = 2500; // Keep Whites-Only Social Gathering longer
             } else if (src === '아이린 씬/아이린 씬5-1.mp4') {
                 centerText = "Harlem 6th Floor Apartment Party";
                 subText = "Harlem 6th Floor Apartment Party";
@@ -793,9 +795,11 @@
             } else if (src === '클레어 씬5.mp4') {
                 centerText = "Black Community Gathering";
                 subText = "Harlem Social Party";
+                centerTextDuration = 2200; // Keep slightly longer
             } else if (src === '클레어 씬6 영상.mp4') {
                 centerText = "Private Gathering Among Black Friends";
                 subText = "Harlem 6th Floor Apartment Party";
+                centerTextDuration = 2500; // Keep slightly longer
             } else if (src === '아이린 씬/아이린 씬6-1.mp4') {
                 centerText = "";
                 subText = "Harlem 6th Floor Apartment Party";
@@ -817,7 +821,7 @@
                         window.overlayHideTimeout = setTimeout(() => {
                             overlayText.classList.add('hidden');
                         }, 500);
-                    }, 1200); // Fade out after 1.2s
+                    }, centerTextDuration); // Use centerTextDuration variable
                 } else {
                     overlayText.style.opacity = '0';
                     overlayText.classList.add('hidden');
