@@ -1572,57 +1572,54 @@
         // Clare-specific ending definitions
         const clareEndings = {
             'passing': {
-                title: "Continue Passing",
+                title: "계속 패싱",
                 engTitle: "PASSING",
                 bgClass: "ending-c-bg",
                 sfx: "calm.mp3",
                 img: "클레어 엔딩 3.png",
-                desc: `Clare continues to choose a life of passing, keeping her past hidden.
-No one knows her secret, yet constant anxiety follows her every move.
-A life in hiding only becomes more precarious the safer it feels.
+                desc: `Clare는 계속해서 자신의 과거를 숨긴 채, 패싱한 삶을 선택한다.
+그 누구도 그녀의 진실을 알지 못하지만, 끊임없는 불안이 따라온다.
+숨기는 삶은 안전할수록 더욱 위태로워진다.
 
-…Can you hide your true self until the very end?
+…당신은 끝까지 자신의 진짜 모습을 감출 수 있나요?
 
-What you have seen might be just a fragment of 'Passing'.
-If you are curious about the hidden truth and the final conclusion,
-check it out directly via the link below.`
+당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.
+숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.`
             },
             'return': {
-                title: "Return to Harlem",
+                title: "흑인 공동체 귀환",
                 engTitle: "RETURN TO HARLEM",
                 bgClass: "ending-b-bg",
                 sfx: "음악4.mp3",
                 img: "클레어 엔딩 2.png",
-                desc: `Clare stops passing and returns to the Black community.
-Warm sunlight, familiar jazz music...
+                desc: `Clare는 패싱을 멈춘 후 흑인 공동체로 돌아간다.
+따스한 햇살, 익숙한 재즈 음악..
 
-…But can you be sure this is happiness?
+…하지만 이것이 행복이라고 확신할 수 있나요?
 
-What you have seen might be just a fragment of 'Passing'.
-If you are curious about the hidden truth and the final conclusion,
-check it out directly via the link below.`
+당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.
+숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.`
             },
             'the_fall': {
-                title: "The Fall",
+                title: "원작 비극 엔딩",
                 engTitle: "THE FALL",
                 bgClass: "ending-a-bg",
                 sfx: "siren.mp3",
                 img: "아이린 엔딩 1.png",
-                desc: `Amidst the chaotic situation, Clare falls out of the window.
-Was it an accident, or...?
-Only the sound of sirens echoes from afar.
+                desc: `혼란스러운 상황 속에서 CLARE는 창밖으로 추락한다.
+사고였을까, 아니면...?
+사이렌 소리만이 멀리서 울려 퍼진다.
 
-…But can you be sure this is the end?
+…하지만 이것이 끝이라고 확신할 수 있나요?
 
-What you have seen might be just a fragment of 'Passing'.
-If you are curious about the hidden truth and the final conclusion,
-check it out directly via the link below.`
+당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.
+숨겨진 진실과 마지막 결말이 궁금하다면 아래 링크를 통해 직접 확인해보세요.`
             }
         };
 
         function showEnding() {
             toggleHiddenEndingButton(false);
-            let shouldPlayEndingBgm = false;
+            let shouldPlayEndingBgm = true;
             
             // Hide the video screen to ensure Clare's typography endings are visible
             const videoScreen = document.getElementById('video-screen');
@@ -1898,8 +1895,8 @@ check it out directly via the link below.`
                         </p>
                         <div class="pt-10">
                             <a href="https://app.notion.com/p/362d7bb5a1ba8088b788cbef9740d46a?assetsVersion=23.13.20260613.0138" target="_blank" class="inline-flex flex-col items-center justify-center px-12 py-5 md:px-16 md:py-6 bg-white hover:bg-neutral-200 text-black rounded-full transition-all shadow-[0_4px_20px_rgba(255,255,255,0.25)] hover:shadow-[0_4px_35px_rgba(255,255,255,0.55)] font-sans group">
-                                <span class="text-lg md:text-2xl font-black uppercase tracking-widest">View the True Ending</span>
-                                <span class="text-xs md:text-sm opacity-60 font-medium tracking-normal mt-1 md:mt-1.5">Original commentary · Ending analysis · Related research papers</span>
+                                <span class="text-lg md:text-2xl font-black uppercase tracking-widest">진실된 결말 보러가기</span>
+                                <span class="text-xs md:text-sm opacity-60 font-medium tracking-normal mt-1 md:mt-1.5">원작 해설 · 엔딩 분석 · 관련 논문 보기</span>
                             </a>
                         </div>
                     </div>
@@ -1992,10 +1989,7 @@ check it out directly via the link below.`
                 const endingScreen = document.getElementById('ending-screen');
                 const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
                 if (isEndingVisible && endingSfx && endingSfx.src) {
-                    const src = decodeURIComponent(endingSfx.src);
-                    if (src.endsWith('음악3.mp3') || src.endsWith('음악4.mp3') || src.endsWith('음악5.mp3') || src.endsWith('음악6.mp3')) {
-                        endingSfx.play().catch(e => console.warn("Failed to resume ending SFX:", e));
-                    }
+                    endingSfx.play().catch(e => console.warn("Failed to resume ending SFX:", e));
                 }
             }
             updateBgmState();
@@ -2134,18 +2128,18 @@ check it out directly via the link below.`
                 <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-yellow-500 font-black font-sans mb-2">Hidden Ending</h2>
                 <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans mb-6">HIDDEN ENDING</h3>
                 <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans max-w-3xl mx-auto whitespace-pre-line text-white/90">
-                    Having witnessed both Irene's and Clare's stories, you have unlocked the hidden ending.
+                    아이린과 클레어의 이야기를 모두 확인한 당신은 숨겨진 엔딩을 확인했습니다.
 
-                    …But can you be sure this is the end?
+                    …하지만 이것이 끝이라고 확신할 수 있나요?
 
-                    What you have seen might be just a fragment of 'Passing'.
-                    If you are curious about the hidden truth and the final conclusion,
-                    check it out directly via the link below.
+                    당신이 본 것은 단지 ‘패싱’의 일부일지도 모릅니다.
+                    숨겨진 진실과 마지막 결말이 궁금하다면
+                    아래 링크를 통해 직접 확인해보세요.
                 </p>
                 <div class="pt-8">
                     <a href="https://app.notion.com/p/362d7bb5a1ba8088b788cbef9740d46a?assetsVersion=23.13.20260613.0138" target="_blank" class="inline-flex flex-col items-center justify-center px-12 py-5 md:px-16 md:py-6 bg-white hover:bg-neutral-200 text-black rounded-full transition-all shadow-[0_4px_20px_rgba(255,255,255,0.25)] hover:shadow-[0_4px_35px_rgba(255,255,255,0.55)] font-sans group">
-                        <span class="text-lg md:text-2xl font-black uppercase tracking-widest">View the True Ending</span>
-                        <span class="text-xs md:text-sm opacity-60 font-medium tracking-normal mt-1 md:mt-1.5">Original commentary · Ending analysis · Related research papers</span>
+                        <span class="text-lg md:text-2xl font-black uppercase tracking-widest">진실된 결말 보러가기</span>
+                        <span class="text-xs md:text-sm opacity-60 font-medium tracking-normal mt-1 md:mt-1.5">원작 해설 · 엔딩 분석 · 관련 논문 보기</span>
                     </a>
                 </div>
             `;
