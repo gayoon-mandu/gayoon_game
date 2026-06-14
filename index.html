@@ -1944,7 +1944,7 @@
                 const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
                 if (isEndingVisible && endingSfx && endingSfx.src) {
                     const src = decodeURIComponent(endingSfx.src);
-                    if (src.endsWith('음악3.mp3') || src.endsWith('음악4.mp3') || src.endsWith('음악6.mp3')) {
+                    if (src.endsWith('음악3.mp3') || src.endsWith('음악4.mp3') || src.endsWith('음악5.mp3') || src.endsWith('음악6.mp3')) {
                         endingSfx.play().catch(e => console.warn("Failed to resume ending SFX:", e));
                     }
                 }
@@ -2068,8 +2068,14 @@
             
             endingImg.src = '공동엔딩.png';
             document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
+            
+            setEndingSfx('음악5.mp3', true);
             if (endingSfx) {
-                endingSfx.pause();
+                if (isPlayingBgm) {
+                    endingSfx.play().catch(e => console.warn("Failed to play Hidden Ending BGM:", e));
+                } else {
+                    endingSfx.pause();
+                }
             }
             
             // Hide the trigger button on common ending page
