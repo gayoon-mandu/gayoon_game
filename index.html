@@ -1782,7 +1782,7 @@
                     // Ending 2: Return
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
                     endingImg.src = 'irene_ending_2.jpg';
-                    setEndingSfx('irene_divorce.mp3', true);
+                    setEndingSfx('음악3.mp3', true);
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Return</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">RETURN</h3>
@@ -1855,7 +1855,24 @@
             
             content.innerHTML = html;
             if (endingSfx) {
-                endingSfx.pause();
+                // Play ending SFX only for Irene's Return ending, if BGM is enabled
+                let isIreneReturn = false;
+                if (selectedCharacter === 'IRENE') {
+                    const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
+                    let highestStats = [];
+                    if (ireneStats.C === maxVal) highestStats.push('C');
+                    if (ireneStats.S === maxVal) highestStats.push('S');
+                    if (ireneStats.R === maxVal) highestStats.push('R');
+                    if (highestStats.length < 2 && highestStats[0] === 'C') {
+                        isIreneReturn = true;
+                    }
+                }
+                
+                if (isIreneReturn && isPlayingBgm) {
+                    endingSfx.play().catch(e => console.warn("Failed to play Irene Return ending SFX:", e));
+                } else {
+                    endingSfx.pause();
+                }
             }
         }
 
@@ -1929,6 +1946,22 @@
             if (!isPlayingBgm) {
                 if (endingSfx) {
                     endingSfx.pause();
+                }
+            } else {
+                // If unmuted on ending screen, check if it's Irene's Return ending and resume endingSfx
+                const endingScreen = document.getElementById('ending-screen');
+                const isEndingVisible = endingScreen && !endingScreen.classList.contains('hidden');
+                if (isEndingVisible && selectedCharacter === 'IRENE') {
+                    const maxVal = Math.max(ireneStats.C, ireneStats.S, ireneStats.R);
+                    let highestStats = [];
+                    if (ireneStats.C === maxVal) highestStats.push('C');
+                    if (ireneStats.S === maxVal) highestStats.push('S');
+                    if (ireneStats.R === maxVal) highestStats.push('R');
+                    if (highestStats.length < 2 && highestStats[0] === 'C') {
+                        if (endingSfx) {
+                            endingSfx.play().catch(e => console.warn("Failed to resume Irene Return ending SFX:", e));
+                        }
+                    }
                 }
             }
             updateBgmState();
