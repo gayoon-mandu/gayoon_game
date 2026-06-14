@@ -819,10 +819,15 @@
                     overlayTextSub.classList.add('hidden');
                 }
                 
+                const savedSrc = currentVideoSrc;
+
                 if (isGameplayTransition) {
                     video.muted = true;
                     // Render the next question first while video screen is still on top (z-index 99999)
                     if (callback) callback();
+                    
+                    // If callback started a new video transition, abort remaining cleanup
+                    if (currentVideoSrc !== savedSrc) return;
                     
                     // Show play-screen again if not showing ending screen
                     const playScreen = document.getElementById('play-screen');
@@ -840,6 +845,9 @@
                     video.muted = true;
                     // Render the next question first so it's ready when the video fades out
                     if (callback) callback();
+                    
+                    // If callback started a new video transition, abort remaining cleanup
+                    if (currentVideoSrc !== savedSrc) return;
                     
                     // Show play-screen again if not showing ending screen
                     const playScreen = document.getElementById('play-screen');
@@ -1393,12 +1401,14 @@
                     }
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "2-2") {
-                playVideo('클레어 씬3 영상.mp4', () => {
-                    if (currentQuestionIndex < questions.length) {
-                        renderQuestion();
-                    } else {
-                        showEnding();
-                    }
+                playVideo('아이린 씬2-2 후 3-1전.mp4', () => {
+                    playVideo('클레어 씬3 영상.mp4', () => {
+                        if (currentQuestionIndex < questions.length) {
+                            renderQuestion();
+                        } else {
+                            showEnding();
+                        }
+                    }, true);
                 }, true);
             } else if (selectedCharacter === 'CLARE' && q.id === "3-2") {
                 playVideo('클레어 씬4 영상.mp4', () => {
