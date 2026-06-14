@@ -1540,7 +1540,7 @@
                 } else {
                     const dominant = highestStats[0];
                     if (dominant === 'C') ireneEnding = 'Return';
-                    else if (dominant === 'R') ireneEnding = 'Quiet Collapse';
+                    else if (dominant === 'R') ireneEnding = 'Divorce';
                     else if (dominant === 'S') ireneEnding = 'Passing';
                 }
                 
@@ -1550,7 +1550,7 @@
                     playVideo('아이린 엔딩 패싱.mp4', showEnding);
                     return;
                 }
-                if (ireneEnding === 'Quiet Collapse' && !playedIreneEndingCollapseVideo) {
+                if (ireneEnding === 'Divorce' && !playedIreneEndingCollapseVideo) {
                     playedIreneEndingCollapseVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
                     playVideo('아이린 엔딩 이혼.mp4', showEnding);
@@ -1616,7 +1616,7 @@
                 } else {
                     const dominant = highestStats[0];
                     if (dominant === 'C') ending = 'Return';
-                    else if (dominant === 'R') ending = 'Quiet Collapse';
+                    else if (dominant === 'R') ending = 'Divorce';
                     else if (dominant === 'S') ending = 'Passing';
                 }
 
@@ -1665,14 +1665,14 @@
                             </a>
                         </div>
                     `;
-                } else if (ending === 'Quiet Collapse') {
-                    // Ending 3: Quiet Collapse
+                } else if (ending === 'Divorce') {
+                    // Ending 3: Divorce
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     endingImg.src = 'irene_ending_3.png';
                     endingSfx.src = 'woman.mp3';
                     html = `
-                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Quiet Collapse</h2>
-                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">QUIET COLLAPSE</h3>
+                        <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Divorce</h2>
+                        <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">DIVORCE</h3>
                         <p class="text-sm md:text-2xl italic leading-relaxed opacity-80 px-4 md:px-0 text-left md:text-center font-sans">
                             끝없는 불안 끝에, IRENE과 BRIAN은 결국 서로를 놓아준다.<br><br>
                             무너진 것은 단순한 관계가 아니라, 인종차별과 사회적 압박 속에서 간신히 유지되던 삶이었다.<br>
