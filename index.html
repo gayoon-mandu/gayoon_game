@@ -353,6 +353,15 @@
             bgm.volume = 0.3; // Lower background music volume to be more comfortable
         }
         const endingSfx = document.getElementById('ending-sfx');
+        function setEndingSfx(src, loop = false) {
+            if (endingSfx) {
+                const currentSrc = endingSfx.src || '';
+                if (!currentSrc.endsWith('/' + src) && currentSrc !== src) {
+                    endingSfx.src = src;
+                }
+                endingSfx.loop = loop;
+            }
+        }
         let questions = [];
         let playedEndingFallVideo = false;
         let playedClareEndingPassingVideo = false;
@@ -1552,24 +1561,44 @@
                 }
                 
                 if (ireneEnding === 'Passing' && !playedIreneEndingPassingVideo) {
+                    setEndingSfx('woman.mp3', false);
+                    if (endingSfx) {
+                        endingSfx.muted = true;
+                        endingSfx.play().catch(() => {});
+                    }
                     playedIreneEndingPassingVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
                     playVideo('irene_ending_passing.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'Divorce' && !playedIreneEndingCollapseVideo) {
+                    setEndingSfx('irene_divorce.mp3', true);
+                    if (endingSfx) {
+                        endingSfx.muted = true;
+                        endingSfx.play().catch(() => {});
+                    }
                     playedIreneEndingCollapseVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
                     playVideo('irene_ending_divorce.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'Return' && !playedIreneEndingReturnVideo) {
+                    setEndingSfx('irene_divorce.mp3', true);
+                    if (endingSfx) {
+                        endingSfx.muted = true;
+                        endingSfx.play().catch(() => {});
+                    }
                     playedIreneEndingReturnVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
                     playVideo('irene_ending_return.mp4', showEnding);
                     return;
                 }
                 if (ireneEnding === 'The Fall' && !playedIreneEndingFallVideo) {
+                    setEndingSfx('siren.mp3', false);
+                    if (endingSfx) {
+                        endingSfx.muted = true;
+                        endingSfx.play().catch(() => {});
+                    }
                     playedIreneEndingFallVideo = true;
                     document.getElementById('play-screen').classList.add('hidden');
                     playVideo('clare_ending_fall.mp4', showEnding);
@@ -1632,8 +1661,7 @@
                     toggleHiddenEndingButton(true);
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     endingImg.src = 'irene_ending_4.png';
-                    endingSfx.src = 'woman.mp3';
-                    endingSfx.loop = false;
+                    setEndingSfx('woman.mp3', false);
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Passing</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">PASSING</h3>
@@ -1656,8 +1684,7 @@
                     // Ending 1: The Fall
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
                     endingImg.src = 'irene_ending_1.png';
-                    endingSfx.src = 'siren.mp3';
-                    endingSfx.loop = false;
+                    setEndingSfx('siren.mp3', false);
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-red-500 font-black font-sans">The Fall</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">THE FALL</h3>
@@ -1680,8 +1707,7 @@
                     // Ending 3: Divorce
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-b-bg custom-scroll";
                     endingImg.src = 'irene_ending_3.png';
-                    endingSfx.src = 'irene_divorce.mp3';
-                    endingSfx.loop = true;
+                    setEndingSfx('irene_divorce.mp3', true);
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-purple-400 font-black font-sans">Divorce</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">DIVORCE</h3>
@@ -1704,8 +1730,7 @@
                     // Ending 2: Return
                     document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-c-bg custom-scroll";
                     endingImg.src = 'irene_ending_2.jpg';
-                    endingSfx.src = 'irene_divorce.mp3';
-                    endingSfx.loop = true;
+                    setEndingSfx('irene_divorce.mp3', true);
                     html = `
                         <h2 class="text-[10px] md:text-sm uppercase tracking-[0.5em] text-neutral-400 font-black font-sans">Return</h2>
                         <h3 class="text-4xl md:text-8xl font-black uppercase tracking-widest leading-tight font-sans">RETURN</h3>
@@ -1724,10 +1749,6 @@
                             </a>
                         </div>
                     `;
-                }
-                content.innerHTML = html;
-                if (isPlayingBgm) {
-                    endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
                 }
             } else {
                 // Clare Ending Branches logic
@@ -1754,7 +1775,7 @@
                 }
                 
                 // Audio setting
-                endingSfx.src = data.sfx;
+                setEndingSfx(data.sfx, false);
                 
                 // Image setting
                 if (endingImg) endingImg.src = data.img;
@@ -1782,6 +1803,14 @@
             
             content.innerHTML = html;
             if (isPlayingBgm) {
+                if (endingSfx) {
+                    endingSfx.muted = false;
+                    try {
+                        endingSfx.currentTime = 0;
+                    } catch (e) {
+                        console.warn("Could not reset currentTime:", e);
+                    }
+                }
                 endingSfx.play().catch(e => console.error("Ending SFX failed:", e));
             }
         }
@@ -1861,7 +1890,9 @@
                     endingSfx.play().catch(() => {});
                 }
             } else {
-                endingSfx.pause();
+                if (endingSfx) {
+                    endingSfx.pause();
+                }
             }
             updateBgmState();
             updateAudioIcons();
@@ -1960,7 +1991,9 @@
             
             endingImg.src = '공동엔딩.png';
             document.body.className = "min-h-screen flex flex-col relative transition-all duration-1000 ending-a-bg custom-scroll";
-            endingSfx.pause();
+            if (endingSfx) {
+                endingSfx.pause();
+            }
             
             // Hide the trigger button on common ending page
             toggleHiddenEndingButton(false);
