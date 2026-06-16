@@ -685,7 +685,68 @@
             }
         ];
 
+        const preloadedVideos = {};
+        function preloadVideo(src) {
+            if (!src || preloadedVideos[src]) return;
+            preloadedVideos[src] = true;
+            const tempVideo = document.createElement('video');
+            tempVideo.src = src;
+            tempVideo.preload = 'auto';
+            tempVideo.load();
+        }
+
+        function preloadNextVideos() {
+            const q = questions[currentQuestionIndex];
+            if (!q) return;
+
+            // 1. General next question video
+            if (currentQuestionIndex < questions.length - 1) {
+                const nextQ = questions[currentQuestionIndex + 1];
+                const nextVideo = getVideoSrcForQuestion(selectedCharacter, nextQ.id);
+                if (nextVideo) preloadVideo(nextVideo);
+            }
+
+            // 2. Chained/Preview transition videos for Clare
+            if (selectedCharacter === 'CLARE') {
+                if (q.id === "1-1") {
+                    preloadVideo('클레어 씬2-1 전.mp4');
+                    preloadVideo('클레어 씬2.mp4');
+                } else if (q.id === "3-2") {
+                    preloadVideo('클레어 씬4-1 전.mp4');
+                    preloadVideo('클레어 씬4 영상.mp4');
+                } else if (q.id === "4-2") {
+                    preloadVideo('클레어 씬5-1 전.mp4');
+                    preloadVideo('클레어 씬5.mp4');
+                } else if (q.id === "5-2") {
+                    preloadVideo('클레어 씬 6-1 전.mp4');
+                    preloadVideo('클레어 씬6 영상.mp4');
+                }
+            }
+
+            // 3. Ending videos when on the final question
+            if (currentQuestionIndex === questions.length - 1) {
+                if (selectedCharacter === 'IRENE') {
+                    preloadVideo('irene_ending_passing.mp4');
+                    preloadVideo('irene_ending_divorce.mp4');
+                    preloadVideo('irene_ending_return.mp4');
+                    preloadVideo('irene_ending_fall.mp4');
+                } else {
+                    preloadVideo('clare_ending_passing.mp4');
+                    preloadVideo('clare_ending_return.mp4');
+                    preloadVideo('clare_ending_fall.mp4');
+                    preloadVideo('공동 엔딩.mp4');
+                }
+            }
+        }
+
+        // Preload intro video immediately on script load
+        preloadVideo('select_intro.mp4');
+
         function startSelect() {
+            // Preload character choice starting videos
+            preloadVideo('아이린 씬1-1.mov');
+            preloadVideo('클레어 씬1.mp4');
+            
             document.body.classList.add('game-started');
             document.getElementById('intro-screen').classList.add('opacity-0');
             updateBgmState();
@@ -874,6 +935,11 @@
 
             videoScreen.style.pointerEvents = 'auto';
             
+            // Stop current playback, clear src, and force reload to purge the visual frame buffer of the previous video
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+            
             // Set video element opacity to 0 instantly so the previous video's frozen frame doesn't leak
             video.style.transition = 'none';
             video.style.opacity = '0';
@@ -899,17 +965,35 @@
             
             video.load();
             
-            // Clear swapping frame cache when the new video starts playing
-            const onPlaying = () => {
-                videoScreen.style.backgroundImage = 'none';
+            // Dual event-driven frame reveal to guarantee the old video frame has been fully replaced 
+            // by the new source's decoded frames before displaying the video element.
+            let hasRevealedNewFrame = false;
+            const revealNewFrame = () => {
+                if (hasRevealedNewFrame) return;
+                hasRevealedNewFrame = true;
                 
-                // Fade in the video element over 0.5s once it actually starts playing
-                video.style.transition = 'opacity 0.5s ease-in-out';
+                videoScreen.style.backgroundImage = 'none';
+                video.style.transition = 'opacity 0.3s ease-in-out';
                 video.style.opacity = '1';
                 
                 video.removeEventListener('playing', onPlaying);
+                video.removeEventListener('timeupdate', onTimeUpdate);
             };
+            
+            const onPlaying = () => {
+                // Introduce a tiny 50ms buffer delay for the decoder to paint the first frame
+                setTimeout(revealNewFrame, 50);
+            };
+            
+            const onTimeUpdate = () => {
+                const startThreshold = (src === '아이린 씬/아이린 씬4-2 찐.mp4') ? 0.15 : 0;
+                if (video.currentTime > startThreshold) {
+                    revealNewFrame();
+                }
+            };
+            
             video.addEventListener('playing', onPlaying);
+            video.addEventListener('timeupdate', onTimeUpdate);
             
             let isFadingOut = false;
             function startFadeOut() {
@@ -1335,6 +1419,7 @@
 
             updateVisuals();
             updateBgmState();
+            preloadNextVideos();
         }
 
         function updateVisuals() {
