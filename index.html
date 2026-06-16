@@ -911,32 +911,8 @@
             };
             video.addEventListener('playing', onPlaying);
             
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    console.log("Playback started successfully");
-                }).catch(e => {
-                    console.error("Video play failed:", e);
-                    videoScreen.style.backgroundImage = 'none';
-                    // Restore opacity on failure
-                    video.style.transition = 'none';
-                    video.style.opacity = '1';
-                });
-            }
-            
-            // Hide play-screen instantly to prevent ghosting during fade-in
-            const playScreen = document.getElementById('play-screen');
-            if (playScreen) playScreen.classList.add('hidden');
-
-            // Instantly make the parent videoScreen fully opaque and overlay it on top
-            videoScreen.style.transition = 'none';
-            videoScreen.style.opacity = '1';
-            videoScreen.style.zIndex = '99999';
-            void videoScreen.offsetWidth; // Force layout reflow
-            updateBgmState();
-            
             let isFadingOut = false;
-            const startFadeOut = () => {
+            function startFadeOut() {
                 if (isFadingOut) return;
                 isFadingOut = true;
                 
@@ -1006,7 +982,43 @@
                     }
                     updateBgmState();
                 }
-            };
+            }
+
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log("Playback started successfully");
+                }).catch(e => {
+                    console.warn("Video play failed with unmuted audio. Retrying muted...", e);
+                    video.muted = true;
+                    const retryPromise = video.play();
+                    if (retryPromise !== undefined) {
+                        retryPromise.then(() => {
+                            console.log("Playback started successfully after muting");
+                        }).catch(err2 => {
+                            console.error("Video play failed even after muting:", err2);
+                            videoScreen.style.backgroundImage = 'none';
+                            // Restore opacity on failure
+                            video.style.transition = 'none';
+                            video.style.opacity = '1';
+                            startFadeOut();
+                        });
+                    } else {
+                        console.log("Playback started successfully after muting (no promise)");
+                    }
+                });
+            }
+            
+            // Hide play-screen instantly to prevent ghosting during fade-in
+            const playScreen = document.getElementById('play-screen');
+            if (playScreen) playScreen.classList.add('hidden');
+
+            // Instantly make the parent videoScreen fully opaque and overlay it on top
+            videoScreen.style.transition = 'none';
+            videoScreen.style.opacity = '1';
+            videoScreen.style.zIndex = '99999';
+            void videoScreen.offsetWidth; // Force layout reflow
+            updateBgmState();
             
             video.onended = () => {
                 startFadeOut();
