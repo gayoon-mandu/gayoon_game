@@ -1045,6 +1045,11 @@
                     updateBgmState();
                 } else {
                     video.muted = true;
+                    // Stop video playback and clear src immediately to purge visual frame buffer
+                    video.pause();
+                    video.removeAttribute('src');
+                    video.load();
+                    
                     videoScreen.style.opacity = '0';
                     videoScreen.style.zIndex = '0';
                     setTimeout(() => {
