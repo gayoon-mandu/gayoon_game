@@ -733,7 +733,7 @@
                 } else {
                     preloadVideo('clare_ending_passing.mp4');
                     preloadVideo('clare_ending_return.mp4');
-                    preloadVideo('clare_ending_fall.mp4');
+                    preloadVideo('아이린 클레어 추락 엔딩.mp4');
                     preloadVideo('공동 엔딩.mp4');
                 }
             }
@@ -1814,6 +1814,12 @@
                     playVideo('clare_ending_return.mp4', showEnding);
                     return;
                 }
+                if (clareEnding === 'the_fall' && !playedEndingFallVideo) {
+                    playedEndingFallVideo = true;
+                    document.getElementById('play-screen').classList.add('hidden');
+                    playVideo('아이린 클레어 추락 엔딩.mp4', showEnding);
+                    return;
+                }
             }
             playedIreneEndingPassingVideo = false;
             playedIreneEndingCollapseVideo = false;
@@ -1821,6 +1827,7 @@
             playedIreneEndingFallVideo = false;
             playedClareEndingPassingVideo = false;
             playedClareEndingReturnVideo = false;
+            playedEndingFallVideo = false;
             
             document.getElementById('play-screen').classList.add('hidden');
             document.getElementById('ending-screen').classList.remove('hidden');
